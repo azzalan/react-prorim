@@ -1,244 +1,115 @@
 import React from 'react'
 import Toggle from 'material-ui/Toggle'
-import RaisedButton from 'material-ui/RaisedButton'
-import Add from 'react-material-icons/icons/content/add'
+// import IconButton from 'material-ui/IconButton'
+// import EditIcon from 'react-material-icons/icons/editor/border-color'
+import ReactTable from 'react-table'
+import 'react-table/react-table.css'
+
 import DialogAdd from './dialog_add'
-import {Table, Column, Cell} from 'fixed-data-table'
-import IconButton from 'material-ui/IconButton'
-import EditIcon from 'react-material-icons/icons/editor/border-color'
-import 'fixed-data-table/dist/fixed-data-table.css'
-
-const staticTableType = [
-  {
-    key: 'edit',
-    label: '',
-    type: 'edit',
-    width: 60,
-  },
-  {
-    key: 'dataRealizacao',
-    label: 'Data da realização',
-    type: 'date',
-    width: 100,
-  },
-  {
-    key: 'exame',
-    label: 'Exame',
-    type: 'choice',
-    choices: ['Choice1', 'Choice2', 'Choice3'],
-    width: 100,
-  },
-  {
-    key: 'dataEnvio',
-    label: 'Data do envio',
-    type: 'date',
-    width: 100,
-  },
-  {
-    key: 'dataResultado',
-    label: 'Data do resultado',
-    type: 'date',
-    width: 100,
-  },
-  {
-    key: 'resultado',
-    label: 'Resultado',
-    type: 'text',
-    width: 100,
-  },
-  {
-    key: 'numeroLaudo',
-    label: 'Número do laudo',
-    type: 'textNumber',
-    width: 100,
-  },
-  {
-    key: 'realizado',
-    label: 'Realizado',
-    type: 'bool',
-    width: 100,
-  },
-]
-
-const staticTableData = [
-  {
-    dataRealizacao: '11/11/11',
-    exame: 'choice',
-    dataEnvio: '11/11/11',
-    dataResultado: '11/11/11',
-    resultado: 'resultado resultado resultado resultado resultado ',
-    numeroLaudo: '1',
-    realizado: true,
-  },
-  {
-    dataRealizacao: '11/11/11',
-    exame: 'choice',
-    dataEnvio: '11/11/11',
-    dataResultado: '11/11/11',
-    resultado: 'resultado resultado resultado resultado resultado ',
-    numeroLaudo: '1',
-    realizado: true,
-  },
-]
-
-const buttonStyle = {
-  margin: '0 0 15px 0',
-}
-
-const propContainer = {
-  width: '100%',
-}
-
-const tableStyle = {
-  width: '100%',
-  overflow: 'auto',
-}
+import DialogEdit from './dialog_edit'
+import TableToolbar from './table_toolbar'
+import {staticTableCols} from '../assets/static_table_cols'
+import {staticTableData} from '../assets/static_table_data'
+// import {styles} from '../assets/styles'
 
 export default class CustomTable extends React.Component {
-
-  handleChange = (event, index, value) => this.setState({value})
 
   constructor(props) {
     super(props)
     this.state = {
-      tableType: [],
+      tableCols: [],
       tableData: [],
-      dialogOpen: false,
+      dialogAddOpen: false,
+      dialogEditOpen: false,
+      dialogEditValues: null
     }
   }
 
-  handleOpenDialog = () => {
+  handleOpenDialogEdit = (e) => {
     this.setState({
-      dialogOpen: true,
+      dialogEditValues: this.state.tableData[e.target.id],
+      dialogEditOpen: true
     })
   }
 
-  handleChange = (event) => {
-    this.setState({height: event.target.value})
+  handleOpenDialogAdd = () => {
+    this.setState({
+      dialogAddOpen: true
+    })
   }
 
-  buildCol = (tableData, col) => {
-    if(col.type==='bool') {
-      return(
-        <Column
-          columnKey={col.key}
-          isResizable={true}
-          header={<Cell>{col.label}</Cell>}              
-          width={col.width}
-          cell={
-            props => (
-              <Cell {...props}>
-                <Toggle
-                  toggled={tableData[props.rowIndex][col.key]}
-                /> 
-              </Cell>
-            )
-          }
-        />
-      )
-    } else if (col.type==='edit') {
-      return(
-        <Column
-          columnKey={col.key}
-          isResizable={true}
-          header={<Cell>{col.label}</Cell>}              
-          width={col.width}
-          cell={
-            props => (
-              <Cell {...props}>
-                <IconButton>
-                    <EditIcon/>
-                  </IconButton>
-              </Cell>
-            )
-          }
-        />
-      )
-    } else {
-      return(
-        <Column
-          columnKey={col.key}
-          isResizable={true}
-          header={<Cell>{col.label}</Cell>}
-          flexGrow={1}    
-          width={col.width}
-          cell={
-            props => (
-              <Cell {...props}>
-                {this.state.tableData[props.rowIndex][col.key]}
-              </Cell>
-            )
-          }
-        />
-      )
-    }
+ buildCols = (cols) => {
+    let renderCols = cols
+    renderCols.map( (col) => {
+      if (col.type==='date') {
+        Object.assign(col, {
+          render: row => (
+            <span 
+              id={row.index}
+              onTouchTap={this.handleOpenDialogEdit}
+            >
+              {row.value.toLocaleDateString()}
+            </span>
+          )
+        })
+      } else if (col.type==='bool') {
+        Object.assign(col, {
+          render: row => (
+            <Toggle
+              toggled={row.value}
+            />)
+        })
+      }
+    })
+    return renderCols
   }
 
-  // buildCols = (row, tableType) => {
-  //   let cols = []
-  //   row.map( (field, index)=> (
-  //     cols.push(<TableRowColumn key={index}>{this.buildCol(field, index, tableType)}</TableRowColumn>)      
-  //   ))
-  //   return cols
-  // }
-
-      // <TableRow 
-      //   key={index} 
-      //   selected={row.selected}
-      //   onTouchTap={this.handleOpenDialog}
-      // >
-      //   {this.buildCols(row, tableType)}
-      // </TableRow>
-
-  buildCols = (tableData, tableType) => {
-    let cols = []
-    tableType.map( (col, index) => (
-      cols.push(this.buildCol(tableData, col))
-    ))
-    return cols
-  }
-
-  _onColumnResizeEndCallback = (newColumnWidth, columnKey) => {
-    let newTableType = this.state.tableType
-    const colIndex = newTableType.findIndex(
-      (col) => {return col.key===columnKey}
+renderDialogEdit = () => {
+  if (this.state.dialogEditValues) {
+    console.log(this.state.dialogEditOpen)
+    return (
+      <DialogEdit
+        dialogOpen={this.state.dialogEditOpen}
+        handleCloseDialog={() => this.setState({dialogEditOpen: false})}
+        tableCols={this.state.tableCols}
+        values={this.state.dialogEditValues}
+      />
     )
-    newTableType[colIndex].width = newColumnWidth
-    this.setState({
-      tableType: newTableType
-    })
   }
+}
 
   componentDidMount = () => {
     this.setState({
-      tableType: staticTableType,
+      tableCols: this.buildCols(staticTableCols),
       tableData: staticTableData,
     })
-    // let rows = this.buildRows(staticTableData, staticTableType)
-    // this.setState({rows})
   }
 
   render() {
-    var {tableData, tableType} = this.state;
+    var {tableData, tableCols} = this.state;
     return (
-      <div style={tableStyle}>
-        <Table
-          rowHeight={50}
-          rowsCount={tableData.length}
-          width={1500}
-          height={500}
-          headerHeight={50}
-          onColumnResizeEndCallback={this._onColumnResizeEndCallback}
-          isColumnResizing={false}
-          >
-          {this.buildCols(tableData, tableType)}
-        </Table>
-        <DialogAdd 
-          dialogOpen={this.state.dialogOpen} 
-          handleCloseDialog={() => this.setState({dialogOpen: false})}
-          tableType={tableType}
+      <div>
+        <TableToolbar 
+          handleOpenDialogAdd={this.handleOpenDialogAdd}
         />
+        <ReactTable
+          previousText={'Anterior'}
+          nextText={'Próximo'}
+          loadingText={'Carregando...'}
+          noDataText={'Nenhum elemento encontrado'}
+          pageText={'Página'}
+          ofText={'de'}
+          rowsText={'linhas'}
+          data={tableData}
+          columns={tableCols}
+        />
+        <DialogAdd 
+          dialogOpen={this.state.dialogAddOpen}
+          handleCloseDialog={() => this.setState({dialogAddOpen: false})}
+          tableCols={tableCols}
+        />
+        {this.renderDialogEdit()}
       </div>
-    );
+    )
   }
 }

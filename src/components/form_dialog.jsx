@@ -5,7 +5,7 @@ import Formsy from 'formsy-react';
 import MenuItem from 'material-ui/MenuItem';
 import { FormsyDate, FormsySelect, FormsyText, FormsyToggle } from 'formsy-material-ui/lib';
 
-export default class DialogAdd extends React.Component {
+export default class FormDialog extends React.Component {
 
   constructor(props) {
     super(props)
@@ -45,6 +45,64 @@ export default class DialogAdd extends React.Component {
       returnChoices.push(<MenuItem value={choice} primaryText={choice} key={index} />)
     ))
     return returnChoices
+  }
+
+  buildFieldWithValue = (field, styles, errorMessages) => {
+    switch(field.type) {
+      case 'date':
+        return(
+          <FormsyDate
+            name={field.accessor}
+            required
+            floatingLabelText={field.header}
+            DateTimeFormat={styles.DateTimeFormat}
+            locale="pt"
+            value={this.props.values[field.accessor]}
+          />
+        )
+      case 'choice':
+        return(
+          <FormsySelect
+            name={field.accessor}
+            required
+            floatingLabelText={field.header}
+            value={this.props.values[field.accessor]}
+          >
+            {this.buildChoices(field.choices)}
+          </FormsySelect>
+        )
+      case 'text':
+        return(
+          <FormsyText
+            name={field.accessor}
+            required
+            floatingLabelText={field.header}
+            value={this.props.values[field.accessor]}                                    
+          />
+        )
+      case 'textNumber':
+        return(
+          <FormsyText
+            name={field.accessor}
+            validations="isNumeric"
+            validationError={errorMessages.numericError}
+            floatingLabelText={field.header}
+            value={this.props.values[field.accessor]}
+          />
+        )
+      case 'bool':
+        return(
+          <FormsyToggle
+            name={field.accessor}
+            label={field.header}
+            style={styles.switchStyle}
+            labelPosition="right"
+            value={this.props.values[field.accessor]}            
+          />
+        )
+      default:
+        break
+    }
   }
 
   buildField = (field, styles, errorMessages) => {
@@ -102,9 +160,15 @@ export default class DialogAdd extends React.Component {
 
   buildFields = (tableCols, styles, errorMessages) => {
     let fields = []
-    tableCols.map( (field, index) => (
-        fields.push(<div key={index}>{this.buildField(field, styles, errorMessages)}</div>)
-    ))
+    if (this.props.values) {
+      tableCols.map( (field, index) => (
+          fields.push(<div key={index}>{this.buildFieldWithValue(field, styles, errorMessages)}</div>)
+      ))
+    } else {
+      tableCols.map( (field, index) => (
+          fields.push(<div key={index}>{this.buildField(field, styles, errorMessages)}</div>)
+      ))
+    }
     return fields
   }
 
