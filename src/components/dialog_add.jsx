@@ -55,7 +55,7 @@ export default class DialogAdd extends React.Component {
       case 'date':
         return(
           <FormsyDate
-            name={field.header}
+            name={field.key}
             required
             floatingLabelText={field.header}
             DateTimeFormat={styles.DateTimeFormat}
@@ -65,7 +65,7 @@ export default class DialogAdd extends React.Component {
       case 'choice':
         return(
           <FormsySelect
-            name={field.header}
+            name={field.key}
             required
             floatingLabelText={field.header}
           >
@@ -75,7 +75,7 @@ export default class DialogAdd extends React.Component {
       case 'text':
         return(
           <FormsyText
-            name={field.header}
+            name={field.key}
             required
             floatingLabelText={field.header}
           />
@@ -83,7 +83,7 @@ export default class DialogAdd extends React.Component {
       case 'textNumber':
         return(
           <FormsyText
-            name={field.header}
+            name={field.key}
             validations="isNumeric"
             validationError={errorMessages.numericError}
             floatingLabelText={field.header}
@@ -92,7 +92,7 @@ export default class DialogAdd extends React.Component {
       case 'bool':
         return(
           <FormsyToggle
-            name={field.header}
+            name={field.key}
             label={field.header}
             style={styles.switchStyle}
             labelPosition="right"

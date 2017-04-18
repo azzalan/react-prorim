@@ -1,66 +1,97 @@
 import React from 'react'
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn}
-  from 'material-ui/Table'
 import Toggle from 'material-ui/Toggle'
 import RaisedButton from 'material-ui/RaisedButton'
 import Add from 'react-material-icons/icons/content/add'
 import DialogAdd from './dialog_add'
+import {Table, Column, Cell} from 'fixed-data-table'
+import IconButton from 'material-ui/IconButton'
+import EditIcon from 'react-material-icons/icons/editor/border-color'
+import 'fixed-data-table/dist/fixed-data-table.css'
 
 const staticTableType = [
   {
-    header: 'Data da realização',
-    type: 'date',
+    key: 'edit',
+    label: '',
+    type: 'edit',
+    width: 60,
   },
   {
-    header: 'Exame',
+    key: 'dataRealizacao',
+    label: 'Data da realização',
+    type: 'date',
+    width: 100,
+  },
+  {
+    key: 'exame',
+    label: 'Exame',
     type: 'choice',
     choices: ['Choice1', 'Choice2', 'Choice3'],
+    width: 100,
   },
   {
-    header: 'Data do envio',
+    key: 'dataEnvio',
+    label: 'Data do envio',
     type: 'date',
+    width: 100,
   },
   {
-    header: 'Data do resultado',
+    key: 'dataResultado',
+    label: 'Data do resultado',
     type: 'date',
+    width: 100,
   },
   {
-    header: 'Resultado',
+    key: 'resultado',
+    label: 'Resultado',
     type: 'text',
+    width: 100,
   },
   {
-    header: 'Número do laudo',
+    key: 'numeroLaudo',
+    label: 'Número do laudo',
     type: 'textNumber',
+    width: 100,
   },
   {
-    header: 'Realizado',
+    key: 'realizado',
+    label: 'Realizado',
     type: 'bool',
+    width: 100,
   },
 ]
 
 const staticTableData = [
-  [
-    '11/11/11',
-    'choice',
-    '11/11/11',
-    '11/11/11',
-    'resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado resultado ',
-    '1',
-    true,
-  ],
-  [
-    '11/11/11',
-    'choice',
-    '11/11/11',
-    '11/11/11',
-    'resultado',
-    '2',
-    false,
-  ],
+  {
+    dataRealizacao: '11/11/11',
+    exame: 'choice',
+    dataEnvio: '11/11/11',
+    dataResultado: '11/11/11',
+    resultado: 'resultado resultado resultado resultado resultado ',
+    numeroLaudo: '1',
+    realizado: true,
+  },
+  {
+    dataRealizacao: '11/11/11',
+    exame: 'choice',
+    dataEnvio: '11/11/11',
+    dataResultado: '11/11/11',
+    resultado: 'resultado resultado resultado resultado resultado ',
+    numeroLaudo: '1',
+    realizado: true,
+  },
 ]
 
 const buttonStyle = {
   margin: '0 0 15px 0',
+}
+
+const propContainer = {
+  width: '100%',
+}
+
+const tableStyle = {
+  width: '100%',
+  overflow: 'auto',
 }
 
 export default class CustomTable extends React.Component {
@@ -70,17 +101,6 @@ export default class CustomTable extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      fixedHeader: true,
-      fixedFooter: true,
-      stripedRows: false,
-      showRowHover: true,
-      selectable: false,
-      multiSelectable: true,
-      enableSelectAll: true,
-      deselectOnClickaway: true,
-      showCheckboxes: false,
-      value: 1,
-      rows: [],
       tableType: [],
       tableData: [],
       dialogOpen: false,
@@ -97,40 +117,96 @@ export default class CustomTable extends React.Component {
     this.setState({height: event.target.value})
   }
 
-  buildCol = (field, index, tableType) => {
-    if(tableType[index].type==='bool') {
-          return(
-              <Toggle
-                toggled={field}
-              />
-          )
-      } else {
-        return(field)
+  buildCol = (tableData, col) => {
+    if(col.type==='bool') {
+      return(
+        <Column
+          columnKey={col.key}
+          isResizable={true}
+          header={<Cell>{col.label}</Cell>}              
+          width={col.width}
+          cell={
+            props => (
+              <Cell {...props}>
+                <Toggle
+                  toggled={tableData[props.rowIndex][col.key]}
+                /> 
+              </Cell>
+            )
+          }
+        />
+      )
+    } else if (col.type==='edit') {
+      return(
+        <Column
+          columnKey={col.key}
+          isResizable={true}
+          header={<Cell>{col.label}</Cell>}              
+          width={col.width}
+          cell={
+            props => (
+              <Cell {...props}>
+                <IconButton>
+                    <EditIcon/>
+                  </IconButton>
+              </Cell>
+            )
+          }
+        />
+      )
+    } else {
+      return(
+        <Column
+          columnKey={col.key}
+          isResizable={true}
+          header={<Cell>{col.label}</Cell>}
+          flexGrow={1}    
+          width={col.width}
+          cell={
+            props => (
+              <Cell {...props}>
+                {this.state.tableData[props.rowIndex][col.key]}
+              </Cell>
+            )
+          }
+        />
+      )
     }
   }
 
-  buildCols = (row, tableType) => {
+  // buildCols = (row, tableType) => {
+  //   let cols = []
+  //   row.map( (field, index)=> (
+  //     cols.push(<TableRowColumn key={index}>{this.buildCol(field, index, tableType)}</TableRowColumn>)      
+  //   ))
+  //   return cols
+  // }
+
+      // <TableRow 
+      //   key={index} 
+      //   selected={row.selected}
+      //   onTouchTap={this.handleOpenDialog}
+      // >
+      //   {this.buildCols(row, tableType)}
+      // </TableRow>
+
+  buildCols = (tableData, tableType) => {
     let cols = []
-    row.map( (field, index)=> (
-      cols.push(<TableRowColumn key={index}>{this.buildCol(field, index, tableType)}</TableRowColumn>)      
+    tableType.map( (col, index) => (
+      cols.push(this.buildCol(tableData, col))
     ))
     return cols
   }
 
-  buildRows = (tableData, tableType) => {
-    let rows = []
-    tableData.map( (row, index) => (
-      rows.push(
-      <TableRow 
-        key={index} 
-        selected={row.selected}
-        onTouchTap={this.handleOpenDialog}
-      >
-        {this.buildCols(row, tableType)}
-      </TableRow>
-      )
-    ))
-    return rows
+  _onColumnResizeEndCallback = (newColumnWidth, columnKey) => {
+    let newTableType = this.state.tableType
+    const colIndex = newTableType.findIndex(
+      (col) => {return col.key===columnKey}
+    )
+    newTableType[colIndex].width = newColumnWidth
+    this.setState({
+      tableType: newTableType
+    })
   }
 
   componentDidMount = () => {
@@ -138,55 +214,29 @@ export default class CustomTable extends React.Component {
       tableType: staticTableType,
       tableData: staticTableData,
     })
-    let rows = this.buildRows(staticTableData, staticTableType)
-    this.setState({rows})
+    // let rows = this.buildRows(staticTableData, staticTableType)
+    // this.setState({rows})
   }
 
   render() {
+    var {tableData, tableType} = this.state;
     return (
-      <div>
+      <div style={tableStyle}>
         <Table
-          fixedHeader={this.state.fixedHeader}
-          fixedFooter={this.state.fixedFooter}
-          selectable={this.state.selectable}
-          multiSelectable={this.state.multiSelectable}
-        >
-          <TableHeader
-            displaySelectAll={this.state.showCheckboxes}
-            adjustForCheckbox={this.state.showCheckboxes}
-            enableSelectAll={this.state.enableSelectAll}
+          rowHeight={50}
+          rowsCount={tableData.length}
+          width={1500}
+          height={500}
+          headerHeight={50}
+          onColumnResizeEndCallback={this._onColumnResizeEndCallback}
+          isColumnResizing={false}
           >
-            <TableRow>
-              <TableHeaderColumn colSpan={this.state.tableType.length} style={{textAlign: 'center'}}>
-                <h1>Table</h1>
-                <RaisedButton
-                  label="Adicionar"
-                  style={buttonStyle}
-                  icon={<Add />}
-                  onTouchTap={this.handleOpenDialog}
-                />
-              </TableHeaderColumn>
-            </TableRow>
-            <TableRow>
-              {this.state.tableType.map( (col, index) => (
-                <TableHeaderColumn key={index}>{col.header}</TableHeaderColumn>
-                ))
-              }
-            </TableRow>
-          </TableHeader>
-          <TableBody
-            displayRowCheckbox={this.state.showCheckboxes}
-            deselectOnClickaway={this.state.deselectOnClickaway}
-            showRowHover={this.state.showRowHover}
-            stripedRows={this.state.stripedRows}
-          >
-            {this.state.rows}
-          </TableBody>
+          {this.buildCols(tableData, tableType)}
         </Table>
         <DialogAdd 
           dialogOpen={this.state.dialogOpen} 
           handleCloseDialog={() => this.setState({dialogOpen: false})}
-          tableType={staticTableType}
+          tableType={tableType}
         />
       </div>
     );
