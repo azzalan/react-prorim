@@ -8,7 +8,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 //     grey100, grey300, grey400, grey500,
 //     white, darkBlack, fullBlack, redA700,
 // } from 'material-ui/styles/colors'
-import Logged from './components/logged.jsx'
+import Logged from './components/logged'
 
 // const muiTheme = getMuiTheme({
 //     fontFamily: 'Roboto, sans-serif',

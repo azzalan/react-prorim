@@ -4,7 +4,7 @@ export const staticTableData = [
   {
     id: 1,
     dataRealizacao: new Date(1332298800000),
-    exame: 'choice',
+    exame: 'Choice1',
     dataEnvio: new Date(1332298800000),
     dataResultado: new Date(1332998800000),
     resultado: 'xresultado resultado resultado resultado resultado ',
@@ -14,7 +14,7 @@ export const staticTableData = [
   {
     id: 2,
     dataRealizacao: new Date(1332298800000),
-    exame: 'choice',
+    exame: 'Choice2',
     dataEnvio: new Date(1332298800000),
     dataResultado: new Date(1332298800000),
     resultado: 'resultado resultado resultado resultado resultado ',

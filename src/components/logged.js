@@ -8,10 +8,10 @@ import {
   Link
 } from 'react-router-dom'
 
-import TableControleAgua from './tables/controle_agua.jsx'
-import TableControleColeta from './tables/controle_coleta.jsx'
-import TableControleDesinfeccao from './tables/controle_desinfeccao.jsx'
-import CustomTable from './table.jsx'
+import TableControleAgua from './tables/controle_agua'
+import TableControleColeta from './tables/controle_coleta'
+import TableControleDesinfeccao from './tables/controle_desinfeccao'
+import CustomTable from '../containers/table'
 
 
 export default class Logged extends Component {
@@ -45,5 +45,3 @@ export default class Logged extends Component {
         )
     }
 }
-
-

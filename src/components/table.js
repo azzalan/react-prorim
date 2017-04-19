@@ -19,16 +19,27 @@ export default class CustomTable extends React.Component {
     this.state = {
       tableCols: [],
       tableData: [],
+      newTableData: [],
       dialogAddOpen: false,
       dialogEditOpen: false,
-      dialogEditValues: null
+      dialogEditValues: null,
+      dialogEditIndex: null,
+      forceChange: false
     }
+  }
+
+  forceChange = () => {
+    let forceChange = !this.state.forceChange
+    this.setState({
+      forceChange
+    })
   }
 
   handleOpenDialogEdit = (e) => {
     this.setState({
       dialogEditValues: this.state.tableData[e.target.id],
-      dialogEditOpen: true
+      dialogEditOpen: true,
+      dialogEditIndex: e.target.id
     })
   }
 
@@ -38,47 +49,67 @@ export default class CustomTable extends React.Component {
     })
   }
 
- buildCols = (cols) => {
+  buildCell = (type, value, index) => {
+    switch(type) {
+      case 'date':
+        return value.toLocaleDateString()
+      case 'bool':
+        return (
+          <Toggle
+            id={index}
+            onTouchTap={this.handleOpenDialogEdit}
+            toggled={value}
+          />
+        )
+      default:
+        return value
+    }
+  }
+
+  buildCols = (cols) => {
     let renderCols = cols
     renderCols.map( (col) => {
-      if (col.type==='date') {
-        Object.assign(col, {
-          render: row => (
-            <span 
-              id={row.index}
-              onTouchTap={this.handleOpenDialogEdit}
-            >
-              {row.value.toLocaleDateString()}
-            </span>
-          )
-        })
-      } else if (col.type==='bool') {
-        Object.assign(col, {
-          render: row => (
-            <Toggle
-              toggled={row.value}
-            />)
-        })
-      }
+      Object.assign(col, {
+        render: row => (
+          <span 
+            id={row.index}
+            onTouchTap={this.handleOpenDialogEdit}
+          >
+            {this.buildCell(col.type, row.value, row.index)}
+          </span>
+        )
+      })
     })
     return renderCols
   }
 
+updateTableData = () => {
+  let tableData = this.state.newTableData
+  this.setState({tableData})
+}
+
+updateNewTableData = (newTableData) => this.setState({newTableData})
+
 renderDialogEdit = () => {
   if (this.state.dialogEditValues) {
-    console.log(this.state.dialogEditOpen)
     return (
       <DialogEdit
+        key='dialogEdit'
         dialogOpen={this.state.dialogEditOpen}
         handleCloseDialog={() => this.setState({dialogEditOpen: false})}
         tableCols={this.state.tableCols}
+        tableData={this.state.tableData}
         values={this.state.dialogEditValues}
+        index={this.state.dialogEditIndex}
+        updateTableData={this.updateTableData}  
+        updateNewTableData={this.updateNewTableData}
       />
     )
   }
 }
 
   componentDidMount = () => {
+    console.log('didmount')
     this.setState({
       tableCols: this.buildCols(staticTableCols),
       tableData: staticTableData,
@@ -87,11 +118,14 @@ renderDialogEdit = () => {
 
   render() {
     var {tableData, tableCols} = this.state;
+    console.log('table render')
+    console.log(tableData)
     return (
       <div>
         <TableToolbar 
           handleOpenDialogAdd={this.handleOpenDialogAdd}
         />
+        <div onTouchTap={this.forceChange}>a</div>
         <ReactTable
           previousText={'Anterior'}
           nextText={'Próximo'}
@@ -103,10 +137,13 @@ renderDialogEdit = () => {
           data={tableData}
           columns={tableCols}
         />
-        <DialogAdd 
+        <DialogAdd
+          key='dialogAdd'
           dialogOpen={this.state.dialogAddOpen}
           handleCloseDialog={() => this.setState({dialogAddOpen: false})}
           tableCols={tableCols}
+          tableData={tableData}
+          updateTableData={tableData => this.setState({tableData})}
         />
         {this.renderDialogEdit()}
       </div>

@@ -1,11 +1,15 @@
-import React from 'react';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import Formsy from 'formsy-react';
-import MenuItem from 'material-ui/MenuItem';
+import React from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import Dialog from 'material-ui/Dialog'
+import FlatButton from 'material-ui/FlatButton'
+import Formsy from 'formsy-react'
+import MenuItem from 'material-ui/MenuItem'
 import { FormsyDate, FormsySelect, FormsyText, FormsyToggle } from 'formsy-material-ui/lib';
 
-export default class FormDialog extends React.Component {
+import { selectTableData } from '../actions/index'
+
+class FormDialog extends React.Component {
 
   constructor(props) {
     super(props)
@@ -14,22 +18,9 @@ export default class FormDialog extends React.Component {
     }
   }
 
-  enableButton = () => {
-    this.setState({
-      canSubmit: true,
-    })
-  }
+  enableButton = () => this.setState({canSubmit: true})
 
-  disableButton = () => {
-    this.setState({
-      canSubmit: false,
-    })
-  }
-
-  submitForm = (data) => {
-    console.log(data)
-    // alert(JSON.stringify(data, null, 4))
-  }
+  disableButton = () => this.setState({canSubmit: false})
 
   notifyFormError = (data) => {
     console.error('Form error:', data)
@@ -47,63 +38,9 @@ export default class FormDialog extends React.Component {
     return returnChoices
   }
 
-  buildFieldWithValue = (field, styles, errorMessages) => {
-    switch(field.type) {
-      case 'date':
-        return(
-          <FormsyDate
-            name={field.accessor}
-            required
-            floatingLabelText={field.header}
-            DateTimeFormat={styles.DateTimeFormat}
-            locale="pt"
-            value={this.props.values[field.accessor]}
-          />
-        )
-      case 'choice':
-        return(
-          <FormsySelect
-            name={field.accessor}
-            required
-            floatingLabelText={field.header}
-            value={this.props.values[field.accessor]}
-          >
-            {this.buildChoices(field.choices)}
-          </FormsySelect>
-        )
-      case 'text':
-        return(
-          <FormsyText
-            name={field.accessor}
-            required
-            floatingLabelText={field.header}
-            value={this.props.values[field.accessor]}                                    
-          />
-        )
-      case 'textNumber':
-        return(
-          <FormsyText
-            name={field.accessor}
-            validations="isNumeric"
-            validationError={errorMessages.numericError}
-            floatingLabelText={field.header}
-            value={this.props.values[field.accessor]}
-          />
-        )
-      case 'bool':
-        return(
-          <FormsyToggle
-            name={field.accessor}
-            label={field.header}
-            style={styles.switchStyle}
-            labelPosition="right"
-            value={this.props.values[field.accessor]}            
-          />
-        )
-      default:
-        break
-    }
-  }
+  addFieldValue = (field) => {
+    if(this.props.values) return {value: this.props.values[field.accessor]}
+  } 
 
   buildField = (field, styles, errorMessages) => {
     switch(field.type) {
@@ -115,6 +52,7 @@ export default class FormDialog extends React.Component {
             floatingLabelText={field.header}
             DateTimeFormat={styles.DateTimeFormat}
             locale="pt"
+            {...this.addFieldValue(field)}
           />
         )
       case 'choice':
@@ -123,6 +61,7 @@ export default class FormDialog extends React.Component {
             name={field.accessor}
             required
             floatingLabelText={field.header}
+            {...this.addFieldValue(field)}
           >
             {this.buildChoices(field.choices)}
           </FormsySelect>
@@ -133,6 +72,7 @@ export default class FormDialog extends React.Component {
             name={field.accessor}
             required
             floatingLabelText={field.header}
+            {...this.addFieldValue(field)}                                    
           />
         )
       case 'textNumber':
@@ -142,6 +82,7 @@ export default class FormDialog extends React.Component {
             validations="isNumeric"
             validationError={errorMessages.numericError}
             floatingLabelText={field.header}
+            {...this.addFieldValue(field)}
           />
         )
       case 'bool':
@@ -151,6 +92,17 @@ export default class FormDialog extends React.Component {
             label={field.header}
             style={styles.switchStyle}
             labelPosition="right"
+            {...this.addFieldValue(field)}            
+          />
+        )
+      case 'id':
+        return(
+          <FormsyText
+            name={field.accessor}
+            validations="isNumeric"
+            validationError={errorMessages.numericError}
+            floatingLabelText={field.header}
+            {...this.addFieldValue(field)}
           />
         )
       default:
@@ -158,26 +110,50 @@ export default class FormDialog extends React.Component {
     }
   }
 
+  addIdValue = () => {
+    const {activeTableData, values} = this.props
+    if(values) {
+      return({value: values.id})
+    } else {
+      return({value: activeTableData[activeTableData.length-1].id+1})
+    }
+  }
+
+  addIdField = (fields) => {
+    fields.push(
+      <div 
+        key={'id'}
+        hidden={true}
+      >
+        <FormsyText
+          name={'id'}
+          required
+          floatingLabelText={'id'}
+          {...this.addIdValue()}
+        />
+      </div>
+    )
+  }
+
   buildFields = (tableCols, styles, errorMessages) => {
     let fields = []
-    if (this.props.values) {
-      tableCols.map( (field, index) => (
-          fields.push(<div key={index}>{this.buildFieldWithValue(field, styles, errorMessages)}</div>)
-      ))
-    } else {
-      tableCols.map( (field, index) => (
-          fields.push(<div key={index}>{this.buildField(field, styles, errorMessages)}</div>)
-      ))
-    }
+    this.addIdField(fields)
+    tableCols.map( (field, index) => (
+        fields.push(
+          <div key={index}>
+            {this.buildField(field, styles, errorMessages)}
+          </div>
+        )
+    ))
     return fields
   }
 
   buildForm = (tableCols, styles, errorMessages) => {
-    return (
+    if (this.props.activeTableData) return (
       <Formsy.Form
         onValid={this.enableButton}
         onInvalid={this.disableButton}
-        onValidSubmit={this.submitForm}
+        onValidSubmit={this.props.submitForm}
         onInvalidSubmit={this.notifyFormError}
         ref="form"
       >
@@ -207,9 +183,9 @@ export default class FormDialog extends React.Component {
       DateTimeFormat,
     }
     const errorMessages = {
-      wordsError: "Please only use letters",
-      numericError: "Please provide a number",
-      urlError: "Please provide a valid URL",
+      wordsError: "Por favor, use apenas letras.",
+      numericError: "Por favor, use apenas números.",
+      urlError: "Por favor, use uma URL válida.",
     }
     const actions = [
       <FlatButton
@@ -218,7 +194,7 @@ export default class FormDialog extends React.Component {
         onTouchTap={this.handleClose}
       />,
       <FlatButton
-        label="Enviar"
+        label="Salvar"
         primary={true}
         keyboardFocused={true}
         disabled={!this.state.canSubmit}
@@ -242,3 +218,15 @@ export default class FormDialog extends React.Component {
     );
   }
 }
+
+function mapStateToProps (state) {
+  return {
+    activeTableData: state.activeTableData
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return bindActionCreators({ selectTableData: selectTableData }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FormDialog)
