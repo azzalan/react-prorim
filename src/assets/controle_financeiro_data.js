@@ -1,4 +1,6 @@
-export const staticTableData = [
+export const controleFinanceiroTitle = 'Controle financeiro'
+
+export const controleFinanceiroData = [
   {
     id: 1,
     dataRealizacao: new Date(1332298800000),

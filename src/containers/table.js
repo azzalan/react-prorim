@@ -12,8 +12,6 @@ import { selectTableData } from '../actions/index'
 import DialogAdd from './dialog_add'
 import DialogEdit from './dialog_edit'
 import TableToolbar from '../components/table_toolbar'
-import {staticTableCols} from '../assets/static_table_cols'
-import {staticTableData} from '../assets/static_table_data'
 // import {styles} from '../assets/styles'
 
 class CustomTable extends React.Component {
@@ -111,9 +109,9 @@ class CustomTable extends React.Component {
 
   componentDidMount = () => {
     this.setState({
-      tableCols: this.buildCols(staticTableCols),
+      tableCols: this.buildCols(this.props.tableCols),
     })
-    this.props.selectTableData(staticTableData)
+    this.props.selectTableData(this.props.tableData)
   }
 
   render() {

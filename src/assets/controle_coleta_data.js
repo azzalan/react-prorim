@@ -1,4 +1,6 @@
-export const staticTableData = [
+export const controleColetaTitle = 'Controle de coleta'
+
+export const controleColetaData = [
   {
     id: 1,
     dataRealizacao: new Date(1332298800000),

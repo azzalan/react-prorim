@@ -1,4 +1,6 @@
-export const staticTableData = [
+export const manutencaoCorretivaTitle = 'Manutenção coretiva'
+
+export const manutencaoCorretivaData = [
   {
     id: 1,
     dataRealizacao: new Date(1332298800000),
