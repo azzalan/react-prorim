@@ -4,7 +4,7 @@ export const manutencaoPreventivaData = [
   {
     id: 1,
     numeroMaquina: '1',
-    fabricante: 'Fabricante2',
+    fabricante: 'Fabricante1',
     janeiro: false,
     fevereiro: false,
     marco: false,

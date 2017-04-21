@@ -1,4 +1,4 @@
-export const manuntencaoCorretivaCols = [
+export const manutencaoCorretivaCols = [
   {
     accessor: 'dataRealizacao',
     header: 'Data da realização',

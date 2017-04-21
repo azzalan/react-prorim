@@ -1,43 +1,57 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-// import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import { cyan500 } from 'material-ui/styles/colors'
 
-// import {
-//     red500, red600,
-//     grey100, grey300, grey400, grey500,
-//     white, darkBlack, fullBlack, redA700,
-// } from 'material-ui/styles/colors'
 import Logged from './components/logged'
-
-// const muiTheme = getMuiTheme({
-//     fontFamily: 'Roboto, sans-serif',
-//     palette: {
-//         primary1Color: redA700,
-//         primary2Color: red600,
-//         primary3Color: grey400,
-//         accent1Color: grey500,
-//         accent2Color: grey100,
-//         accent3Color: grey500,
-//         textColor: darkBlack,
-//         alternateTextColor: white,
-//         canvasColor: white,
-//         borderColor: grey300,
-//         pickerHeaderColor: red500,
-//         shadowColor: fullBlack,
-//     },
-// })
+import Login from './containers/login'
+import { newLogin } from './actions/index'
 
 injectTapEventPlugin()
 
-export default class App extends Component {
+class App extends Component {
+
+  renderLogin = () => {
+    document.body.style.backgroundColor = cyan500
+    return (<Login />)
+  }
+
+  renderLogged = () => {
+    document.body.style.backgroundColor = null
+    return (<Logged />)
+  }
+
+  renderApp = () => {
+    const { log } = this.props
+    if (log) {
+      if (log.status) return this.renderLogged()
+      else return this.renderLogin()
+    } else return this.renderLogin()
+  }
+
+  componentDidMount = () => {
+    if(this.props.log===null) this.props.newLogin()
+  }
+
   render () {
     return (
       <MuiThemeProvider>
-        <div>
-          <Logged />
-        </div>
+        {this.renderApp()}
       </MuiThemeProvider>
     )
   }
 }
+
+function mapStateToProps (state) {
+  return {
+    log: state.log
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return bindActionCreators({ newLogin: newLogin }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)

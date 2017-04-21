@@ -1,19 +1,20 @@
-import React, { Component } from 'react';
-import AppBar from 'material-ui/AppBar';
-import Drawer from 'material-ui/Drawer';
-import MenuItem from 'material-ui/MenuItem';
+import React, { Component } from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import AppBar from 'material-ui/AppBar'
+import Drawer from 'material-ui/Drawer'
+import MenuItem from 'material-ui/MenuItem'
 import {
   BrowserRouter as Router,
   Route,
   Link
 } from 'react-router-dom'
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
+import IconMenu from 'material-ui/IconMenu'
+import IconButton from 'material-ui/IconButton'
 
-import TableControleAgua from './tables/controle_agua'
-import TableControleColeta from './tables/controle_coleta'
-import TableControleDesinfeccao from './tables/controle_desinfeccao'
+import { logout } from '../actions/index'
 import CustomTable from '../containers/table'
-import {staticTableCols} from '../assets/static_table_cols'
-import {staticTableData} from '../assets/static_table_data'
 import {controleAguaCols} from '../assets/controle_agua_cols'
 import {controleAguaData, controleAguaTitle} from '../assets/controle_agua_data'
 import {controleColetaCols} from '../assets/controle_coleta_cols'
@@ -33,7 +34,12 @@ import {maquinasData, maquinasTitle} from '../assets/maquinas_data'
 class ControleAgua extends Component {
   render() {
     return(
-      <CustomTable tableTitle={controleAguaTitle} tableData={controleAguaData} tableCols={controleAguaCols}/>
+      <CustomTable 
+        tableTitle={controleAguaTitle} 
+        tableData={controleAguaData} 
+        tableCols={controleAguaCols}
+        disableAddButton={false}
+      />
     )
   }
 }
@@ -41,7 +47,12 @@ class ControleAgua extends Component {
 class ControleColeta extends Component {
   render() {
     return(
-      <CustomTable tableTitle={controleColetaTitle} tableData={controleColetaData} tableCols={controleColetaCols}/>
+      <CustomTable 
+        tableTitle={controleColetaTitle} 
+        tableData={controleColetaData} 
+        tableCols={controleColetaCols}
+        disableAddButton={false}
+      />
     )
   }
 }
@@ -49,7 +60,12 @@ class ControleColeta extends Component {
 class ControleDesinfeccao extends Component {
   render() {
     return(
-      <CustomTable tableTitle={controleDesinfeccaoTitle} tableData={controleDesinfeccaoData} tableCols={controleDesinfeccaoCols}/>
+      <CustomTable 
+        tableTitle={controleDesinfeccaoTitle} 
+        tableData={controleDesinfeccaoData} 
+        tableCols={controleDesinfeccaoCols}
+        disableAddButton={false}
+      />
     )
   }
 }
@@ -57,7 +73,12 @@ class ControleDesinfeccao extends Component {
 class ControleFinanceiro extends Component {
   render() {
     return(
-      <CustomTable tableTitle={controleFinanceiroTitle} tableData={controleFinanceiroData} tableCols={controleFinanceiroCols}/>
+      <CustomTable 
+        tableTitle={controleFinanceiroTitle} 
+        tableData={controleFinanceiroData} 
+        tableCols={controleFinanceiroCols}
+        disableAddButton={false}
+      />
     )
   }
 }
@@ -65,7 +86,12 @@ class ControleFinanceiro extends Component {
 class ManutencaoCorretiva extends Component {
   render() {
     return(
-      <CustomTable tableTitle={manutencaoCorretivaTitle} tableData={manutencaoCorretivaData} tableCols={manutencaoCorretivaCols}/>
+      <CustomTable 
+        tableTitle={manutencaoCorretivaTitle} 
+        tableData={manutencaoCorretivaData} 
+        tableCols={manutencaoCorretivaCols}
+        disableAddButton={true}
+      />
     )
   }
 }
@@ -73,7 +99,12 @@ class ManutencaoCorretiva extends Component {
 class ManutencaoPreventiva extends Component {
   render() {
     return(
-      <CustomTable tableTitle={manutencaoPreventivaTitle} tableData={manutencaoPreventivaData} tableCols={manutencaoPreventivaCols}/>
+      <CustomTable 
+        tableTitle={manutencaoPreventivaTitle} 
+        tableData={manutencaoPreventivaData} 
+        tableCols={manutencaoPreventivaCols}
+        disableAddButton={true}
+      />
     )
   }
 }
@@ -81,12 +112,17 @@ class ManutencaoPreventiva extends Component {
 class Maquinas extends Component {
   render() {
     return(
-      <CustomTable tableTitle={maquinasTitle} tableData={maquinasData} tableCols={maquinasCols}/>
+      <CustomTable 
+        tableTitle={maquinasTitle} 
+        tableData={maquinasData} 
+        tableCols={maquinasCols}
+        disableAddButton={false}
+      />
     )
   }
 }
 
-export default class Logged extends Component {
+class Logged extends Component {
     constructor(props) {
     super(props)
     this.state = {open: true}
@@ -96,11 +132,28 @@ export default class Logged extends Component {
 
   handleClose = () => this.setState({open: false});
 
+  handleSair = () => this.props.logout()
+
+  renderRightMenu = () => (
+    <IconMenu
+      iconButtonElement={
+        <IconButton><MoreVertIcon /></IconButton>
+      }
+      targetOrigin={{horizontal: 'right', vertical: 'top'}}
+      anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+    >
+      <MenuItem primaryText="Sair" onTouchTap={this.handleSair}/>
+    </IconMenu>
+  )
+
   render() {
     return (
       <Router>
         <div>
-          <AppBar title="My AppBar" onLeftIconButtonTouchTap={this.handleToggle}/>
+          <AppBar title="Pro Rim" 
+            onLeftIconButtonTouchTap={this.handleToggle}
+            iconElementRight={this.renderRightMenu()}
+          />
           <Drawer open={this.state.open} docked={false} onRequestChange={(open) => this.setState({open})}>
             <AppBar title="Menu" onLeftIconButtonTouchTap={this.handleToggle}/>
             <Link to="/controle-agua"><MenuItem onTouchTap={this.handleClose}>{controleAguaTitle}</MenuItem></Link>
@@ -123,3 +176,15 @@ export default class Logged extends Component {
     )
   }
 }
+
+function mapStateToProps (state) {
+  return {}
+}
+
+function mapDispatchToProps (dispatch) {
+  return bindActionCreators({ 
+    logout: logout,
+  }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Logged)

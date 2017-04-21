@@ -19,10 +19,23 @@ export default class TableToolbar extends React.Component {
 
   handleChange = (event, index, value) => this.setState({value});
 
+  renderAddButton = () => {
+    if (!this.props.disableAddButton) {
+      return(
+        <RaisedButton 
+          label="Adicionar"
+          primary={true} 
+          onTouchTap={this.props.handleOpenDialogAdd}
+        />
+      )
+    }
+  }
+
   render() {
+    const {tableTitle} = this.props
     return (
       <Toolbar>
-        <ToolbarTitle text="Nome da tabela" />
+        <ToolbarTitle text={tableTitle} />
         <ToolbarGroup firstChild={true}>
           <DropDownMenu value={this.state.value} onChange={this.handleChange}>
             <MenuItem value={1} primaryText="All Broadcasts" />
@@ -38,11 +51,7 @@ export default class TableToolbar extends React.Component {
           <ToolbarTitle text="Opções" />
           <FontIcon className="muidocs-icon-custom-sort" />
           <ToolbarSeparator />
-          <RaisedButton 
-            label="Adicionar" 
-            primary={true} 
-            onTouchTap={this.props.handleOpenDialogAdd}
-          />
+          {this.renderAddButton()}
           <IconMenu
             iconButtonElement={
               <IconButton touch={true}>

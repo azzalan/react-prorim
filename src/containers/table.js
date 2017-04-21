@@ -115,11 +115,13 @@ class CustomTable extends React.Component {
   }
 
   render() {
-    let {tableCols} = this.state
+    const {tableCols} = this.state
     return (
       <div>
-        <TableToolbar 
+        <TableToolbar
+          tableTitle={this.props.tableTitle}
           handleOpenDialogAdd={this.handleOpenDialogAdd}
+          disableAddButton={this.props.disableAddButton}
         />
         {this.renderTable()}
         <DialogAdd

@@ -9,7 +9,8 @@ export const manutencaoPreventivaCols = [
     accessor: 'fabricante',
     header: 'Fabricante',
     type: 'choice',
-    choices: ['Fabricante1', 'Fabricante2', 'Fabricante3']
+    choices: ['Fabricante1', 'Fabricante2', 'Fabricante3'],
+    readOnly: true
   },
   {
     accessor: 'janeiro',

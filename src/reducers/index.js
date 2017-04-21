@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux'
-import TableDataReducer from './tableData'
 import ActiveTableData from './active_table_data'
+import ActiveTable from './active_table'
+import Log from './log'
 
 const rootReducer = combineReducers({
-  tableData: TableDataReducer,
-  activeTableData: ActiveTableData
+  activeTableData: ActiveTableData,
+  activeTable: ActiveTable,
+  log: Log
 })
 
 export default rootReducer

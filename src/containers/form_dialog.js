@@ -135,12 +135,16 @@ class FormDialog extends React.Component {
     )
   }
 
+  readOnlyProp = (field) => {
+    if (field.readOnly) return({hidden: true})
+  }
+
   buildFields = (tableCols, styles, errorMessages) => {
     let fields = []
     this.addIdField(fields)
     tableCols.map( (field, index) => (
         fields.push(
-          <div key={index}>
+          <div key={index} {...this.readOnlyProp(field)}>
             {this.buildField(field, styles, errorMessages)}
           </div>
         )
