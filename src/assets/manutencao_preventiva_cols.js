@@ -1,12 +1,12 @@
 export const manutencaoPreventivaCols = [
   {
-    accessor: 'numeroMaquina',
+    accessor: 'maquina.numero',
     header: 'Número da máquina',
     type: 'choice',
     choices: ['1', '2', '3']
   },
   {
-    accessor: 'fabricante',
+    accessor: 'maquina.fabricante',
     header: 'Fabricante',
     type: 'choice',
     choices: ['Fabricante1', 'Fabricante2', 'Fabricante3'],

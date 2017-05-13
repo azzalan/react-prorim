@@ -26,7 +26,7 @@ class App extends Component {
   renderApp = () => {
     const { log } = this.props
     if (log) {
-      if (log.status) return this.renderLogged()
+      if (!log.status) return this.renderLogged()
       else return this.renderLogin()
     } else return this.renderLogin()
   }

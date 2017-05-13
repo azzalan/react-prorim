@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Toggle from 'material-ui/Toggle'
@@ -9,10 +10,9 @@ import 'react-table/react-table.css'
 
 import { selectTableData } from '../actions/index'
 
-import DialogAdd from './dialog_add'
-import DialogEdit from './dialog_edit'
+import DialogAdd from '../components/dialog_add'
+import DialogEdit from '../components/dialog_edit'
 import TableToolbar from '../components/table_toolbar'
-// import {styles} from '../assets/styles'
 
 class CustomTable extends React.Component {
 
@@ -41,10 +41,15 @@ class CustomTable extends React.Component {
     })
   }
 
-  buildCell = (type, value, index) => {
-    switch(type) {
+  buildCell = (col, value, index) => {
+    switch(col.type) {
       case 'date':
-        return value.toLocaleDateString()
+        let date = new Date(value)
+        let day = date.getDate()
+        let month = date.getMonth()+1
+        let year = date.getFullYear()
+        let stringDate = day + '/' + month + '/' + year
+        return stringDate
       case 'bool':
         return (
           <Toggle
@@ -53,6 +58,8 @@ class CustomTable extends React.Component {
             toggled={value}
           />
         )
+      case 'obj':
+        return value[col.show]
       default:
         return value
     }
@@ -67,7 +74,7 @@ class CustomTable extends React.Component {
             id={row.index}
             onTouchTap={this.handleOpenDialogEdit}
           >
-            {this.buildCell(col.type, row.value, row.index)}
+            {this.buildCell(col, row.value, row.index)}
           </span>
         )
       })
@@ -85,6 +92,8 @@ class CustomTable extends React.Component {
           tableCols={this.state.tableCols}
           values={this.state.dialogEditValues}
           index={this.state.dialogEditIndex} 
+          tableUrl={this.props.tableUrl}
+          fetchTableData={this.fetchTableData}
         />
       )
     }
@@ -107,11 +116,30 @@ class CustomTable extends React.Component {
     )
   }
 
+  fetchTableData = () => {
+    axios.get(this.props.tableUrl).then(
+      this.updateTableData
+    ).catch(function(error){
+      alert(error)
+    });
+  }
+
+  updateTableData = (response) => {
+    this.props.selectTableData(response.data)
+  }
+
   componentDidMount = () => {
     this.setState({
       tableCols: this.buildCols(this.props.tableCols),
     })
-    this.props.selectTableData(this.props.tableData)
+    // this.props.selectTableData(this.props.tableData)
+    // fetch('http://127.0.0.1:8000/test.json', {}).then(function(response){
+    //   console.log(response)
+    // }).catch(function(err) {
+    //   console.log(err)
+    // })
+    // post put get delete
+    this.fetchTableData()
   }
 
   render() {
@@ -128,6 +156,8 @@ class CustomTable extends React.Component {
           dialogOpen={this.state.dialogAddOpen}
           handleCloseDialog={() => this.setState({dialogAddOpen: false})}
           tableCols={tableCols}
+          tableUrl={this.props.tableUrl}
+          fetchTableData={this.fetchTableData}
         />
         {this.renderDialogEdit()}
       </div>

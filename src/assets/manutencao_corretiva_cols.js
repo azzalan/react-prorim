@@ -1,38 +1,44 @@
 export const manutencaoCorretivaCols = [
   {
-    accessor: 'dataRealizacao',
-    header: 'Data da realização',
+    accessor: 'data',
+    header: 'Data',
     type: 'date'
   },
   {
-    accessor: 'exame',
-    header: 'Exame',
-    type: 'choice',
-    choices: ['Choice1', 'Choice2', 'Choice3']
+    accessor: 'erro.estadia.turno.sala.identificador',
+    header: 'Sala',
+    type: 'text',
+    readOnly: true
   },
   {
-    accessor: 'dataEnvio',
-    header: 'Data do envio',
-    type: 'date'
+    accessor: 'erro',
+    header: 'Número do erro',
+    type: 'obj',
+    show: 'numero',
+    readOnly: true,
+    readOnlyButRequired: true
   },
   {
-    accessor: 'dataResultado',
-    header: 'Data do resultado',
-    type: 'date'
+    accessor: 'erro.maquina.numero',
+    header: 'Número da máquina',
+    type: 'text',
+    readOnly: true
   },
   {
-    accessor: 'resultado',
-    header: 'Resultado',
+    accessor: 'erro.enfermeiro.firstName',
+    header: 'Enfermeiro',
+    type: 'text',
+    readOnly: true
+  },
+  {
+    accessor: 'acao',
+    header: 'Ação',
     type: 'text'
   },
   {
-    accessor: 'numeroLaudo',
-    header: 'Número do laudo',
-    type: 'textNumber'
-  },
-  {
-    accessor: 'realizado',
-    header: 'Realizado',
-    type: 'bool'
+    accessor: 'tecnico',
+    header: 'Técnico',
+    type: 'obj',
+    show: 'firstName'
   }
 ]

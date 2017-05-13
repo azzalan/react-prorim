@@ -1,6 +1,6 @@
 export const controleColetaCols = [
   {
-    accessor: 'dataRealizacao',
+    accessor: 'dataRealizado',
     header: 'Data da realização',
     type: 'date'
   },
@@ -26,7 +26,7 @@ export const controleColetaCols = [
     type: 'text'
   },
   {
-    accessor: 'numeroLaudo',
+    accessor: 'numeroDoLaudo',
     header: 'Número do laudo',
     type: 'textNumber'
   },

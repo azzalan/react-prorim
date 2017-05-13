@@ -1,5 +1,4 @@
 import React from 'react'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
@@ -7,14 +6,13 @@ import Formsy from 'formsy-react'
 import MenuItem from 'material-ui/MenuItem'
 import { FormsyDate, FormsySelect, FormsyText, FormsyToggle } from 'formsy-material-ui/lib';
 
-import { selectTableData } from '../actions/index'
-
 class FormDialog extends React.Component {
 
   constructor(props) {
     super(props)
     this.state = {
       canSubmit: false,
+      confirmDialogOpen: false,
     }
   }
 
@@ -26,8 +24,11 @@ class FormDialog extends React.Component {
     console.error('Form error:', data)
   }
 
-  handleClose = () => {
-    this.props.handleCloseDialog()
+  handleCloseConfirm = () => this.setState({confirmDialogOpen: false})
+
+  handleDelete = () => {
+    this.handleCloseConfirm()
+    this.props.deleteAction()
   }
 
   buildChoices = (choices) => {
@@ -40,6 +41,10 @@ class FormDialog extends React.Component {
 
   addFieldValue = (field) => {
     if(this.props.values) return {value: this.props.values[field.accessor]}
+  }
+
+  addFieldDateValue = (field) => {
+    if(this.props.values) return {value: new Date(this.props.values[field.accessor])}
   } 
 
   buildField = (field, styles, errorMessages) => {
@@ -52,7 +57,7 @@ class FormDialog extends React.Component {
             floatingLabelText={field.header}
             DateTimeFormat={styles.DateTimeFormat}
             locale="pt"
-            {...this.addFieldValue(field)}
+            {...this.addFieldDateValue(field)}
           />
         )
       case 'choice':
@@ -95,60 +100,37 @@ class FormDialog extends React.Component {
             {...this.addFieldValue(field)}            
           />
         )
-      case 'id':
+      case 'obj':
         return(
-          <FormsyText
+          <FormsySelect
             name={field.accessor}
-            validations="isNumeric"
-            validationError={errorMessages.numericError}
+            required
             floatingLabelText={field.header}
-            {...this.addFieldValue(field)}
-          />
+            value={2}
+          >
+            <MenuItem value={'1'} primaryText={'erro1'} key={1} />
+            <MenuItem value={'2'} primaryText={'erro2'} key={2} />
+            <MenuItem value={'3'} primaryText={'erro3'} key={3} />
+          </FormsySelect>
         )
       default:
         break
     }
   }
 
-  addIdValue = () => {
-    const {activeTableData, values} = this.props
-    if(values) {
-      return({value: values.id})
-    } else {
-      return({value: activeTableData[activeTableData.length-1].id+1})
-    }
-  }
-
-  addIdField = (fields) => {
-    fields.push(
-      <div 
-        key={'id'}
-        hidden={true}
-      >
-        <FormsyText
-          name={'id'}
-          required
-          floatingLabelText={'id'}
-          {...this.addIdValue()}
-        />
-      </div>
-    )
-  }
-
-  readOnlyProp = (field) => {
-    if (field.readOnly) return({hidden: true})
+  readOnlyCheck = (field, index, fields, styles, errorMessages) => {
+      if (!field.readOnly) {
+        fields.push(
+          <div key={index}>
+            {this.buildField(field, styles, errorMessages)}
+          </div>
+        )
+      }
   }
 
   buildFields = (tableCols, styles, errorMessages) => {
     let fields = []
-    this.addIdField(fields)
-    tableCols.map( (field, index) => (
-        fields.push(
-          <div key={index} {...this.readOnlyProp(field)}>
-            {this.buildField(field, styles, errorMessages)}
-          </div>
-        )
-    ))
+    tableCols.map( (field, index) => this.readOnlyCheck(field, index, fields, styles, errorMessages))
     return fields
   }
 
@@ -164,6 +146,18 @@ class FormDialog extends React.Component {
         {this.buildFields(tableCols, styles, errorMessages)}
       </Formsy.Form>
     )
+  }
+
+  addDelete = () => {
+    if (this.props.enableDelete) {
+      return (
+      <FlatButton
+        label="Excluir"
+        primary={true}
+        onTouchTap={()=>{this.setState({confirmDialogOpen: true})}}
+      />
+      )
+    }
   }
 
   componentDidMount = () => {
@@ -191,12 +185,26 @@ class FormDialog extends React.Component {
       numericError: "Por favor, use apenas números.",
       urlError: "Por favor, use uma URL válida.",
     }
+    const confirmActions = [
+      <FlatButton
+        label="Cancelar"
+        primary={true}
+        onTouchTap={this.handleCloseConfirm}
+      />,
+      <FlatButton
+        label="Confirmar"
+        primary={true}
+        keyboardFocused={true}
+        onTouchTap={this.handleDelete}
+      />,
+    ]
     const actions = [
       <FlatButton
         label="Cancelar"
         primary={true}
-        onTouchTap={this.handleClose}
+        onTouchTap={this.props.handleCloseDialog}
       />,
+      this.addDelete(),
       <FlatButton
         label="Salvar"
         primary={true}
@@ -209,14 +217,24 @@ class FormDialog extends React.Component {
     return (
       <div>
         <Dialog
-          title="Dialog With Actions"
+          title={this.props.title}
           actions={actions}
           modal={false}
           autoScrollBodyContent={true}
           open={this.props.dialogOpen}
-          onRequestClose={this.handleClose}
+          onRequestClose={this.props.handleCloseDialog}
         >
           {this.buildForm(this.props.tableCols, styles, errorMessages)}
+          <Dialog
+            title="Confirmar"
+            actions={confirmActions}
+            modal={false}
+            autoScrollBodyContent={true}
+            open={this.state.confirmDialogOpen}
+            onRequestClose={this.handleCloseConfirm}
+          >
+            Tem certeza que deseja excluir esse elemento?
+          </Dialog>
         </Dialog>
       </div>
     );
@@ -229,8 +247,4 @@ function mapStateToProps (state) {
   }
 }
 
-function mapDispatchToProps (dispatch) {
-  return bindActionCreators({ selectTableData: selectTableData }, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(FormDialog)
+export default connect(mapStateToProps)(FormDialog)

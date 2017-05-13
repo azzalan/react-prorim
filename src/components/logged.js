@@ -16,27 +16,28 @@ import IconButton from 'material-ui/IconButton'
 import { logout } from '../actions/index'
 import CustomTable from '../containers/table'
 import {controleAguaCols} from '../assets/controle_agua_cols'
-import {controleAguaData, controleAguaTitle} from '../assets/controle_agua_data'
+import {controleAguaTitle} from '../assets/controle_agua_data'
 import {controleColetaCols} from '../assets/controle_coleta_cols'
-import {controleColetaData, controleColetaTitle} from '../assets/controle_coleta_data'
+import {controleColetaTitle} from '../assets/controle_coleta_data'
 import {controleDesinfeccaoCols} from '../assets/controle_desinfeccao_cols'
-import {controleDesinfeccaoData, controleDesinfeccaoTitle} from '../assets/controle_desinfeccao_data'
-import {controleFinanceiroCols} from '../assets/controle_financeiro_cols'
-import {controleFinanceiroData, controleFinanceiroTitle} from '../assets/controle_financeiro_data'
+import {controleDesinfeccaoTitle} from '../assets/controle_desinfeccao_data'
+// import {controleFinanceiroCols} from '../assets/controle_financeiro_cols'
+import {controleFinanceiroTitle} from '../assets/controle_financeiro_data'
 import {manutencaoCorretivaCols} from '../assets/manutencao_corretiva_cols'
-import {manutencaoCorretivaData, manutencaoCorretivaTitle} from '../assets/manutencao_corretiva_data'
+import {manutencaoCorretivaTitle} from '../assets/manutencao_corretiva_data'
 import {manutencaoPreventivaCols} from '../assets/manutencao_preventiva_cols'
-import {manutencaoPreventivaData, manutencaoPreventivaTitle} from '../assets/manutencao_preventiva_data'
+import {manutencaoPreventivaTitle} from '../assets/manutencao_preventiva_data'
 import {maquinasCols} from '../assets/maquinas_cols'
-import {maquinasData, maquinasTitle} from '../assets/maquinas_data'
-
+import {maquinasTitle} from '../assets/maquinas_data'
+import {apiUrl} from '../assets/urls'
 
 class ControleAgua extends Component {
   render() {
+    const tableUrl = apiUrl + 'controle-agua/'
     return(
       <CustomTable 
-        tableTitle={controleAguaTitle} 
-        tableData={controleAguaData} 
+        tableUrl={tableUrl}
+        tableTitle={controleAguaTitle}
         tableCols={controleAguaCols}
         disableAddButton={false}
       />
@@ -46,10 +47,11 @@ class ControleAgua extends Component {
 
 class ControleColeta extends Component {
   render() {
+    const tableUrl = apiUrl + 'controle-coleta/'
     return(
       <CustomTable 
-        tableTitle={controleColetaTitle} 
-        tableData={controleColetaData} 
+        tableUrl={tableUrl}
+        tableTitle={controleColetaTitle}
         tableCols={controleColetaCols}
         disableAddButton={false}
       />
@@ -59,10 +61,11 @@ class ControleColeta extends Component {
 
 class ControleDesinfeccao extends Component {
   render() {
+    const tableUrl = apiUrl + 'controle-desinfeccao/'
     return(
       <CustomTable 
+        tableUrl={tableUrl}
         tableTitle={controleDesinfeccaoTitle} 
-        tableData={controleDesinfeccaoData} 
         tableCols={controleDesinfeccaoCols}
         disableAddButton={false}
       />
@@ -73,22 +76,24 @@ class ControleDesinfeccao extends Component {
 class ControleFinanceiro extends Component {
   render() {
     return(
-      <CustomTable 
+      <div></div>
+      /*<CustomTable 
         tableTitle={controleFinanceiroTitle} 
         tableData={controleFinanceiroData} 
         tableCols={controleFinanceiroCols}
         disableAddButton={false}
-      />
+      />*/
     )
   }
 }
 
 class ManutencaoCorretiva extends Component {
   render() {
+    const tableUrl = apiUrl + 'manutencao-corretiva/'
     return(
       <CustomTable 
+        tableUrl={tableUrl}
         tableTitle={manutencaoCorretivaTitle} 
-        tableData={manutencaoCorretivaData} 
         tableCols={manutencaoCorretivaCols}
         disableAddButton={true}
       />
@@ -98,10 +103,11 @@ class ManutencaoCorretiva extends Component {
 
 class ManutencaoPreventiva extends Component {
   render() {
+    const tableUrl = apiUrl + 'manutencao-preventiva/'
     return(
       <CustomTable 
+        tableUrl={tableUrl}
         tableTitle={manutencaoPreventivaTitle} 
-        tableData={manutencaoPreventivaData} 
         tableCols={manutencaoPreventivaCols}
         disableAddButton={true}
       />
@@ -111,10 +117,11 @@ class ManutencaoPreventiva extends Component {
 
 class Maquinas extends Component {
   render() {
+    const tableUrl = apiUrl + 'maquina/'
     return(
       <CustomTable 
-        tableTitle={maquinasTitle} 
-        tableData={maquinasData} 
+        tableUrl={tableUrl}
+        tableTitle={maquinasTitle}
         tableCols={maquinasCols}
         disableAddButton={false}
       />

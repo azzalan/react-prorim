@@ -1,9 +1,14 @@
 export const maquinasCols = [
   {
-    accessor: 'numeroMaquina',
+    accessor: 'numero',
     header: 'Número da máquina',
     type: 'choice',
     choices: ['1', '2', '3']
+  },
+  {
+    accessor: 'fabricante',
+    header: 'Fabricante',
+    type: 'text'
   },
   {
     accessor: 'disponibilidade',
