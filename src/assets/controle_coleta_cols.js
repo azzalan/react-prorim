@@ -7,8 +7,9 @@ export const controleColetaCols = [
   {
     accessor: 'exame',
     header: 'Exame',
-    type: 'choice',
-    choices: ['Choice1', 'Choice2', 'Choice3']
+    type: 'obj',
+    show: 'nome',
+    choicesUrl: 'choice-exame-coleta/'
   },
   {
     accessor: 'dataEnvio',

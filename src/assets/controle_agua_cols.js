@@ -7,8 +7,9 @@ export const controleAguaCols = [
   {
     accessor: 'teste',
     header: 'Teste',
-    type: 'choice',
-    choices: ['Teste1', 'Teste2', 'Teste3']
+    type: 'obj',
+    show: 'nome',
+    choicesUrl: 'choice-teste-agua/'
   },
   {
     accessor: 'resultado',

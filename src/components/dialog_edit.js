@@ -6,6 +6,7 @@ import FormDialog from '../containers/form_dialog'
 export default class DialogEdit extends React.Component {
 
   submitForm = (data) => {
+    data['csrfmiddlewaretoken'] = "{{ csrf_token }}"
     this.props.tableCols.map( (col, index) => {
       if (col.readOnlyButRequired) {
         if (col.type==='obj') data[col.accessor] = this.props.values[col.accessor].id
@@ -13,8 +14,6 @@ export default class DialogEdit extends React.Component {
       }
       return null
     })
-    console.log(data)
-    console.log(this.props.tableUrl+this.props.values.id+'/')
     axios.put(this.props.tableUrl+this.props.values.id+'/', data).then(
       this.props.fetchTableData
     ).catch(function(error){alert(error)})

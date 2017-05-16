@@ -1,0 +1,7 @@
+export const controleAguaTitle = 'Controle de água'
+export const controleColetaTitle = 'Controle de coleta'
+export const controleDesinfeccaoTitle = 'Controle de desinfecção'
+export const controleFinanceiroTitle = 'Controle financeiro'
+export const manutencaoCorretivaTitle = 'Manutenção coretiva'
+export const manutencaoPreventivaTitle = 'Manutenção preventiva'
+export const maquinasTitle = 'Máquinas'

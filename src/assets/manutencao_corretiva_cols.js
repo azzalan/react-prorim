@@ -39,6 +39,7 @@ export const manutencaoCorretivaCols = [
     accessor: 'tecnico',
     header: 'Técnico',
     type: 'obj',
-    show: 'firstName'
+    show: 'firstName',
+    choicesUrl: 'tecnico/'
   }
 ]

@@ -13,6 +13,7 @@ import { selectTableData } from '../actions/index'
 import DialogAdd from '../components/dialog_add'
 import DialogEdit from '../components/dialog_edit'
 import TableToolbar from '../components/table_toolbar'
+import { apiUrl } from '../assets/urls'
 
 class CustomTable extends React.Component {
 
@@ -20,6 +21,7 @@ class CustomTable extends React.Component {
     super(props)
     this.state = {
       tableCols: [],
+      choices: {},
       dialogAddOpen: false,
       dialogEditOpen: false,
       dialogEditValues: null,
@@ -51,15 +53,17 @@ class CustomTable extends React.Component {
         let stringDate = day + '/' + month + '/' + year
         return stringDate
       case 'bool':
+        let toggleValue = (value==='true'||value)
         return (
           <Toggle
             id={index}
             onTouchTap={this.handleOpenDialogEdit}
-            toggled={value}
+            toggled={toggleValue}
           />
         )
       case 'obj':
-        return value[col.show]
+        if (value) return value[col.show]
+        break
       default:
         return value
     }
@@ -68,6 +72,13 @@ class CustomTable extends React.Component {
   buildCols = (cols) => {
     let renderCols = cols
     renderCols.map( (col) => {
+      if (col.choicesUrl) {
+        axios.get(apiUrl+col.choicesUrl).then(function(response){
+          let choices = {...this.state.choices}
+          choices[col.accessor] = response.data
+          this.setState({choices})
+        }.bind(this)).catch(function(error){alert(error)})
+      }
       Object.assign(col, {
         render: row => (
           <span 
@@ -90,6 +101,7 @@ class CustomTable extends React.Component {
           dialogOpen={this.state.dialogEditOpen}
           handleCloseDialog={() => this.setState({dialogEditOpen: false})}
           tableCols={this.state.tableCols}
+          choices={this.state.choices}
           values={this.state.dialogEditValues}
           index={this.state.dialogEditIndex} 
           tableUrl={this.props.tableUrl}
@@ -132,18 +144,11 @@ class CustomTable extends React.Component {
     this.setState({
       tableCols: this.buildCols(this.props.tableCols),
     })
-    // this.props.selectTableData(this.props.tableData)
-    // fetch('http://127.0.0.1:8000/test.json', {}).then(function(response){
-    //   console.log(response)
-    // }).catch(function(err) {
-    //   console.log(err)
-    // })
-    // post put get delete
     this.fetchTableData()
   }
 
   render() {
-    const {tableCols} = this.state
+    const {tableCols, choices} = this.state
     return (
       <div>
         <TableToolbar
@@ -156,6 +161,7 @@ class CustomTable extends React.Component {
           dialogOpen={this.state.dialogAddOpen}
           handleCloseDialog={() => this.setState({dialogAddOpen: false})}
           tableCols={tableCols}
+          choices={choices}
           tableUrl={this.props.tableUrl}
           fetchTableData={this.fetchTableData}
         />

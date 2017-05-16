@@ -31,11 +31,16 @@ class FormDialog extends React.Component {
     this.props.deleteAction()
   }
 
-  buildChoices = (choices) => {
+  buildChoices = (field) => {
     let returnChoices = []
-    choices.map( (choice, index) => (
-      returnChoices.push(<MenuItem value={choice} primaryText={choice} key={index} />)
-    ))
+    if (this.props.choices[field.accessor]) {
+      this.props.choices[field.accessor].map( (choice, index) => {
+        if (!choice.desativado) {
+          returnChoices.push(<MenuItem value={choice['id']} primaryText={choice[field.show]} key={index} />)
+        }
+        return null
+      })
+    }
     return returnChoices
   }
 
@@ -46,6 +51,10 @@ class FormDialog extends React.Component {
   addFieldDateValue = (field) => {
     if(this.props.values) return {value: new Date(this.props.values[field.accessor])}
   } 
+
+  addObjFieldValue = (field) => {
+    if(this.props.values) return {value: this.props.values[field.accessor].id}
+  }
 
   buildField = (field, styles, errorMessages) => {
     switch(field.type) {
@@ -68,7 +77,7 @@ class FormDialog extends React.Component {
             floatingLabelText={field.header}
             {...this.addFieldValue(field)}
           >
-            {this.buildChoices(field.choices)}
+            {this.buildChoices(field)}
           </FormsySelect>
         )
       case 'text':
@@ -106,11 +115,9 @@ class FormDialog extends React.Component {
             name={field.accessor}
             required
             floatingLabelText={field.header}
-            value={2}
+            {...this.addObjFieldValue(field)}  
           >
-            <MenuItem value={'1'} primaryText={'erro1'} key={1} />
-            <MenuItem value={'2'} primaryText={'erro2'} key={2} />
-            <MenuItem value={'3'} primaryText={'erro3'} key={3} />
+            {this.buildChoices(field)}
           </FormsySelect>
         )
       default:

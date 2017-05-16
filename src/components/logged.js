@@ -16,20 +16,22 @@ import IconButton from 'material-ui/IconButton'
 import { logout } from '../actions/index'
 import CustomTable from '../containers/table'
 import {controleAguaCols} from '../assets/controle_agua_cols'
-import {controleAguaTitle} from '../assets/controle_agua_data'
 import {controleColetaCols} from '../assets/controle_coleta_cols'
-import {controleColetaTitle} from '../assets/controle_coleta_data'
 import {controleDesinfeccaoCols} from '../assets/controle_desinfeccao_cols'
-import {controleDesinfeccaoTitle} from '../assets/controle_desinfeccao_data'
 // import {controleFinanceiroCols} from '../assets/controle_financeiro_cols'
-import {controleFinanceiroTitle} from '../assets/controle_financeiro_data'
 import {manutencaoCorretivaCols} from '../assets/manutencao_corretiva_cols'
-import {manutencaoCorretivaTitle} from '../assets/manutencao_corretiva_data'
 import {manutencaoPreventivaCols} from '../assets/manutencao_preventiva_cols'
-import {manutencaoPreventivaTitle} from '../assets/manutencao_preventiva_data'
 import {maquinasCols} from '../assets/maquinas_cols'
-import {maquinasTitle} from '../assets/maquinas_data'
 import {apiUrl} from '../assets/urls'
+import {
+  controleAguaTitle,
+  controleColetaTitle,
+  controleDesinfeccaoTitle,
+  controleFinanceiroTitle,
+  manutencaoCorretivaTitle,
+  manutencaoPreventivaTitle,
+  maquinasTitle
+} from '../assets/strings'
 
 class ControleAgua extends Component {
   render() {

@@ -1,15 +1,16 @@
 export const manutencaoPreventivaCols = [
   {
-    accessor: 'maquina.numero',
+    accessor: 'maquina',
     header: 'Número da máquina',
-    type: 'choice',
-    choices: ['1', '2', '3']
+    type: 'obj',
+    show: 'numero',
+    readOnly: true,
+    readOnlyButRequired: true
   },
   {
     accessor: 'maquina.fabricante',
     header: 'Fabricante',
-    type: 'choice',
-    choices: ['Fabricante1', 'Fabricante2', 'Fabricante3'],
+    type: 'text',
     readOnly: true
   },
   {

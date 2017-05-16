@@ -6,6 +6,7 @@ import FormDialog from '../containers/form_dialog'
 export default class DialogAdd extends React.Component {
 
   submitForm = (data) => {
+    data['csrfmiddlewaretoken'] = "{{ csrf_token }}"
     axios.post(this.props.tableUrl, data).then(
       this.props.fetchTableData
     ).catch(function(error){alert(error)})
