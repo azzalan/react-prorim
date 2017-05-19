@@ -10,7 +10,6 @@ export default class DialogAdd extends React.Component {
     axios.post(this.props.tableUrl, data).then(
       this.props.fetchTableData
     ).catch(function(error){alert(error)})
-    // this.props.selectTableData([...this.props.activeTableData, data])
     this.props.handleCloseDialog()
   }
 

@@ -19,6 +19,7 @@ import {controleAguaCols} from '../assets/controle_agua_cols'
 import {controleColetaCols} from '../assets/controle_coleta_cols'
 import {controleDesinfeccaoCols} from '../assets/controle_desinfeccao_cols'
 // import {controleFinanceiroCols} from '../assets/controle_financeiro_cols'
+import {gestaoEnfermagemCols} from '../assets/gestao_enfermagem_cols'
 import {manutencaoCorretivaCols} from '../assets/manutencao_corretiva_cols'
 import {manutencaoPreventivaCols} from '../assets/manutencao_preventiva_cols'
 import {maquinasCols} from '../assets/maquinas_cols'
@@ -30,7 +31,8 @@ import {
   controleFinanceiroTitle,
   manutencaoCorretivaTitle,
   manutencaoPreventivaTitle,
-  maquinasTitle
+  maquinasTitle,
+  gestaoEnfermagemTitle
 } from '../assets/strings'
 
 class ControleAgua extends Component {
@@ -85,6 +87,20 @@ class ControleFinanceiro extends Component {
         tableCols={controleFinanceiroCols}
         disableAddButton={false}
       />*/
+    )
+  }
+}
+
+class GestaoEnfermagem extends Component {
+  render() {
+    const tableUrl = apiUrl + 'estadia/'
+    return(
+      <CustomTable 
+        tableUrl={tableUrl}
+        tableTitle={gestaoEnfermagemTitle}
+        tableCols={gestaoEnfermagemCols}
+        disableAddButton={false}
+      />
     )
   }
 }
@@ -169,6 +185,7 @@ class Logged extends Component {
             <Link to="/controle-coleta"><MenuItem onTouchTap={this.handleClose}>{controleColetaTitle}</MenuItem></Link>
             <Link to="/controle-desinfeccao"><MenuItem onTouchTap={this.handleClose}>{controleDesinfeccaoTitle}</MenuItem></Link>
             <Link to="/controle-financeiro"><MenuItem onTouchTap={this.handleClose}>{controleFinanceiroTitle}</MenuItem></Link>
+             <Link to="/gestao-enfermagem"><MenuItem onTouchTap={this.handleClose}>{gestaoEnfermagemTitle}</MenuItem></Link>
             <Link to="/manutencao-corretiva"><MenuItem onTouchTap={this.handleClose}>{manutencaoCorretivaTitle}</MenuItem></Link>
             <Link to="/manutencao-prevetiva"><MenuItem onTouchTap={this.handleClose}>{manutencaoPreventivaTitle}</MenuItem></Link>
             <Link to="/maquinas"><MenuItem onTouchTap={this.handleClose}>{maquinasTitle}</MenuItem></Link>
@@ -177,6 +194,7 @@ class Logged extends Component {
           <Route path="/controle-coleta" component={ControleColeta}/>
           <Route path="/controle-desinfeccao" component={ControleDesinfeccao}/>
           <Route path="/controle-financeiro" component={ControleFinanceiro}/>
+          <Route path="/gestao-enfermagem" component={GestaoEnfermagem}/>
           <Route path="/manutencao-corretiva" component={ManutencaoCorretiva}/>
           <Route path="/manutencao-prevetiva" component={ManutencaoPreventiva}/>
           <Route path="/maquinas" component={Maquinas}/>

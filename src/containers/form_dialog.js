@@ -45,15 +45,24 @@ class FormDialog extends React.Component {
   }
 
   addFieldValue = (field) => {
-    if(this.props.values) return {value: this.props.values[field.accessor]}
+    if(this.props.values) {
+      let value = this.props.values[field.accessor]
+      if(value) return {value}
+    }
   }
 
   addFieldDateValue = (field) => {
-    if(this.props.values) return {value: new Date(this.props.values[field.accessor])}
+    if(this.props.values) {
+      let value = this.props.values[field.accessor]
+      if(value) return {value: new Date(value)}
+    }
   } 
 
   addObjFieldValue = (field) => {
-    if(this.props.values) return {value: this.props.values[field.accessor].id}
+    if(this.props.values) {
+      let value = this.props.values[field.accessor]
+      if(value) return {value: value.id}
+    }
   }
 
   buildField = (field, styles, errorMessages) => {

@@ -2,9 +2,9 @@ import React from 'react'
 import axios from 'axios'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import Toggle from 'material-ui/Toggle'
+// import Toggle from 'material-ui/Toggle'
 // import IconButton from 'material-ui/IconButton'
-// import EditIcon from 'react-material-icons/icons/editor/border-color'
+import CheckIcon from 'react-material-icons/icons/navigation/check'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 
@@ -44,29 +44,30 @@ class CustomTable extends React.Component {
   }
 
   buildCell = (col, value, index) => {
-    switch(col.type) {
-      case 'date':
-        let date = new Date(value)
-        let day = date.getDate()
-        let month = date.getMonth()+1
-        let year = date.getFullYear()
-        let stringDate = day + '/' + month + '/' + year
-        return stringDate
-      case 'bool':
-        let toggleValue = (value==='true'||value)
-        return (
-          <Toggle
-            id={index}
-            onTouchTap={this.handleOpenDialogEdit}
-            toggled={toggleValue}
-          />
-        )
-      case 'obj':
-        if (value) return value[col.show]
-        break
-      default:
-        return value
-    }
+    if(value) {
+      switch(col.type) {
+        case 'date':
+          let date = new Date(value)
+          let day = date.getDate()
+          let month = date.getMonth()+1
+          let year = date.getFullYear()
+          let stringDate = day + '/' + month + '/' + year
+          return stringDate
+        case 'bool':
+          if(value) return (
+            <div id={index} className={'text-center'}>
+              <CheckIcon id={index}/>
+            </div>
+          )
+          break
+        case 'obj':
+          if (value) return value[col.show]
+          break
+        default:
+          return value
+      }
+    } else return null
+
   }
 
   buildCols = (cols) => {
