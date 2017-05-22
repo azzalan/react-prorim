@@ -12,8 +12,10 @@ import { selectTableData } from '../actions/index'
 
 import DialogAdd from '../components/dialog_add'
 import DialogEdit from '../components/dialog_edit'
-import TableToolbar from '../components/table_toolbar'
+import TableToolbar from './table_toolbar'
+import Filter from './filter'
 import { apiUrl } from '../assets/urls'
+
 
 class CustomTable extends React.Component {
 
@@ -25,8 +27,15 @@ class CustomTable extends React.Component {
       dialogAddOpen: false,
       dialogEditOpen: false,
       dialogEditValues: null,
-      dialogEditIndex: null
+      dialogEditIndex: null,
+      dialogAddValues: null,
+      filterOpen: true
     }
+  }
+
+  toogleFilter = () => {
+    let filterOpen = !this.state.filterOpen
+    this.setState({filterOpen})
   }
 
   handleOpenDialogEdit = (e) => {
@@ -61,8 +70,7 @@ class CustomTable extends React.Component {
           )
           break
         case 'obj':
-          if (value) return value[col.show]
-          break
+          return value[col.show]
         default:
           return value
       }
@@ -70,29 +78,50 @@ class CustomTable extends React.Component {
 
   }
 
-  buildCols = (cols) => {
-    let renderCols = cols
-    renderCols.map( (col) => {
-      if (col.choicesUrl) {
+  deleteHidden = (cols) => {
+    let returnCols = []
+    cols.forEach( (col, index) => {
+      if(!col.hideTable) {
+        returnCols.push(col)
+      }
+    })
+    return returnCols
+  }
+
+  buildChoices = (cols) => {
+    cols.forEach( (col, index) => {
+      if (col.columns) this.buildChoices(col.columns)
+      else if (col.choicesUrl) {
         axios.get(apiUrl+col.choicesUrl).then(function(response){
           let choices = {...this.state.choices}
           choices[col.accessor] = response.data
           this.setState({choices})
         }.bind(this)).catch(function(error){alert(error)})
       }
-      Object.assign(col, {
-        render: row => (
-          <span 
-            id={row.index}
-            onTouchTap={this.handleOpenDialogEdit}
-          >
-            {this.buildCell(col, row.value, row.index)}
-          </span>
-        )
-      })
-      return null
     })
-    return renderCols
+  }
+
+  buildCols = (cols) => {
+    const copyCols = JSON.parse(JSON.stringify(cols))
+    let renderCols = this.deleteHidden(copyCols)
+    renderCols.forEach( (col, index) => {
+      if (col.columns) {
+        col.columns = this.buildCols(col.columns)
+      }
+      else {
+        Object.assign(col, {
+          render: row => (
+            <span 
+              id={row.index}
+              onTouchTap={this.handleOpenDialogEdit}
+            >
+              {this.buildCell(col, row.value, row.index)}
+            </span>
+          )
+        })
+      }
+    })
+  return renderCols
   }
 
   renderDialogEdit = () => {
@@ -101,7 +130,7 @@ class CustomTable extends React.Component {
         <DialogEdit
           dialogOpen={this.state.dialogEditOpen}
           handleCloseDialog={() => this.setState({dialogEditOpen: false})}
-          tableCols={this.state.tableCols}
+          tableCols={this.props.tableCols}
           choices={this.state.choices}
           values={this.state.dialogEditValues}
           index={this.state.dialogEditIndex} 
@@ -130,7 +159,9 @@ class CustomTable extends React.Component {
   }
 
   fetchTableData = () => {
-    axios.get(this.props.tableUrl).then(
+    axios.get(this.props.tableUrl, {
+      params: {...this.props.filterData}
+    }).then(
       this.updateTableData
     ).catch(function(error){
       alert(error)
@@ -145,26 +176,41 @@ class CustomTable extends React.Component {
     this.setState({
       tableCols: this.buildCols(this.props.tableCols),
     })
+    if(this.props.disableFilter) {
+      this.setState({
+        filterOpen: false
+      })
+    }
     this.fetchTableData()
+    this.buildChoices(this.props.tableCols)
   }
 
   render() {
-    const {tableCols, choices} = this.state
+    const {choices} = this.state
     return (
       <div>
         <TableToolbar
           tableTitle={this.props.tableTitle}
           handleOpenDialogAdd={this.handleOpenDialogAdd}
-          disableAddButton={this.props.disableAddButton}
+          hideAddButton={this.props.disableAddButton}
+          toogleFilter={this.toogleFilter}
+          disableFilter={this.props.disableFilter}
+        />
+        <Filter 
+          filterOpen={this.state.filterOpen}
+          tableCols={this.props.tableCols}
+          choices={choices}
+          fetchTableData={this.fetchTableData}
         />
         {this.renderTable()}
         <DialogAdd
           dialogOpen={this.state.dialogAddOpen}
           handleCloseDialog={() => this.setState({dialogAddOpen: false})}
-          tableCols={tableCols}
+          tableCols={this.props.tableCols}
           choices={choices}
           tableUrl={this.props.tableUrl}
           fetchTableData={this.fetchTableData}
+          filterValues={this.props.filterData}
         />
         {this.renderDialogEdit()}
       </div>
@@ -174,7 +220,8 @@ class CustomTable extends React.Component {
 
 function mapStateToProps (state) {
   return {
-    activeTableData: state.activeTableData
+    activeTableData: state.activeTableData,
+    filterData: state.filterData
   }
 }
 

@@ -4,14 +4,14 @@ export const manutencaoPreventivaCols = [
     header: 'Número da máquina',
     type: 'obj',
     show: 'numero',
-    readOnly: true,
-    readOnlyButRequired: true
+    hideForm: true,
+    required: true
   },
   {
     accessor: 'maquina.fabricante',
     header: 'Fabricante',
     type: 'text',
-    readOnly: true
+    hideForm: true
   },
   {
     accessor: 'janeiro',

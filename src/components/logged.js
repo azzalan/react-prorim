@@ -44,6 +44,7 @@ class ControleAgua extends Component {
         tableTitle={controleAguaTitle}
         tableCols={controleAguaCols}
         disableAddButton={false}
+        disableFilter={true}
       />
     )
   }
@@ -58,6 +59,7 @@ class ControleColeta extends Component {
         tableTitle={controleColetaTitle}
         tableCols={controleColetaCols}
         disableAddButton={false}
+        disableFilter={true}
       />
     )
   }
@@ -72,6 +74,7 @@ class ControleDesinfeccao extends Component {
         tableTitle={controleDesinfeccaoTitle} 
         tableCols={controleDesinfeccaoCols}
         disableAddButton={false}
+        disableFilter={true}
       />
     )
   }
@@ -86,6 +89,7 @@ class ControleFinanceiro extends Component {
         tableData={controleFinanceiroData} 
         tableCols={controleFinanceiroCols}
         disableAddButton={false}
+        disableFilter={true}
       />*/
     )
   }
@@ -114,6 +118,7 @@ class ManutencaoCorretiva extends Component {
         tableTitle={manutencaoCorretivaTitle} 
         tableCols={manutencaoCorretivaCols}
         disableAddButton={true}
+        disableFilter={true}
       />
     )
   }
@@ -128,6 +133,7 @@ class ManutencaoPreventiva extends Component {
         tableTitle={manutencaoPreventivaTitle} 
         tableCols={manutencaoPreventivaCols}
         disableAddButton={true}
+        disableFilter={true}
       />
     )
   }
@@ -142,6 +148,7 @@ class Maquinas extends Component {
         tableTitle={maquinasTitle}
         tableCols={maquinasCols}
         disableAddButton={false}
+        disableFilter={true}
       />
     )
   }

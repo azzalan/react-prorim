@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
+import Toggle from 'material-ui/Toggle';
 import Formsy from 'formsy-react'
 import MenuItem from 'material-ui/MenuItem'
 import { FormsyDate, FormsySelect, FormsyText, FormsyToggle } from 'formsy-material-ui/lib';
@@ -13,6 +14,7 @@ class FormDialog extends React.Component {
     this.state = {
       canSubmit: false,
       confirmDialogOpen: false,
+      optionalOpen: {},
     }
   }
 
@@ -33,10 +35,18 @@ class FormDialog extends React.Component {
 
   buildChoices = (field) => {
     let returnChoices = []
-    if (this.props.choices[field.accessor]) {
-      this.props.choices[field.accessor].map( (choice, index) => {
+    const {choices} = this.props
+    if (choices) {
+      let fieldChoices = choices[field.accessor]
+      if(choices[field.accessor]) fieldChoices.map( (choice, index) => {
         if (!choice.desativado) {
-          returnChoices.push(<MenuItem value={choice['id']} primaryText={choice[field.show]} key={index} />)
+          returnChoices.push(
+            <MenuItem 
+              value={choice['id']} 
+              primaryText={choice[field.show]} 
+              key={index}
+            />
+          )
         }
         return null
       })
@@ -44,23 +54,38 @@ class FormDialog extends React.Component {
     return returnChoices
   }
 
+  getValueInDepth = (dotPath, value) => {
+    if(dotPath) return dotPath.split('.').reduce((o,i)=>o[i], value)
+  }
+  
+  getValue = (field) => {
+    const {values} = this.props
+    if(field.depth) {
+      let dotPath = field.accessor.split('.')
+      if(values[dotPath[0]]) {
+        return this.getValueInDepth(field.accessor, values)
+      }
+    }
+    else return values[field.accessor]
+  }
+
   addFieldValue = (field) => {
     if(this.props.values) {
-      let value = this.props.values[field.accessor]
+      let value = this.getValue(field)
       if(value) return {value}
     }
   }
 
   addFieldDateValue = (field) => {
     if(this.props.values) {
-      let value = this.props.values[field.accessor]
+      let value = this.getValue(field)
       if(value) return {value: new Date(value)}
     }
-  } 
+  }
 
   addObjFieldValue = (field) => {
     if(this.props.values) {
-      let value = this.props.values[field.accessor]
+      let value = this.getValue(field)
       if(value) return {value: value.id}
     }
   }
@@ -77,17 +102,6 @@ class FormDialog extends React.Component {
             locale="pt"
             {...this.addFieldDateValue(field)}
           />
-        )
-      case 'choice':
-        return(
-          <FormsySelect
-            name={field.accessor}
-            required
-            floatingLabelText={field.header}
-            {...this.addFieldValue(field)}
-          >
-            {this.buildChoices(field)}
-          </FormsySelect>
         )
       case 'text':
         return(
@@ -134,19 +148,66 @@ class FormDialog extends React.Component {
     }
   }
 
-  readOnlyCheck = (field, index, fields, styles, errorMessages) => {
-      if (!field.readOnly) {
+  renderCheck = (field, index, fields, styles, errorMessages) => {
+      if (!field.hideForm) {
         fields.push(
-          <div key={index}>
+          <div key={field.accessor+index}>
             {this.buildField(field, styles, errorMessages)}
           </div>
         )
       }
   }
 
+  optionalFieldToogle = (event, checked) => {
+    let optionalOpen = {...this.state.optionalOpen}
+    console.log(event.target)
+    this.setState({optionalOpen})
+  }
+
   buildFields = (tableCols, styles, errorMessages) => {
     let fields = []
-    tableCols.map( (field, index) => this.readOnlyCheck(field, index, fields, styles, errorMessages))
+    tableCols.map( (field, index) => {
+      if(field.columns) {
+        let subFields = this.buildFields(field.columns, styles, errorMessages)
+        if(field.optional) {
+          const optionalToggle = [
+            <Toggle
+              name={field.accessor}
+              key={'optional'+field.accessor}
+              label={field.header}
+              labelPosition="right"
+              style={styles.switchStyle}
+              toggled={this.state.optionalOpen[field.accessor]}
+              onToggle={(event, checked) => {
+                let optionalOpen = {...this.state.optionalOpen}
+                optionalOpen[field.accessor] = checked
+                this.setState({optionalOpen})
+              }}
+            />
+          ]
+          fields = [
+            ...fields,
+            ...optionalToggle
+          ]
+          if(this.state.optionalOpen[field.accessor]) {
+            subFields = this.buildFields(field.columns, styles, errorMessages)
+            fields = [
+              ...fields,
+              ...subFields
+            ]
+          }
+        } else {
+          subFields = this.buildFields(field.columns, styles, errorMessages)
+          fields = [
+            ...fields, 
+            ...subFields
+          ]
+        }
+      } else {
+        this.renderCheck(field, index, fields, styles, errorMessages)
+      }
+      return null
+    })
     return fields
   }
 

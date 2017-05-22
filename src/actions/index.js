@@ -50,3 +50,23 @@ export function selectLog (log) {
   }
 }
 
+export function selectFilterData (filterData) {
+  return {
+    type: 'FILTER_DATA',
+    payload: filterData
+  }
+}
+
+export function enableAddButton () {
+  return {
+    type: 'DISABLE_ADD_BUTTON',
+    payload: false
+  }
+}
+
+export function disableAddButton () {
+  return {
+    type: 'DISABLE_ADD_BUTTON',
+    payload: true
+  }
+}

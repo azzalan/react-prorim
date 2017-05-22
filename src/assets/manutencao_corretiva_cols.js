@@ -5,30 +5,30 @@ export const manutencaoCorretivaCols = [
     type: 'date'
   },
   {
-    accessor: 'erro.estadia.turno.sala.identificador',
+    accessor: 'erro.estadia.sala.identificador',
     header: 'Sala',
     type: 'text',
-    readOnly: true
+    hideForm: true
   },
   {
     accessor: 'erro',
     header: 'Número do erro',
     type: 'obj',
     show: 'numero',
-    readOnly: true,
-    readOnlyButRequired: true
+    hideForm: true,
+    required: true
   },
   {
     accessor: 'erro.maquina.numero',
     header: 'Número da máquina',
     type: 'text',
-    readOnly: true
+    hideForm: true
   },
   {
     accessor: 'erro.enfermeiro.firstName',
     header: 'Enfermeiro',
     type: 'text',
-    readOnly: true
+    hideForm: true
   },
   {
     accessor: 'acao',
