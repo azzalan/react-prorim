@@ -170,6 +170,10 @@ class Filter extends React.Component {
     this.updateTableData()
   }
 
+  componentWillUnmount = () => {
+    this.props.enableAddButton()
+  }
+
   render() {
     const IntlPolyfill = require('intl')
     let DateTimeFormat = IntlPolyfill.DateTimeFormat
