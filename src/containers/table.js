@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { Component } from 'react'
 import axios from 'axios'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 // import Toggle from 'material-ui/Toggle'
 // import IconButton from 'material-ui/IconButton'
 import CheckIcon from 'react-material-icons/icons/navigation/check'
@@ -16,10 +17,8 @@ import TableToolbar from './table_toolbar'
 import Filter from './filter'
 import { apiUrl } from '../assets/urls'
 
-
-class CustomTable extends React.Component {
-
-  constructor(props) {
+class CustomTable extends Component {
+  constructor (props) {
     super(props)
     this.state = {
       tableCols: [],
@@ -53,35 +52,36 @@ class CustomTable extends React.Component {
   }
 
   buildCell = (col, value, index) => {
-    if(value) {
-      switch(col.type) {
-        case 'date':
-          let date = new Date(value)
-          let day = date.getDate()
-          let month = date.getMonth()+1
-          let year = date.getFullYear()
-          let stringDate = day + '/' + month + '/' + year
-          return stringDate
-        case 'bool':
-          if(value) return (
+    if (value) {
+      switch (col.type) {
+      case 'date':
+        let date = new Date(value)
+        let day = date.getDate()
+        let month = date.getMonth() + 1
+        let year = date.getFullYear()
+        let stringDate = day + '/' + month + '/' + year
+        return stringDate
+      case 'bool':
+        if (value) {
+          return (
             <div id={index} className={'text-center'}>
-              <CheckIcon id={index}/>
+              <CheckIcon id={index} />
             </div>
           )
-          break
-        case 'obj':
-          return value[col.show]
-        default:
-          return value
+        }
+        break
+      case 'obj':
+        return value[col.show]
+      default:
+        return value
       }
     } else return null
-
   }
 
   deleteHidden = (cols) => {
     let returnCols = []
-    cols.forEach( (col, index) => {
-      if(!col.hideTable) {
+    cols.forEach((col, index) => {
+      if (!col.hideTable) {
         returnCols.push(col)
       }
     })
@@ -89,14 +89,14 @@ class CustomTable extends React.Component {
   }
 
   buildChoices = (cols) => {
-    cols.forEach( (col, index) => {
+    cols.forEach((col, index) => {
       if (col.columns) this.buildChoices(col.columns)
       else if (col.choicesUrl) {
-        axios.get(apiUrl+col.choicesUrl).then(function(response){
+        axios.get(apiUrl + col.choicesUrl).then(function (response) {
           let choices = {...this.state.choices}
           choices[col.accessor] = response.data
           this.setState({choices})
-        }.bind(this)).catch(function(error){alert(error)})
+        }.bind(this)).catch(function (error) { alert(error) })
       }
     })
   }
@@ -104,14 +104,13 @@ class CustomTable extends React.Component {
   buildCols = (cols) => {
     const copyCols = JSON.parse(JSON.stringify(cols))
     let renderCols = this.deleteHidden(copyCols)
-    renderCols.forEach( (col, index) => {
+    renderCols.forEach((col, index) => {
       if (col.columns) {
         col.columns = this.buildCols(col.columns)
-      }
-      else {
+      } else {
         Object.assign(col, {
           render: row => (
-            <span 
+            <span
               id={row.index}
               onTouchTap={this.handleOpenDialogEdit}
             >
@@ -121,7 +120,7 @@ class CustomTable extends React.Component {
         })
       }
     })
-  return renderCols
+    return renderCols
   }
 
   renderDialogEdit = () => {
@@ -133,7 +132,7 @@ class CustomTable extends React.Component {
           tableCols={this.props.tableCols}
           choices={this.state.choices}
           values={this.state.dialogEditValues}
-          index={this.state.dialogEditIndex} 
+          index={this.state.dialogEditIndex}
           tableUrl={this.props.tableUrl}
           fetchTableData={this.fetchTableData}
         />
@@ -142,20 +141,22 @@ class CustomTable extends React.Component {
   }
 
   renderTable = () => {
-    if(this.props.activeTableData) return (
-      <ReactTable
-        key='table'
-        previousText={'Anterior'}
-        nextText={'Próximo'}
-        loadingText={'Carregando...'}
-        noDataText={'Nenhum elemento encontrado'}
-        pageText={'Página'}
-        ofText={'de'}
-        rowsText={'linhas'}
-        data={this.props.activeTableData}
-        columns={this.state.tableCols}
+    if (this.props.activeTableData) {
+      return (
+        <ReactTable
+          key='table'
+          previousText={'Anterior'}
+          nextText={'Próximo'}
+          loadingText={'Carregando...'}
+          noDataText={'Nenhum elemento encontrado'}
+          pageText={'Página'}
+          ofText={'de'}
+          rowsText={'linhas'}
+          data={this.props.activeTableData}
+          columns={this.state.tableCols}
       />
-    )
+      )
+    }
   }
 
   fetchTableData = () => {
@@ -163,9 +164,9 @@ class CustomTable extends React.Component {
       params: {...this.props.filterData}
     }).then(
       this.updateTableData
-    ).catch(function(error){
+    ).catch(function (error) {
       alert(error)
-    });
+    })
   }
 
   updateTableData = (response) => {
@@ -174,9 +175,9 @@ class CustomTable extends React.Component {
 
   componentDidMount = () => {
     this.setState({
-      tableCols: this.buildCols(this.props.tableCols),
+      tableCols: this.buildCols(this.props.tableCols)
     })
-    if(this.props.disableFilter) {
+    if (this.props.disableFilter) {
       this.setState({
         filterOpen: false
       })
@@ -185,7 +186,7 @@ class CustomTable extends React.Component {
     this.buildChoices(this.props.tableCols)
   }
 
-  render() {
+  render () {
     const {choices} = this.state
     return (
       <div>
@@ -196,7 +197,7 @@ class CustomTable extends React.Component {
           toogleFilter={this.toogleFilter}
           disableFilter={this.props.disableFilter}
         />
-        <Filter 
+        <Filter
           filterOpen={this.state.filterOpen}
           tableCols={this.props.tableCols}
           choices={choices}
@@ -216,6 +217,17 @@ class CustomTable extends React.Component {
       </div>
     )
   }
+}
+
+CustomTable.propTypes = {
+  activeTableData: PropTypes.array,
+  tableCols: PropTypes.array.isRequired,
+  disableAddButton: PropTypes.bool,
+  disableFilter: PropTypes.bool,
+  tableTitle: PropTypes.string.isRequired,
+  tableUrl: PropTypes.string.isRequired,
+  filterData: PropTypes.array,
+  selectTableData: PropTypes.func.isRequired
 }
 
 function mapStateToProps (state) {

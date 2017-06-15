@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import PropTypes from 'prop-types'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { cyan500 } from 'material-ui/styles/colors'
 
-import Logged from './components/logged'
+import Logged from './containers/logged'
 import Login from './containers/login'
 import { newLogin } from './actions/index'
 
 injectTapEventPlugin()
 
 class App extends Component {
-
   renderLogin = () => {
     document.body.style.backgroundColor = cyan500
     return (<Login />)
@@ -32,7 +32,7 @@ class App extends Component {
   }
 
   componentDidMount = () => {
-    if(this.props.log===null) this.props.newLogin()
+    if (this.props.log === null) this.props.newLogin()
   }
 
   render () {
@@ -42,6 +42,11 @@ class App extends Component {
       </MuiThemeProvider>
     )
   }
+}
+
+App.propTypes = {
+  log: PropTypes.func,
+  newLogin: PropTypes.func.isRequired
 }
 
 function mapStateToProps (state) {

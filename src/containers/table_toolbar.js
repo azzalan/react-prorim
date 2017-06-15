@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import IconMenu from 'material-ui/IconMenu'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
@@ -14,9 +15,8 @@ import {
   options
 } from '../assets/strings'
 
-class TableToolbar extends React.Component {
-
-  constructor(props) {
+class TableToolbar extends Component {
+  constructor (props) {
     super(props)
     this.state = {
     }
@@ -26,10 +26,10 @@ class TableToolbar extends React.Component {
 
   renderAddButton = () => {
     if (!this.props.hideAddButton) {
-      return(
-        <RaisedButton 
+      return (
+        <RaisedButton
           label={add}
-          primary={true} 
+          primary
           onTouchTap={this.props.handleOpenDialogAdd}
           disabled={this.props.disableAddButton}
         />
@@ -37,18 +37,20 @@ class TableToolbar extends React.Component {
     }
   }
 
-  renderFilter = () =>{
-    if (!this.props.disableFilter) return (
-      <ToolbarGroup firstChild={true}>
-        <ToolbarTitle text={filter}/>
-        <IconButton onTouchTap={this.props.toogleFilter}>
-          <NavigationExpandMoreIcon />
-        </IconButton>
-      </ToolbarGroup>
-    )
+  renderFilter = () => {
+    if (!this.props.disableFilter) {
+      return (
+        <ToolbarGroup firstChild>
+          <ToolbarTitle text={filter} />
+          <IconButton onTouchTap={this.props.toogleFilter}>
+            <NavigationExpandMoreIcon />
+          </IconButton>
+        </ToolbarGroup>
+      )
+    }
   }
 
-  render() {
+  render () {
     const {tableTitle} = this.props
     return (
       <Toolbar>
@@ -61,18 +63,27 @@ class TableToolbar extends React.Component {
           {this.renderAddButton()}
           <IconMenu
             iconButtonElement={
-              <IconButton touch={true}>
+              <IconButton touch>
                 <NavigationExpandMoreIcon />
               </IconButton>
             }
           >
-            <MenuItem primaryText="Download" />
-            <MenuItem primaryText="More Info" />
+            <MenuItem primaryText='Download' />
+            <MenuItem primaryText='More Info' />
           </IconMenu>
         </ToolbarGroup>
       </Toolbar>
-    );
+    )
   }
+}
+
+TableToolbar.propTypes = {
+  hideAddButton: PropTypes.bool,
+  handleOpenDialogAdd: PropTypes.func.isRequired,
+  disableAddButton: PropTypes.bool,
+  disableFilter: PropTypes.bool,
+  toogleFilter: PropTypes.func.isRequired,
+  tableTitle: PropTypes.string.isRequired
 }
 
 function mapStateToProps (state) {

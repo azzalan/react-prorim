@@ -7,7 +7,6 @@ import App from './App'
 import reducers from './reducers'
 import './index.css'
 
-
 const createStoreWithMiddleware = applyMiddleware()(createStore)
 
 ReactDOM.render(
