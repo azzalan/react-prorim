@@ -45,12 +45,40 @@ export default class DialogEdit extends Component {
     })
   }
 
+  addFiles = (formData) => {
+    const { tableCols } = this.props
+    let hasFormData = false
+    tableCols.forEach((col) => {
+      if (col.type === 'file') {
+        let file = document.getElementById(col.accessor).files[0]
+        if (file) {
+          hasFormData = true
+          formData.append(col.accessor, file)
+        }
+      }
+    })
+    return hasFormData
+  }
+
+  saveFiles = (formData) => {
+    const config = {
+      headers: { 'content-type': 'multipart/form-data' }
+    }
+    axios.put(this.props.tableUrl + 'file/' + this.props.values.id + '/', formData, config).then(
+      this.props.fetchTableData
+    ).catch(function (error) { alert(error) })
+  }
+
   submitForm = (data) => {
     data['csrfmiddlewaretoken'] = '{{ csrf_token }}'
+    const formData = new FormData()
     this.addRequired(this.props.tableCols, data)
-    console.log(data)
+    let hasFormData = this.addFiles(formData)
     axios.put(this.props.tableUrl + this.props.values.id + '/', data).then(
-      this.props.fetchTableData
+      () => {
+        if (hasFormData) this.saveFiles(formData)
+        else this.props.fetchTableData()
+      }
     ).catch(function (error) { alert(error) })
     this.props.handleCloseDialog()
   }

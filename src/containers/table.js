@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 // import Toggle from 'material-ui/Toggle'
 // import IconButton from 'material-ui/IconButton'
 import CheckIcon from 'react-material-icons/icons/navigation/check'
+import FileIcon from 'react-material-icons/icons/file/file-download'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 
@@ -72,6 +73,12 @@ class CustomTable extends Component {
         break
       case 'obj':
         return value[col.show]
+      case 'file':
+        return (
+          <div id={index} className={'text-center'}>
+            <a href={value} download><FileIcon /></a>
+          </div>
+        )
       default:
         return value
       }

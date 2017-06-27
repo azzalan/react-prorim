@@ -34,12 +34,40 @@ export default class DialogAdd extends Component {
     })
   }
 
+  addFiles = (formData) => {
+    const { tableCols } = this.props
+    let hasFormData = false
+    tableCols.forEach((col) => {
+      if (col.type === 'file') {
+        let file = document.getElementById(col.accessor).files[0]
+        if (file) {
+          hasFormData = true
+          formData.append(col.accessor, file)
+        }
+      }
+    })
+    return hasFormData
+  }
+
+  saveFiles = (formData, id) => {
+    const config = {
+      headers: { 'content-type': 'multipart/form-data' }
+    }
+    axios.put(this.props.tableUrl + 'file/' + id + '/', formData, config).then(
+      this.props.fetchTableData
+    ).catch(function (error) { alert(error) })
+  }
+
   submitForm = (data) => {
     data['csrfmiddlewaretoken'] = '{{ csrf_token }}'
+    const formData = new FormData()
     this.addFilterRequired(this.props.tableCols, data)
-    console.log(data)
+    let hasFormData = this.addFiles(formData)
     axios.post(this.props.tableUrl, data).then(
-      this.props.fetchTableData
+      (response) => {
+        if (hasFormData) this.saveFiles(formData, response.data.id)
+        else this.props.fetchTableData()
+      }
     ).catch(function (error) { alert(error) })
     this.props.handleCloseDialog()
   }

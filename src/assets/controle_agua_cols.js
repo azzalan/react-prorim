@@ -13,7 +13,17 @@ export const controleAguaCols = [
   },
   {
     accessor: 'resultado',
-    header: 'Resultado',
+    header: 'Satisfatório',
     type: 'bool'
+  },
+  {
+    accessor: 'numeroDoLaudo',
+    header: 'Número do laudo',
+    type: 'textNumber'
+  },
+  {
+    accessor: 'arquivoResultado',
+    header: 'Arquivo',
+    type: 'file'
   }
 ]

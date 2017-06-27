@@ -45,7 +45,7 @@ class App extends Component {
 }
 
 App.propTypes = {
-  log: PropTypes.func,
+  log: PropTypes.object,
   newLogin: PropTypes.func.isRequired
 }
 

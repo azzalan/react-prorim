@@ -144,6 +144,14 @@ class FormDialog extends Component {
           {this.buildChoices(field)}
         </FormsySelect>
       )
+    case 'file':
+      return (
+        <input
+          style={styles.switchStyle}
+          id={field.accessor}
+          type='file'
+        />
+      )
     default:
       break
     }
