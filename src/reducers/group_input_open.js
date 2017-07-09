@@ -1,6 +1,6 @@
 export default function (state = null, action) {
   switch (action.type) {
-  case 'TABLE':
+  case 'GROUP_INPUT_OPEN':
     return action.payload
   default:
     break

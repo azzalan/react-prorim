@@ -6,6 +6,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { cyan500 } from 'material-ui/styles/colors'
 
+// import Test from './test'
 import Logged from './containers/logged'
 import Login from './containers/login'
 import { newLogin } from './actions/index'
@@ -23,12 +24,16 @@ class App extends Component {
     return (<Logged />)
   }
 
+  // renderApp = () => {
+  //   const { log } = this.props
+  //   if (log) {
+  //     if (log.status) return this.renderLogged()
+  //   }
+  //   return this.renderLogin()
+  // }
   renderApp = () => {
-    const { log } = this.props
-    if (log) {
-      if (!log.status) return this.renderLogged()
-      else return this.renderLogin()
-    } else return this.renderLogin()
+    // return (<Test />)
+    return this.renderLogged()
   }
 
   componentDidMount = () => {

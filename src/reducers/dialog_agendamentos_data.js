@@ -1,6 +1,6 @@
 export default function (state = null, action) {
   switch (action.type) {
-  case 'TABLE':
+  case 'DIALOG_AGENDAMENTOS_DATA':
     return action.payload
   default:
     break

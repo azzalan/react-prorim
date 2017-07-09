@@ -2,10 +2,10 @@
 // que esse reducer é responsável.
 export default function (state = null, action) {
   switch (action.type) {
-    case 'TABLE_DATA':
-      return action.payload
-    default:
-      break
+  case 'TABLE_DATA':
+    return action.payload
+  default:
+    break
   }
   return state
 }

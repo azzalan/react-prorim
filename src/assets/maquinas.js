@@ -1,4 +1,4 @@
-export const maquinasCols = [
+export const maquinasForm = [
   {
     accessor: 'numero',
     header: 'Número da máquina',
@@ -12,8 +12,15 @@ export const maquinasCols = [
   {
     accessor: 'disponibilidade',
     header: 'Disponibilidade',
-    type: 'obj',
+    type: 'choice',
     show: 'nome',
     choicesUrl: 'choice-disponibilidade-maquina/'
+  },
+  {
+    accessor: 'sala',
+    header: 'Sala',
+    type: 'choice',
+    show: 'identificador',
+    choicesUrl: 'sala/'
   }
 ]

@@ -15,7 +15,7 @@ import {
   options
 } from '../assets/strings'
 
-class TableToolbar extends Component {
+class ModelToolbar extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -38,7 +38,7 @@ class TableToolbar extends Component {
   }
 
   renderFilter = () => {
-    if (!this.props.disableFilter) {
+    if (this.props.showFilterToogle) {
       return (
         <ToolbarGroup firstChild>
           <ToolbarTitle text={filter} />
@@ -51,10 +51,10 @@ class TableToolbar extends Component {
   }
 
   render () {
-    const {tableTitle} = this.props
+    const {modelTitle} = this.props
     return (
       <Toolbar>
-        <ToolbarTitle text={tableTitle} />
+        <ToolbarTitle text={modelTitle} />
         {this.renderFilter()}
         <ToolbarGroup>
           <ToolbarTitle text={options} />
@@ -77,13 +77,13 @@ class TableToolbar extends Component {
   }
 }
 
-TableToolbar.propTypes = {
+ModelToolbar.propTypes = {
   hideAddButton: PropTypes.bool,
   handleOpenDialogAdd: PropTypes.func.isRequired,
   disableAddButton: PropTypes.bool,
-  disableFilter: PropTypes.bool,
-  toogleFilter: PropTypes.func.isRequired,
-  tableTitle: PropTypes.string.isRequired
+  showFilterToogle: PropTypes.array,
+  toogleFilter: PropTypes.func,
+  modelTitle: PropTypes.string.isRequired
 }
 
 function mapStateToProps (state) {
@@ -92,4 +92,4 @@ function mapStateToProps (state) {
   }
 }
 
-export default connect(mapStateToProps)(TableToolbar)
+export default connect(mapStateToProps)(ModelToolbar)
