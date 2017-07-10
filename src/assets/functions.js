@@ -27,7 +27,7 @@ export const setValueDotPath = (dotPath, data, value) => {
 
 const deleteDotArray = (dotArray, position, data) => {
   if (dotArray.length - 1 === position) {
-    if (data[dotArray[position]]) delete data[dotArray[position]]
+    data[dotArray[position]] = undefined
   } else {
     if (!data[dotArray[position]]) return null
     setValueDotArray(dotArray, position + 1, data[dotArray[position]])
@@ -64,13 +64,18 @@ export const fetchData = (url, filterData, handleResponse) => {
   })
 }
 
-export const postData = (url, data, handleResponse = null) => {
+const defaultCatch = (error) => alert(error)
+
+export const postData = (
+  url,
+  data,
+  handleResponse = null,
+  catchFunction = defaultCatch
+) => {
   data['csrfmiddlewaretoken'] = '{{ csrf_token }}'
   axios.post(url, data).then(
     handleResponse
-  ).catch(function (error) {
-    alert(error)
-  })
+  ).catch(catchFunction)
 }
 
 export const fetchChoicesData = (fields, filterData, saveData) => {
@@ -83,8 +88,22 @@ export const fetchChoicesData = (fields, filterData, saveData) => {
   })
 }
 
+// Cópia sem referência
 export const copyObject = (obj) => (JSON.parse(JSON.stringify(obj)))
 
 export const moveArrayElement = (array, from, to) => {
   array.splice(to, 0, array.splice(from, 1)[0])
+}
+
+// Pega objetos de data e seta seu id como valor, guandando o resto das
+// infomações em 'key' + '_data'
+export const fixObjectsForSave = (data) => {
+  for (let field in data) {
+    if (data[field]) {
+      if (data[field].id) {
+        data[field + '_data'] = data[field]
+        data[field] = data[field].id
+      }
+    }
+  }
 }

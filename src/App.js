@@ -5,15 +5,49 @@ import PropTypes from 'prop-types'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { cyan500 } from 'material-ui/styles/colors'
+import 'react-table/react-table.css'
+
+import { selectUserData, selectAuthToken } from './actions/index'
 
 // import Test from './test'
 import Logged from './containers/logged'
 import Login from './containers/login'
-import { newLogin } from './actions/index'
+// import { newLogin } from './actions/index'
+
+import { userUrl } from './assets/urls'
+import { get } from './assets/api_calls'
+import {
+  master,
+  admin,
+  consultor,
+  enfermeiro,
+  tecnico,
+  erroNoUserType
+} from './assets/strings'
 
 injectTapEventPlugin()
 
 class App extends Component {
+  getUserType = (user) => {
+    for (let i in user.groups) {
+      let group = user.groups[i].name
+      if (group === master) return master
+      if (group === admin) return admin
+      if (group === consultor) return consultor
+      if (group === enfermeiro) return enfermeiro
+      if (group === tecnico) return tecnico
+    }
+  }
+
+  handleLogin = () => {
+    get(userUrl, (response) => {
+      let user = response.data
+      user.type = this.getUserType(user)
+      if (!user.type) alert(erroNoUserType)
+      this.props.selectUserData(user)
+    })
+  }
+
   renderLogin = () => {
     document.body.style.backgroundColor = cyan500
     return (<Login />)
@@ -24,20 +58,28 @@ class App extends Component {
     return (<Logged />)
   }
 
+  renderApp = () => {
+    if (this.props.userData) return this.renderLogged()
+    else if (localStorage.getItem('prorimToken')) return (<div />)
+    return this.renderLogin()
+  }
   // renderApp = () => {
-  //   const { log } = this.props
-  //   if (log) {
-  //     if (log.status) return this.renderLogged()
-  //   }
+  //   // return (<Test />)
   //   return this.renderLogin()
   // }
-  renderApp = () => {
-    // return (<Test />)
-    return this.renderLogged()
+
+  componentWillMount = () => {
+    const { userData, authToken, selectAuthToken } = this.props
+    const localToken = localStorage.getItem('prorimToken')
+    if (!userData) {
+      if (authToken) this.handleLogin()
+      else if (localToken) selectAuthToken(localToken)
+    }
   }
 
-  componentDidMount = () => {
-    if (this.props.log === null) this.props.newLogin()
+  componentWillReceiveProps = (nextProps) => {
+    const { userData, authToken } = nextProps
+    if (!userData && authToken) return this.handleLogin()
   }
 
   render () {
@@ -50,18 +92,26 @@ class App extends Component {
 }
 
 App.propTypes = {
-  log: PropTypes.object,
-  newLogin: PropTypes.func.isRequired
+  // redux state
+  authToken: PropTypes.string,
+  userData: PropTypes.object,
+  // redux actions
+  selectUserData: PropTypes.func.isRequired,
+  selectAuthToken: PropTypes.func.isRequired
 }
 
 function mapStateToProps (state) {
   return {
-    log: state.log
+    authToken: state.authToken,
+    userData: state.userData
   }
 }
 
 function mapDispatchToProps (dispatch) {
-  return bindActionCreators({ newLogin: newLogin }, dispatch)
+  return bindActionCreators({
+    selectUserData,
+    selectAuthToken
+  }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

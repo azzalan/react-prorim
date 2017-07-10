@@ -29,3 +29,20 @@ export const edit = 'Editar'
 export const titleDialogAgendamentos = 'Remover agendamentos'
 export const close = 'Fechar'
 export const titleDialogAddAgendamentos = 'Agendar'
+export const master = 'Master'
+export const admin = 'Administrador'
+export const consultor = 'Consultor'
+export const enfermeiro = 'Enfermeiro'
+export const tecnico = 'Técnico'
+export const erroNoUserType = 'O tipo do usuário precisa ser especificado no cadastro.'
+export const logout = 'Sair'
+export const errorLogin = 'Usuário ou senha incorretos.'
+export const loadingAdd = 'Adicionando...'
+export const loadingEdit = 'Editando...'
+export const loading = 'Carregando...'
+export const visualizeAs = {
+  admin: 'Visualizar como administrador',
+  consultor: 'Visualizar como consultor',
+  enfermeiro: 'Visualizar como enfermeiro',
+  tecnico: 'Visualizar como técnico'
+}

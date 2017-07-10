@@ -2,72 +2,74 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types'
-import axios from 'axios'
+import Snackbar from 'material-ui/Snackbar'
 
 import { selectDialogEditIsOpen } from '../actions/index'
 
 import FormDialog from './dialog_form'
 
-import { addFiles, deleteDotPath } from '../assets/functions'
-import { edit } from '../assets/strings'
+import { addFiles, deleteDotPath, fixObjectsForSave } from '../assets/functions'
+import { patch, putFiles, del } from '../assets/api_calls'
+import { edit, loadingEdit } from '../assets/strings'
 
 class DialogEdit extends Component {
-  addFiles = (formData) => addFiles(formData, this.props.fields)
-
-  saveFiles = (formData) => {
-    const config = {
-      headers: { 'content-type': 'multipart/form-data' }
+  constructor (props) {
+    super(props)
+    this.state = {
+      loadingOpen: false
     }
-    axios.put(this.props.modelUrl + 'file/' + this.props.formData.id + '/', formData, config).then(
-      this.props.fetchModelData
-    ).catch(function (error) { alert(error) })
+  }
+
+  afterSave = () => {
+    this.setState({loadingOpen: false})
+    this.props.fetchModelData()
+  }
+
+  afterPatch = () => {
+    const formData = new FormData()
+    const hasFormData = addFiles(formData, this.props.fields)
+    const url = this.props.modelUrl + 'file/' + this.props.formData.id + '/'
+    if (hasFormData) putFiles(url, formData, this.afterSave)
+    else this.afterSave()
   }
 
   submitForm = () => {
-    const data = this.props.formData
-    data['csrfmiddlewaretoken'] = '{{ csrf_token }}'
-    const formData = new FormData()
-    let hasFormData = this.addFiles(formData)
-    for (let field in data) {
-      if (data[field]) {
-        if (data[field].id) {
-          data[field + '_data'] = data[field]
-          data[field] = data[field].id
-        }
-      }
-    }
+    this.setState({loadingOpen: true})
+    let { modelUrl, formData } = this.props
+    const url = modelUrl + this.props.formData.id + '/'
+    fixObjectsForSave(formData)
     this.props.fields.forEach((field) => {
-      if (field.type === 'file') deleteDotPath(field.accessor, data)
+      if (field.type === 'file') deleteDotPath(field.accessor, formData)
     })
-    axios.patch(this.props.modelUrl + this.props.formData.id + '/', data).then(
-      () => {
-        if (hasFormData) this.saveFiles(formData)
-        else this.props.fetchModelData()
-      }
-    ).catch(function (error) { alert(error) })
-    this.handleCloseDialog()
+    patch(url, formData, this.afterPatch)
+    this.props.selectDialogEditIsOpen(false)
   }
 
   deleteForm = () => {
-    axios.delete(this.props.modelUrl + this.props.formData.id + '/').then(
-      this.props.fetchModelData
-    ).catch(function (error) { alert(error) })
-    this.handleCloseDialog()
+    const url = this.props.modelUrl + this.props.formData.id + '/'
+    del(url, this.props.fetchModelData)
+    this.props.selectDialogEditIsOpen(false)
   }
-
-  handleCloseDialog = () => this.props.selectDialogEditIsOpen(false)
 
   render () {
     return (
-      <FormDialog
-        {...this.props}
-        dialogOpen={this.props.dialogEditIsOpen}
-        handleCloseDialog={this.handleCloseDialog}
-        enableDelete
-        deleteAction={this.deleteForm}
-        submitForm={this.submitForm}
-        title={this.props.title || edit}
-      />
+      <div>
+        <FormDialog
+          {...this.props}
+          dialogOpen={this.props.dialogEditIsOpen}
+          handleCloseDialog={() => this.props.selectDialogEditIsOpen(false)}
+          enableDelete
+          deleteAction={this.deleteForm}
+          submitForm={this.submitForm}
+          title={this.props.title || edit}
+        />
+        <Snackbar
+          open={this.state.loadingOpen}
+          message={loadingEdit}
+          autoHideDuration={10000}
+          onRequestClose={() => this.setState({loadingOpen: false})}
+        />
+      </div>
     )
   }
 }

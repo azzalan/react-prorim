@@ -18,7 +18,12 @@ import {
   maquinasTitle,
   gestaoEnfermagemTitle,
   errosTitle,
-  pacientesTitle
+  pacientesTitle,
+  master,
+  admin,
+  consultor,
+  enfermeiro,
+  tecnico
 } from '../assets/strings'
 
 class MenuLeft extends Component {
@@ -29,9 +34,162 @@ class MenuLeft extends Component {
     this.props.selectMenuLeftOpen(false)
   }
 
-  componentWillMount = () => this.props.selectMenuLeftOpen(true)
+  buildMenuItems = (items) => {
+    let menuItems = []
+    items.forEach((item, index) => {
+      switch (item) {
+      case 'ControleAgua':
+        menuItems.push(
+          <MenuItem key={index} onTouchTap={() => this.handleOpenModelDisplay('ControleAgua')}>
+            {controleAguaTitle}
+          </MenuItem>
+          )
+        break
+      case 'ControleColeta':
+        menuItems.push(
+          <MenuItem key={index} onTouchTap={() => this.handleOpenModelDisplay('ControleColeta')}>
+            {controleColetaTitle}
+          </MenuItem>
+          )
+        break
+      case 'ControleDesinfeccao':
+        menuItems.push(
+          <MenuItem key={index} onTouchTap={() => this.handleOpenModelDisplay('ControleDesinfeccao')}>
+            {controleDesinfeccaoTitle}
+          </MenuItem>
+          )
+        break
+      case 'ControleFinanceiro':
+        menuItems.push(
+          <MenuItem key={index} onTouchTap={() => this.handleOpenModelDisplay('ControleFinanceiro')}>
+            {controleFinanceiroTitle}
+          </MenuItem>
+          )
+        break
+      case 'Pacientes':
+        menuItems.push(
+          <MenuItem key={index} onTouchTap={() => this.handleOpenModelDisplay('Pacientes')}>
+            {pacientesTitle}
+          </MenuItem>
+          )
+        break
+      case 'GestaoEnfermagem':
+        menuItems.push(
+          <MenuItem key={index} onTouchTap={() => this.handleOpenModelDisplay('GestaoEnfermagem')}>
+            {gestaoEnfermagemTitle}
+          </MenuItem>
+          )
+        break
+      case 'Erros':
+        menuItems.push(
+          <MenuItem key={index} onTouchTap={() => this.handleOpenModelDisplay('Erros')}>
+            {errosTitle}
+          </MenuItem>
+          )
+        break
+      case 'ManutencaoCorretiva':
+        menuItems.push(
+          <MenuItem key={index} onTouchTap={() => this.handleOpenModelDisplay('ManutencaoCorretiva')}>
+            {manutencaoCorretivaTitle}
+          </MenuItem>
+          )
+        break
+      case 'ManutencaoPreventiva':
+        menuItems.push(
+          <MenuItem key={index} onTouchTap={() => this.handleOpenModelDisplay('ManutencaoPreventiva')}>
+            {manutencaoPreventivaTitle}
+          </MenuItem>
+          )
+        break
+      case 'Maquinas':
+        menuItems.push(
+          <MenuItem key={index} onTouchTap={() => this.handleOpenModelDisplay('Maquinas')}>
+            {maquinasTitle}
+          </MenuItem>
+          )
+        break
+      default:
+        break
+      }
+    })
+    return menuItems
+  }
+
+  selectInitialModelDisplay = (type) => {
+    switch (type) {
+    case master:
+      break
+    case admin:
+      break
+    case consultor:
+      this.props.selectModelDisplay('ControleFinanceiro')
+      break
+    case enfermeiro:
+      this.props.selectModelDisplay('GestaoEnfermagem')
+      break
+    case tecnico:
+      this.props.selectModelDisplay('Maquinas')
+      break
+    default:
+      break
+    }
+  }
+
+  componentWillMount = () => {
+    this.props.selectMenuLeftOpen(false)
+    this.selectInitialModelDisplay(this.props.userData.type)
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.userData.type !== this.props.userData.type) {
+      this.selectInitialModelDisplay(nextProps.userData.type)
+    }
+  }
 
   render () {
+    const allItems = [
+      'ControleAgua',
+      'ControleColeta',
+      'ControleDesinfeccao',
+      'ControleFinanceiro',
+      'Pacientes',
+      'GestaoEnfermagem',
+      'Erros',
+      'ManutencaoCorretiva',
+      'ManutencaoPreventiva',
+      'Maquinas'
+    ]
+    let items = []
+    switch (this.props.userData.type) {
+    case master:
+      items = allItems
+      break
+    case admin:
+      items = allItems
+      break
+    case consultor:
+      items = ['ControleFinanceiro']
+      break
+    case enfermeiro:
+      items = [
+        'ControleAgua',
+        'ControleColeta',
+        'ControleDesinfeccao',
+        'Pacientes',
+        'GestaoEnfermagem'
+      ]
+      break
+    case tecnico:
+      items = [
+        'Erros',
+        'ManutencaoCorretiva',
+        'ManutencaoPreventiva',
+        'Maquinas'
+      ]
+      break
+    default:
+      break
+    }
     return (
       <Drawer
         open={this.props.menuLeftOpen}
@@ -39,50 +197,25 @@ class MenuLeft extends Component {
         onRequestChange={this.props.selectMenuLeftOpen}
       >
         <AppBar title='Menu' onLeftIconButtonTouchTap={this.handleToggle} />
-        <MenuItem onTouchTap={() => this.handleOpenModelDisplay('ControleAgua')}>
-          {controleAguaTitle}
-        </MenuItem>
-        <MenuItem onTouchTap={() => this.handleOpenModelDisplay('ControleColeta')}>
-          {controleColetaTitle}
-        </MenuItem>
-        <MenuItem onTouchTap={() => this.handleOpenModelDisplay('ControleDesinfeccao')}>
-          {controleDesinfeccaoTitle}
-        </MenuItem>
-        <MenuItem onTouchTap={() => this.handleOpenModelDisplay('ControleFinanceiro')}>
-          {controleFinanceiroTitle}
-        </MenuItem>
-        <MenuItem onTouchTap={() => this.handleOpenModelDisplay('Pacientes')}>
-          {pacientesTitle}
-        </MenuItem>
-        <MenuItem onTouchTap={() => this.handleOpenModelDisplay('GestaoEnfermagem')}>
-          {gestaoEnfermagemTitle}
-        </MenuItem>
-        <MenuItem onTouchTap={() => this.handleOpenModelDisplay('Erros')}>
-          {errosTitle}
-        </MenuItem>
-        <MenuItem onTouchTap={() => this.handleOpenModelDisplay('ManutencaoCorretiva')}>
-          {manutencaoCorretivaTitle}
-        </MenuItem>
-        <MenuItem onTouchTap={() => this.handleOpenModelDisplay('ManutencaoPreventiva')}>
-          {manutencaoPreventivaTitle}
-        </MenuItem>
-        <MenuItem onTouchTap={() => this.handleOpenModelDisplay('Maquinas')}>
-          {maquinasTitle}
-        </MenuItem>
+        {this.buildMenuItems(items)}
       </Drawer>
     )
   }
 }
 
 MenuLeft.propTypes = {
+  // redux state
   menuLeftOpen: PropTypes.bool,
+  userData: PropTypes.object,
+  // redux actions
   selectMenuLeftOpen: PropTypes.func.isRequired,
   selectModelDisplay: PropTypes.func.isRequired
 }
 
 function mapStateToProps (state) {
   return {
-    menuLeftOpen: state.menuLeftOpen
+    menuLeftOpen: state.menuLeftOpen,
+    userData: state.userData
   }
 }
 

@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import IconMenu from 'material-ui/IconMenu'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
 import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more'
-import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar'
+// import IconMenu from 'material-ui/IconMenu'
+// import MenuItem from 'material-ui/MenuItem'
 
 import {
   add,
@@ -27,12 +27,18 @@ class ModelToolbar extends Component {
   renderAddButton = () => {
     if (!this.props.hideAddButton) {
       return (
-        <RaisedButton
-          label={add}
-          primary
-          onTouchTap={this.props.handleOpenDialogAdd}
-          disabled={this.props.disableAddButton}
-        />
+        <ToolbarGroup>
+          <ToolbarTitle text={options} />
+          <FontIcon className='muidocs-icon-custom-sort' />
+          <ToolbarSeparator />
+          <RaisedButton
+            label={add}
+            primary
+            onTouchTap={this.props.handleOpenDialogAdd}
+            disabled={this.props.disableAddButton}
+          />
+        </ToolbarGroup>
+
       )
     }
   }
@@ -52,26 +58,23 @@ class ModelToolbar extends Component {
 
   render () {
     const {modelTitle} = this.props
+    // const arrow = (
+    //   <IconMenu
+    //     iconButtonElement={
+    //       <IconButton touch>
+    //         <NavigationExpandMoreIcon />
+    //       </IconButton>
+    //     }
+    //   >
+    //     <MenuItem primaryText='Download' />
+    //     <MenuItem primaryText='More Info' />
+    //   </IconMenu>
+    // )
     return (
       <Toolbar>
         <ToolbarTitle text={modelTitle} />
         {this.renderFilter()}
-        <ToolbarGroup>
-          <ToolbarTitle text={options} />
-          <FontIcon className='muidocs-icon-custom-sort' />
-          <ToolbarSeparator />
-          {this.renderAddButton()}
-          <IconMenu
-            iconButtonElement={
-              <IconButton touch>
-                <NavigationExpandMoreIcon />
-              </IconButton>
-            }
-          >
-            <MenuItem primaryText='Download' />
-            <MenuItem primaryText='More Info' />
-          </IconMenu>
-        </ToolbarGroup>
+        {this.renderAddButton()}
       </Toolbar>
     )
   }

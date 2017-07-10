@@ -2,53 +2,63 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types'
-import axios from 'axios'
+import Snackbar from 'material-ui/Snackbar'
 
 import { selectDialogAddIsOpen } from '../actions/index'
 
 import FormDialog from './dialog_form'
 
-import { addFiles, postData } from '../assets/functions'
-import { add } from '../assets/strings'
+import { addFiles, fixObjectsForSave } from '../assets/functions'
+import { post, putFiles } from '../assets/api_calls'
+import { add, loadingAdd } from '../assets/strings'
 
 class DialogAdd extends Component {
-  addFiles = (formData) => addFiles(formData, this.props.fields)
-
-  saveFiles = (formData, id) => {
-    const config = {
-      headers: { 'content-type': 'multipart/form-data' }
+  constructor (props) {
+    super(props)
+    this.state = {
+      loadingOpen: false
     }
-    axios.put(this.props.modelUrl + 'file/' + id + '/', formData, config).then(
-      this.props.fetchModelData
-    ).catch(function (error) { alert(error) })
   }
 
-  afterPostData = (response) => {
+  afterSave = () => {
+    this.setState({loadingOpen: false})
+    this.props.fetchModelData()
+  }
+
+  afterPost = (response) => {
     const formData = new FormData()
-    let hasFormData = this.addFiles(formData)
-    if (hasFormData) this.saveFiles(formData, response.data.id)
-    else this.props.fetchModelData()
+    const hasFormData = addFiles(formData, this.props.fields)
+    const url = this.props.modelUrl + 'file/' + response.data.id + '/'
+    if (hasFormData) putFiles(url, formData, this.afterSave)
+    else this.afterSave()
   }
 
   submitForm = () => {
+    this.setState({loadingOpen: true})
     const { modelUrl, filterData, formData } = this.props
+    fixObjectsForSave(formData)
     const data = {...formData, filter: {...filterData}}
-    data['csrfmiddlewaretoken'] = '{{ csrf_token }}'
-    postData(modelUrl, data, this.afterPostData)
-    this.handleCloseDialog()
+    post(modelUrl, data, this.afterPost)
+    this.props.selectDialogAddIsOpen(false)
   }
-
-  handleCloseDialog = () => this.props.selectDialogAddIsOpen(false)
 
   render () {
     return (
-      <FormDialog
-        {...this.props}
-        dialogOpen={this.props.dialogAddIsOpen}
-        handleCloseDialog={this.handleCloseDialog}
-        submitForm={this.submitForm}
-        title={this.props.title || add}
-      />
+      <div>
+        <FormDialog
+          {...this.props}
+          dialogOpen={this.props.dialogAddIsOpen}
+          handleCloseDialog={() => this.props.selectDialogAddIsOpen(false)}
+          submitForm={this.submitForm}
+          title={this.props.title || add}
+        />
+        <Snackbar
+          open={this.state.loadingOpen}
+          message={loadingAdd}
+          autoHideDuration={10000}
+          onRequestClose={() => this.setState({loadingOpen: false})}
+        />
+      </div>
     )
   }
 }

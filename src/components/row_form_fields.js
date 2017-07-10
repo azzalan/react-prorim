@@ -49,6 +49,7 @@ class RowFormFields extends Component {
 
 RowFormFields.propTypes = {
   fields: PropTypes.array.isRequired,
+  // redux state
   groupInputOpen: PropTypes.object
 }
 

@@ -19,37 +19,17 @@ export function selectTable (table) {
   }
 }
 
-export function newLogin () {
-  return {
-    type: 'LOG',
-    payload: {
-      status: false
-    }
-  }
-}
-
-export function login () {
-  return {
-    type: 'LOG',
-    payload: {
-      status: true
-    }
-  }
-}
-
-export function logout () {
-  return {
-    type: 'LOG',
-    payload: {
-      status: false
-    }
-  }
-}
-
-export function selectLog (log) {
+export function selectAuthToken (log) {
   return {
     type: 'LOG',
     payload: log
+  }
+}
+
+export function selectUserData (data) {
+  return {
+    type: 'USER_DATA',
+    payload: data
   }
 }
 

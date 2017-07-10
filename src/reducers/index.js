@@ -18,11 +18,12 @@ import DialogAgendamentosIsOpen from './dialog_agendamentos_is_open'
 import DialogAgendamentosData from './dialog_agendamentos_data'
 import DialogAddAgendamentosData from './dialog_add_agendamentos_data'
 import ActiveFormData from './form_data'
+import UserData from './user_data'
 
 const rootReducer = combineReducers({
   activeTableData: ActiveTableData,
   activeTable: ActiveTable,
-  log: Log,
+  authToken: Log,
   filterData: FilterData,
   disableAddButton: DisableAddButton,
   groupInputOpen: GroupInputOpen,
@@ -38,7 +39,8 @@ const rootReducer = combineReducers({
   dialogAgendamentosIsOpen: DialogAgendamentosIsOpen,
   dialogAgendamentosData: DialogAgendamentosData,
   formData: ActiveFormData,
-  dialogAddAgendamentosData: DialogAddAgendamentosData
+  dialogAddAgendamentosData: DialogAddAgendamentosData,
+  userData: UserData
 })
 
 export default rootReducer

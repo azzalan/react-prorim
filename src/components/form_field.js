@@ -153,6 +153,17 @@ export default class formField extends Component {
           onChange={(e, value) => this.updateFormData(field, value)}
           />
       )
+    case 'password':
+      return (
+        <FormsyText
+          name={field.accessor}
+          floatingLabelText={field.header}
+          value={getValueDotPath(field.accessor, this.props.formData)}
+          required={!field.optional}
+          onChange={(e, value) => this.updateFormData(field, value)}
+          type='password'
+          />
+      )
     case 'textNumber':
       return (
         <FormsyText

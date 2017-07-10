@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import 'react-table/react-table.css'
+import Snackbar from 'material-ui/Snackbar'
 
 import {
   selectTableData,
@@ -19,17 +19,20 @@ import DialogAdd from './dialog_add'
 import DialogEdit from './dialog_edit'
 import ModelToolbar from './model_toolbar'
 import Filter from './filter'
+
 import {
   setValueDotPath,
   fetchChoicesData,
   fetchData
 } from '../assets/functions'
+import { loading } from '../assets/strings'
 
 class ModelDisplayTable extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      filterOpen: true
+      filterOpen: true,
+      loadingOpen: false
     }
   }
 
@@ -76,15 +79,18 @@ class ModelDisplayTable extends Component {
   }
 
   fetchTableData = (filterData = this.props.filterData) => {
+    this.setState({loadingOpen: true})
     fetchData(this.props.tableUrl, filterData, this.updateTableData)
   }
 
   fetchModelData = () => {
+    this.setState({loadingOpen: true})
     fetchData(this.props.tableUrl, this.props.filterData, this.updateTableData)
   }
 
   updateTableData = (response) => {
     this.props.selectTableData(response.data)
+    this.setState({loadingOpen: false})
   }
 
   componentWillMount = () => {
@@ -147,6 +153,12 @@ class ModelDisplayTable extends Component {
         />
         {this.props.dialogAdd || dialogAdd}
         {this.props.dialogEdit || dialogEdit}
+        <Snackbar
+          open={this.state.loadingOpen}
+          message={loading}
+          autoHideDuration={10000}
+          onRequestClose={() => this.setState({loadingOpen: false})}
+        />
       </div>
     )
   }
