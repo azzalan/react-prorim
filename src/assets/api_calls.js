@@ -61,5 +61,6 @@ export const get = (
   const token = store.getState().authToken
   const headers = token ? { 'Authorization': 'Token ' + token } : undefined
   const config = { params, headers }
+  console.log(config)
   axios.get(url, config).then(thenFunction).catch(catchFunction)
 }

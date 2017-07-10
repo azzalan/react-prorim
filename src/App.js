@@ -39,13 +39,28 @@ class App extends Component {
     }
   }
 
+  errorLogin = (error) => {
+    if (error.response) {
+      console.log(error.response)
+      console.log(error.response.data)
+      if (error.response.status === 401) {
+        console.log('401')
+      }
+    } else if (error.request) {
+      console.log(error.request)
+    }
+    this.props.selectUserData({invalid: true})
+    this.props.selectAuthToken(null)
+    localStorage.removeItem('prorimToken')
+  }
+
   handleLogin = () => {
     get(userUrl, (response) => {
       let user = response.data
       user.type = this.getUserType(user)
       if (!user.type) alert(erroNoUserType)
       this.props.selectUserData(user)
-    })
+    }, {}, this.errorLogin)
   }
 
   renderLogin = () => {
@@ -59,8 +74,10 @@ class App extends Component {
   }
 
   renderApp = () => {
-    if (this.props.userData) return this.renderLogged()
-    else if (localStorage.getItem('prorimToken')) return (<div />)
+    if (this.props.userData) {
+      if (this.props.userData.invalid) return this.renderLogin()
+      return this.renderLogged()
+    } else if (localStorage.getItem('prorimToken')) return (<div />)
     return this.renderLogin()
   }
   // renderApp = () => {
@@ -79,7 +96,8 @@ class App extends Component {
 
   componentWillReceiveProps = (nextProps) => {
     const { userData, authToken } = nextProps
-    if (!userData && authToken) return this.handleLogin()
+    const hasUser = userData && !userData.invalid
+    if (!hasUser && authToken) return this.handleLogin()
   }
 
   render () {
