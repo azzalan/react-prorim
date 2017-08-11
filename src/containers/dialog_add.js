@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types'
-import Snackbar from 'material-ui/Snackbar'
 
 import { selectDialogAddIsOpen } from '../actions/index'
 
@@ -10,19 +9,18 @@ import FormDialog from './dialog_form'
 
 import { addFiles, fixObjectsForSave } from '../assets/functions'
 import { post, putFiles } from '../assets/api_calls'
-import { add, loadingAdd } from '../assets/strings'
+import { add } from '../assets/strings'
 
 class DialogAdd extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      loadingOpen: false
     }
   }
 
   afterSave = () => {
-    this.setState({loadingOpen: false})
     this.props.fetchModelData()
+    this.props.selectDialogAddIsOpen(false)
   }
 
   afterPost = (response) => {
@@ -34,12 +32,9 @@ class DialogAdd extends Component {
   }
 
   submitForm = () => {
-    this.setState({loadingOpen: true})
     const { modelUrl, filterData, formData } = this.props
-    fixObjectsForSave(formData)
-    const data = {...formData, filter: {...filterData}}
-    post(modelUrl, data, this.afterPost)
-    this.props.selectDialogAddIsOpen(false)
+    const saveData = {...fixObjectsForSave(formData), filter: {...filterData}}
+    post(modelUrl, saveData, this.afterPost)
   }
 
   render () {
@@ -51,12 +46,6 @@ class DialogAdd extends Component {
           handleCloseDialog={() => this.props.selectDialogAddIsOpen(false)}
           submitForm={this.submitForm}
           title={this.props.title || add}
-        />
-        <Snackbar
-          open={this.state.loadingOpen}
-          message={loadingAdd}
-          autoHideDuration={10000}
-          onRequestClose={() => this.setState({loadingOpen: false})}
         />
       </div>
     )

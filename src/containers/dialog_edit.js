@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types'
-import Snackbar from 'material-ui/Snackbar'
 
 import { selectDialogEditIsOpen } from '../actions/index'
 
@@ -10,18 +9,17 @@ import FormDialog from './dialog_form'
 
 import { addFiles, deleteDotPath, fixObjectsForSave } from '../assets/functions'
 import { patch, putFiles, del } from '../assets/api_calls'
-import { edit, loadingEdit } from '../assets/strings'
+import { edit } from '../assets/strings'
 
 class DialogEdit extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      loadingOpen: false
     }
   }
 
   afterSave = () => {
-    this.setState({loadingOpen: false})
+    this.props.selectDialogEditIsOpen(false)
     this.props.fetchModelData()
   }
 
@@ -29,20 +27,21 @@ class DialogEdit extends Component {
     const formData = new FormData()
     const hasFormData = addFiles(formData, this.props.fields)
     const url = this.props.modelUrl + 'file/' + this.props.formData.id + '/'
-    if (hasFormData) putFiles(url, formData, this.afterSave)
-    else this.afterSave()
+    if (hasFormData) {
+      putFiles(url, formData, this.afterSave)
+    } else {
+      this.afterSave()
+    }
   }
 
   submitForm = () => {
-    this.setState({loadingOpen: true})
     let { modelUrl, formData } = this.props
     const url = modelUrl + this.props.formData.id + '/'
-    fixObjectsForSave(formData)
+    const saveData = fixObjectsForSave(formData)
     this.props.fields.forEach((field) => {
-      if (field.type === 'file') deleteDotPath(field.accessor, formData)
+      if (field.type === 'file') deleteDotPath(field.accessor, saveData)
     })
-    patch(url, formData, this.afterPatch)
-    this.props.selectDialogEditIsOpen(false)
+    patch(url, saveData, this.afterPatch)
   }
 
   deleteForm = () => {
@@ -62,12 +61,7 @@ class DialogEdit extends Component {
           deleteAction={this.deleteForm}
           submitForm={this.submitForm}
           title={this.props.title || edit}
-        />
-        <Snackbar
-          open={this.state.loadingOpen}
-          message={loadingEdit}
-          autoHideDuration={10000}
-          onRequestClose={() => this.setState({loadingOpen: false})}
+          disabled={this.props.disabled}
         />
       </div>
     )
@@ -79,6 +73,7 @@ DialogEdit.propTypes = {
   modelUrl: PropTypes.string.isRequired,
   fetchModelData: PropTypes.func.isRequired,
   title: PropTypes.string,
+  disabled: PropTypes.bool,
   // redux state
   formData: PropTypes.object,
   dialogEditIsOpen: PropTypes.bool,

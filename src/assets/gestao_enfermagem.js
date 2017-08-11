@@ -9,7 +9,7 @@ export const gestaoEnfermagemCols = [
       },
       {
         accessor: 'numeroDaMaca',
-        header: 'Número da maca',
+        header: 'Número do leito',
         type: 'text'
       },
       {
@@ -33,11 +33,6 @@ export const gestaoEnfermagemCols = [
         type: 'text'
       },
       {
-        accessor: 'erro.observacao',
-        header: 'Observação',
-        type: 'text'
-      },
-      {
         accessor: 'erro.ocorrido',
         header: 'Ocorrido',
         type: 'time'
@@ -56,6 +51,11 @@ export const gestaoEnfermagemCols = [
         accessor: 'erro.maquina.numero',
         header: 'Número da máquina',
         type: 'text'
+      },
+      {
+        accessor: 'erro.observacao',
+        header: 'Observação',
+        type: 'text'
       }
     ]
   }
@@ -64,8 +64,8 @@ export const gestaoEnfermagemCols = [
 export const gestaoEnfermagemForm = [
   {
     accessor: 'numeroDaMaca',
-    header: 'Número da maca',
-    type: 'textNumber',
+    header: 'Número do leito',
+    type: 'text',
     optional: true
   },
   {
@@ -87,13 +87,7 @@ export const gestaoEnfermagemForm = [
       {
         accessor: 'erro.numero',
         header: 'Número do erro',
-        type: 'textNumber'
-      },
-      {
-        accessor: 'erro.observacao',
-        header: 'Observação',
-        type: 'text',
-        optional: true
+        type: 'text'
       },
       {
         accessor: 'erro.ocorrido',
@@ -120,6 +114,12 @@ export const gestaoEnfermagemForm = [
         header: 'Número da máquina',
         type: 'choice',
         choicesUrl: 'maquina/'
+      },
+      {
+        accessor: 'erro.observacao',
+        header: 'Observação',
+        type: 'textArea',
+        optional: true
       }
     ]
   }

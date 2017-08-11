@@ -1,3 +1,17 @@
+export function selectAlertMessages (data) {
+  return {
+    type: 'ALERT_MESSAGES',
+    payload: data
+  }
+}
+
+export function selectAlertOpen (data) {
+  return {
+    type: 'ALERT_OPEN',
+    payload: data
+  }
+}
+
 export function selectTableData (tableData) {
   return {
     type: 'TABLE_DATA',

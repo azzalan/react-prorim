@@ -13,6 +13,11 @@ export const controleDesinfeccaoCols = [
     accessor: 'realizado',
     header: 'Realizado',
     type: 'bool'
+  },
+  {
+    accessor: 'observacao',
+    header: 'Observação',
+    type: 'text'
   }
 ]
 
@@ -31,5 +36,11 @@ export const controleDesinfeccaoForm = [
     accessor: 'realizado',
     header: 'Realizado',
     type: 'bool'
+  },
+  {
+    accessor: 'observacao',
+    header: 'Observação',
+    type: 'textArea',
+    optional: true
   }
 ]

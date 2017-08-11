@@ -20,19 +20,24 @@ export const controleColetaCols = [
     type: 'date'
   },
   {
-    accessor: 'resultado',
+    accessor: 'resultado.nome',
     header: 'Resultado',
     type: 'text'
   },
   {
     accessor: 'numeroDoLaudo',
     header: 'Número do laudo',
-    type: 'textNumber'
+    type: 'text'
   },
   {
     accessor: 'realizado',
     header: 'Realizado',
     type: 'bool'
+  },
+  {
+    accessor: 'observacao',
+    header: 'Observação',
+    type: 'text'
   }
 ]
 
@@ -62,16 +67,24 @@ export const controleColetaForm = [
   {
     accessor: 'resultado',
     header: 'Resultado',
-    type: 'text'
+    type: 'choice',
+    show: 'nome',
+    choicesUrl: 'choice-resultado-agua/'
   },
   {
     accessor: 'numeroDoLaudo',
     header: 'Número do laudo',
-    type: 'textNumber'
+    type: 'text'
   },
   {
     accessor: 'realizado',
     header: 'Realizado',
     type: 'bool'
+  },
+  {
+    accessor: 'observacao',
+    header: 'Observação',
+    type: 'textArea',
+    optional: true
   }
 ]

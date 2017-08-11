@@ -34,6 +34,7 @@ class RowFormFields extends Component {
           <div key={field.accessor + index}>
             <RowFormField
               field={field}
+              disabled={this.props.disabled}
             />
           </div>
         )
@@ -49,6 +50,7 @@ class RowFormFields extends Component {
 
 RowFormFields.propTypes = {
   fields: PropTypes.array.isRequired,
+  disabled: PropTypes.bool,
   // redux state
   groupInputOpen: PropTypes.object
 }

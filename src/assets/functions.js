@@ -1,5 +1,6 @@
 import axios from 'axios'
-import { apiUrl } from '../assets/urls'
+import { apiUrl } from './urls'
+import { get } from './api_calls'
 
 export const getValueDotPath = (dotPath, data) => {
   try {
@@ -54,16 +55,6 @@ export const addFiles = (formData, fields) => {
   return hasFormData
 }
 
-export const fetchData = (url, filterData, handleResponse) => {
-  axios.get(url, {
-    params: {...filterData}
-  }).then(
-    handleResponse
-  ).catch(function (error) {
-    alert(error)
-  })
-}
-
 const defaultCatch = (error) => alert(error)
 
 export const postData = (
@@ -83,7 +74,7 @@ export const fetchChoicesData = (fields, filterData, saveData) => {
     if (field.fields) fetchChoicesData(field.fields, filterData, saveData)
     else if (field.choicesUrl) {
       const handleResponse = (response) => saveData(field, response.data)
-      fetchData(apiUrl + field.choicesUrl, filterData, handleResponse)
+      get(apiUrl + field.choicesUrl, handleResponse, filterData)
     }
   })
 }
@@ -97,7 +88,8 @@ export const moveArrayElement = (array, from, to) => {
 
 // Pega objetos de data e seta seu id como valor, guandando o resto das
 // infomações em 'key' + '_data'
-export const fixObjectsForSave = (data) => {
+export const fixObjectsForSave = (originalData) => {
+  let data = copyObject(originalData)
   for (let field in data) {
     if (data[field]) {
       if (data[field].id) {
@@ -106,4 +98,5 @@ export const fixObjectsForSave = (data) => {
       }
     }
   }
+  return data
 }

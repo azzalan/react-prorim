@@ -1,5 +1,5 @@
-export const controleAguaTitle = 'Controle de água'
-export const controleColetaTitle = 'Controle de coleta'
+export const controleAguaTitle = 'Controle de coleta'
+export const controleColetaTitle = 'Controle de água'
 export const controleDesinfeccaoTitle = 'Controle de desinfecção'
 export const controleFinanceiroTitle = 'Controle financeiro'
 export const manutencaoCorretivaTitle = 'Manutenção coretiva'
@@ -36,13 +36,18 @@ export const enfermeiro = 'Enfermeiro'
 export const tecnico = 'Técnico'
 export const erroNoUserType = 'O tipo do usuário precisa ser especificado no cadastro.'
 export const logout = 'Sair'
+export const login = 'Entrar'
 export const errorLogin = 'Usuário ou senha incorretos.'
 export const loadingAdd = 'Adicionando...'
-export const loadingEdit = 'Editando...'
+export const editing = 'Editando...'
 export const loading = 'Carregando...'
+export const sending = 'Enviando...'
+export const sendingFile = 'Enviando arquivo...'
+export const deleting = 'Excluindo...'
 export const visualizeAs = {
   admin: 'Visualizar como administrador',
   consultor: 'Visualizar como consultor',
   enfermeiro: 'Visualizar como enfermeiro',
   tecnico: 'Visualizar como técnico'
 }
+export const exportTable = 'Exportar'

@@ -6,25 +6,20 @@ import FileIcon from 'react-material-icons/icons/file/file-download'
 export default class CustomCell extends Component {
   render () {
     const { type, value } = this.props
+    const lang = navigator.language
     if (value) {
       switch (type) {
       case 'date':
-        let date = new Date(value)
-        let day = date.getDate()
-        if (day < 10) day = '0' + day
-        let month = date.getMonth() + 1
-        if (month < 10) month = '0' + month
-        let year = date.getFullYear()
-        let stringDate = day + '/' + month + '/' + year
-        return (<div>{stringDate}</div>)
+        return (<div>{new Intl.DateTimeFormat().format(new Date(value))}</div>)
       case 'time':
+        const options = {hour: 'numeric', minute: 'numeric'}
         let time = new Date(value)
-        let minutes = time.getMinutes()
-        if (minutes < 10) minutes = '0' + minutes
-        let hours = time.getHours()
-        if (hours < 10) hours = '0' + hours
-        let stringTime = hours + ':' + minutes
-        return (<div>{stringTime}</div>)
+        time = new Intl.DateTimeFormat(lang, options).format(time)
+        return (<div>{time}</div>)
+      case 'money':
+        const currency = {style: 'currency', currency: 'BRL'}
+        const money = new Intl.NumberFormat(lang, currency).format(value)
+        return (<div>{money}</div>)
       case 'bool':
         return (
           <div className={'text-center'} id={this.props.id}>

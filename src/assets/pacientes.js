@@ -8,6 +8,11 @@ export const pacientesCols = [
     type: 'text'
   },
   {
+    accessor: 'cpf',
+    header: 'CPF',
+    type: 'text'
+  },
+  {
     accessor: 'convenio',
     header: 'Convênio',
     type: 'text'
@@ -52,6 +57,11 @@ export const pacientesForm = [
     accessor: 'nome',
     header: 'Nome',
     type: 'text'
+  },
+  {
+    accessor: 'cpf',
+    header: 'CPF',
+    type: 'cpf'
   },
   {
     accessor: 'convenio',

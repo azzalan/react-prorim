@@ -19,6 +19,10 @@ import DialogAgendamentosData from './dialog_agendamentos_data'
 import DialogAddAgendamentosData from './dialog_add_agendamentos_data'
 import ActiveFormData from './form_data'
 import UserData from './user_data'
+import AlertOpen from './alert_open'
+import AlertMessages from './alert_messages'
+import SnackbarOpen from './snackbar_open'
+import SnackbarMessage from './snackbar_message'
 
 const rootReducer = combineReducers({
   activeTableData: ActiveTableData,
@@ -40,7 +44,11 @@ const rootReducer = combineReducers({
   dialogAgendamentosData: DialogAgendamentosData,
   formData: ActiveFormData,
   dialogAddAgendamentosData: DialogAddAgendamentosData,
-  userData: UserData
+  userData: UserData,
+  alertOpen: AlertOpen,
+  alertMessages: AlertMessages,
+  snackbarOpen: SnackbarOpen,
+  snackbarMessage: SnackbarMessage
 })
 
 export default rootReducer

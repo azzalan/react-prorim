@@ -19,6 +19,7 @@ class RowFormField extends Component {
         formData={this.props.formData}
         filterData={this.props.filterData}
         selectFormData={this.updateFormData}
+        disabled={this.props.disabled}
       />
     )
   }
@@ -26,6 +27,7 @@ class RowFormField extends Component {
 
 RowFormField.propTypes = {
   field: PropTypes.object.isRequired,
+  disabled: PropTypes.bool,
   // redux state
   formData: PropTypes.object,
   filterData: PropTypes.object,

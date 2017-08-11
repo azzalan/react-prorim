@@ -2,7 +2,7 @@ export const maquinasForm = [
   {
     accessor: 'numero',
     header: 'Número da máquina',
-    type: 'textNumber'
+    type: 'text'
   },
   {
     accessor: 'fabricante',

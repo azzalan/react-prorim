@@ -12,6 +12,8 @@ import { selectUserData, selectAuthToken } from './actions/index'
 // import Test from './test'
 import Logged from './containers/logged'
 import Login from './containers/login'
+import DialogAlert from './containers/dialog_alert'
+import Snackbar from './containers/snackbar'
 // import { newLogin } from './actions/index'
 
 import { userUrl } from './assets/urls'
@@ -103,7 +105,11 @@ class App extends Component {
   render () {
     return (
       <MuiThemeProvider>
-        {this.renderApp()}
+        <div>
+          {this.renderApp()}
+          <DialogAlert />
+          <Snackbar />
+        </div>
       </MuiThemeProvider>
     )
   }

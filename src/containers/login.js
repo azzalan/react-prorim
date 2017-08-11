@@ -14,7 +14,7 @@ import FormFields from '../components/row_form_fields'
 import { loginForm } from '../assets/login'
 import { loginUrl } from '../assets/urls'
 import { post } from '../assets/api_calls'
-import { errorLogin } from '../assets/strings'
+import { errorLogin, login } from '../assets/strings'
 
 class Login extends Component {
   constructor (props) {
@@ -107,7 +107,7 @@ class Login extends Component {
               primary
               style={styles.submitStyle}
               type='submit'
-              label='Entrar'
+              label={login}
               onTouchTap={this.handleLogin}
               disabled={!this.state.canSubmit}
               />

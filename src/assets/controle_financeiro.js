@@ -7,62 +7,62 @@ export const controleFinanceiroCols = [
   {
     accessor: 'janeiro',
     header: 'Janeiro',
-    type: 'textNumber'
+    type: 'money'
   },
   {
     accessor: 'fevereiro',
     header: 'Fevereiro',
-    type: 'textNumber'
+    type: 'money'
   },
   {
     accessor: 'marco',
     header: 'Março',
-    type: 'textNumber'
+    type: 'money'
   },
   {
     accessor: 'abril',
     header: 'Abril',
-    type: 'textNumber'
+    type: 'money'
   },
   {
     accessor: 'maio',
     header: 'Maio',
-    type: 'textNumber'
+    type: 'money'
   },
   {
     accessor: 'junho',
     header: 'Junho',
-    type: 'textNumber'
+    type: 'money'
   },
   {
     accessor: 'julho',
     header: 'Julho',
-    type: 'textNumber'
+    type: 'money'
   },
   {
     accessor: 'agosto',
     header: 'Agosto',
-    type: 'textNumber'
+    type: 'money'
   },
   {
     accessor: 'setembro',
     header: 'Setembro',
-    type: 'textNumber'
+    type: 'money'
   },
   {
     accessor: 'outubro',
     header: 'Outubro',
-    type: 'textNumber'
+    type: 'money'
   },
   {
     accessor: 'novembro',
     header: 'Novembro',
-    type: 'textNumber'
+    type: 'money'
   },
   {
     accessor: 'dezembro',
     header: 'Dezembro',
-    type: 'textNumber'
+    type: 'money'
   }
 ]
 

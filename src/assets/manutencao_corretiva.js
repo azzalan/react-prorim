@@ -25,13 +25,13 @@ export const manutencaoCorretivaCols = [
     type: 'date'
   },
   {
-    accessor: 'acao',
-    header: 'Ação',
+    accessor: 'tecnico.firstName',
+    header: 'Técnico',
     type: 'text'
   },
   {
-    accessor: 'tecnico.firstName',
-    header: 'Técnico',
+    accessor: 'acao',
+    header: 'Ação',
     type: 'text'
   }
 ]
@@ -43,15 +43,15 @@ export const manutencaoCorretivaForm = [
     type: 'date'
   },
   {
-    accessor: 'acao',
-    header: 'Ação',
-    type: 'text'
-  },
-  {
     accessor: 'tecnico',
     header: 'Técnico',
     type: 'choice',
     show: 'firstName',
     choicesUrl: 'tecnico/'
+  },
+  {
+    accessor: 'acao',
+    header: 'Ação',
+    type: 'textArea'
   }
 ]

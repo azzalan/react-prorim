@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import Snackbar from 'material-ui/Snackbar'
 
 import {
   selectTableData,
@@ -17,22 +16,21 @@ import {
 import Table from '../components/table'
 import DialogAdd from './dialog_add'
 import DialogEdit from './dialog_edit'
+import DialogAlert from './dialog_alert'
 import ModelToolbar from './model_toolbar'
 import Filter from './filter'
 
 import {
   setValueDotPath,
-  fetchChoicesData,
-  fetchData
+  fetchChoicesData
 } from '../assets/functions'
-import { loading } from '../assets/strings'
+import { get } from '../assets/api_calls'
 
 class ModelDisplayTable extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      filterOpen: true,
-      loadingOpen: false
+      filterOpen: true
     }
   }
 
@@ -79,18 +77,15 @@ class ModelDisplayTable extends Component {
   }
 
   fetchTableData = (filterData = this.props.filterData) => {
-    this.setState({loadingOpen: true})
-    fetchData(this.props.tableUrl, filterData, this.updateTableData)
+    get(this.props.tableUrl, this.updateTableData, filterData)
   }
 
   fetchModelData = () => {
-    this.setState({loadingOpen: true})
-    fetchData(this.props.tableUrl, this.props.filterData, this.updateTableData)
+    get(this.props.tableUrl, this.updateTableData, this.props.filterData)
   }
 
   updateTableData = (response) => {
     this.props.selectTableData(response.data)
-    this.setState({loadingOpen: false})
   }
 
   componentWillMount = () => {
@@ -128,6 +123,7 @@ class ModelDisplayTable extends Component {
         choices={this.state.choices}
         modelUrl={this.props.tableUrl}
         fetchModelData={this.fetchModelData}
+        disabled={this.props.disableEdit}
       />
     )
     return (
@@ -138,6 +134,7 @@ class ModelDisplayTable extends Component {
           hideAddButton={this.props.disableAddButton}
           toogleFilter={this.toogleFilter}
           showFilterToogle={this.props.filterFields}
+          tableCols={this.props.tableCols}
         />
         <Filter
           filterOpen={this.state.filterOpen}
@@ -153,12 +150,7 @@ class ModelDisplayTable extends Component {
         />
         {this.props.dialogAdd || dialogAdd}
         {this.props.dialogEdit || dialogEdit}
-        <Snackbar
-          open={this.state.loadingOpen}
-          message={loading}
-          autoHideDuration={10000}
-          onRequestClose={() => this.setState({loadingOpen: false})}
-        />
+        <DialogAlert />
       </div>
     )
   }
@@ -174,6 +166,7 @@ ModelDisplayTable.propTypes = {
   tableTitle: PropTypes.string.isRequired,
   tableUrl: PropTypes.string.isRequired,
   initialFilter: PropTypes.object,
+  disableEdit: PropTypes.bool,
   // redux state
   activeTableData: PropTypes.array,
   filterData: PropTypes.object,

@@ -4,11 +4,11 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
+import Formsy from 'formsy-react'
 
 import { selectGroupInputOpen } from '../actions/index'
 
 import DeleteAction from '../components/delete_action'
-import Formsy from 'formsy-react'
 import RowFormFields from '../components/row_form_fields'
 
 class FormDialog extends Component {
@@ -60,11 +60,15 @@ class FormDialog extends Component {
         label='Cancelar'
         primary
         onTouchTap={this.props.handleCloseDialog}
-      />,
+      />
+    ]
+    const deleteAction = (
       <DeleteAction
         enableDelete={this.props.enableDelete}
         openConfirmDialog={this.openConfirmDialog}
-      />,
+      />
+    )
+    const saveAction = (
       <FlatButton
         label='Salvar'
         primary
@@ -72,7 +76,11 @@ class FormDialog extends Component {
         disabled={!this.state.canSubmit}
         onTouchTap={() => { this.refs.form.submit() }}
       />
-    ]
+    )
+    if (!this.props.disabled) {
+      actions.push(deleteAction)
+      actions.push(saveAction)
+    }
     return (
       <div>
         <Dialog
@@ -89,9 +97,10 @@ class FormDialog extends Component {
             onValidSubmit={this.props.submitForm}
             onInvalidSubmit={this.notifyFormError}
             ref='form'
-        >
+          >
             <RowFormFields
               fields={this.props.fields}
+              disabled={this.props.disabled}
             />
           </Formsy.Form>
           <Dialog
@@ -113,11 +122,13 @@ class FormDialog extends Component {
 FormDialog.propTypes = {
   deleteAction: PropTypes.func,
   enableDelete: PropTypes.bool,
+  disabled: PropTypes.bool,
   submitForm: PropTypes.func.isRequired,
   dialogOpen: PropTypes.bool,
   handleCloseDialog: PropTypes.func.isRequired,
   fields: PropTypes.array,
   title: PropTypes.string.isRequired,
+  // redux actions
   selectGroupInputOpen: PropTypes.func.isRequired
 }
 

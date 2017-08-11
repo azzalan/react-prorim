@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
 import ModelDisplayTable from '../../containers/model_display_table'
 import DialogAgendamentos from '../../containers/dialog_agendamentos'
 import DialogAddAgendamentos from '../../containers/dialog_add_agendamentos'
 
 import { apiUrl } from '../../assets/urls'
+import { getValueDotPath } from '../../assets/functions'
 import {
   pacientesCols,
   pacientesForm,
@@ -14,12 +18,15 @@ import {
   pacientesTitle,
   titleDialogAgendamentos,
   close,
-  titleDialogAddAgendamentos
+  titleDialogAddAgendamentos,
+  consultor
 } from '../../assets/strings'
 
-export default class pacientes extends Component {
+class Pacientes extends Component {
   render () {
     const tableUrl = apiUrl + 'paciente/'
+    const userType = getValueDotPath('type', this.props.userData)
+    const isConsultor = userType === consultor
     return (
       <div>
         <ModelDisplayTable
@@ -29,6 +36,8 @@ export default class pacientes extends Component {
           formFields={pacientesForm}
           filterFields={pacientesFilter}
           disableFilterInvalid
+          disableEdit={isConsultor}
+          disableAddButton={isConsultor}
         />
         <DialogAgendamentos
           title={titleDialogAgendamentos}
@@ -42,3 +51,21 @@ export default class pacientes extends Component {
     )
   }
 }
+
+Pacientes.propTypes = {
+  // redux state
+  userData: PropTypes.object
+}
+
+function mapStateToProps (state) {
+  return {
+    userData: state.userData
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return bindActionCreators({
+  }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Pacientes)

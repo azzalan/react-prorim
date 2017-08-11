@@ -168,12 +168,10 @@ class MenuLeft extends Component {
       items = allItems
       break
     case consultor:
-      items = ['ControleFinanceiro']
+      items = allItems
       break
     case enfermeiro:
       items = [
-        'ControleAgua',
-        'ControleColeta',
         'ControleDesinfeccao',
         'Pacientes',
         'GestaoEnfermagem'
@@ -181,6 +179,8 @@ class MenuLeft extends Component {
       break
     case tecnico:
       items = [
+        'ControleAgua',
+        'ControleColeta',
         'Erros',
         'ManutencaoCorretiva',
         'ManutencaoPreventiva',

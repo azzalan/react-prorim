@@ -1,17 +1,26 @@
 import React, { Component } from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
 import ModelDisplayTable from '../../containers/model_display_table'
 
 import { estadiaUrl } from '../../assets/urls'
+import { getValueDotPath } from '../../assets/functions'
 import {
   errosCols,
   errosForm,
   errosFilter
 } from '../../assets/erros'
-import { errosTitle } from '../../assets/strings'
+import {
+  errosTitle,
+  consultor
+} from '../../assets/strings'
 
-export default class Erros extends Component {
+class Erros extends Component {
   render () {
+    const userType = getValueDotPath('type', this.props.userData)
+    const isConsultor = userType === consultor
     return (
       <ModelDisplayTable
         tableUrl={estadiaUrl}
@@ -20,7 +29,26 @@ export default class Erros extends Component {
         formFields={errosForm}
         filterFields={errosFilter}
         disableAddButton
+        disableEdit={isConsultor}
       />
     )
   }
 }
+
+Erros.propTypes = {
+  // redux state
+  userData: PropTypes.object
+}
+
+function mapStateToProps (state) {
+  return {
+    userData: state.userData
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return bindActionCreators({
+  }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Erros)

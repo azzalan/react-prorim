@@ -131,6 +131,7 @@ class ModelDisplayCards extends Component {
           choices={this.state.choices}
           modelUrl={this.props.modelUrl}
           fetchModelData={this.fetchModelData}
+          disabled={this.props.disableEdit}
         />
       </div>
     )
@@ -142,7 +143,10 @@ ModelDisplayCards.propTypes = {
   modelTitle: PropTypes.string.isRequired,
   hideAddButton: PropTypes.any,
   formFields: PropTypes.array,
+  disableEdit: PropTypes.bool,
+  // redux state
   choices: PropTypes.object,
+  // redux actions
   selectChoices: PropTypes.func.isRequired,
   selectFormData: PropTypes.func.isRequired,
   selectGroupInputOpen: PropTypes.func.isRequired,

@@ -20,7 +20,8 @@ import RowFormFields from '../components/row_form_fields'
 import { estadiaUrl } from '../assets/urls'
 import { cancel, add, save } from '../assets/strings'
 import { agendarFields, agendarCols } from '../assets/pacientes'
-import { copyObject, postData } from '../assets/functions'
+import { copyObject } from '../assets/functions'
+import { post } from '../assets/api_calls'
 
 class DialogAddAgendamentos extends Component {
   constructor (props) {
@@ -51,7 +52,7 @@ class DialogAddAgendamentos extends Component {
         data.paciente = this.props.filterData.paciente
         data.periodo = data.periodo.id
         data.sala = data.sala.id
-        postData(estadiaUrl, data)
+        post(estadiaUrl, data)
       }
     )
     this.handleCloseDialog()
