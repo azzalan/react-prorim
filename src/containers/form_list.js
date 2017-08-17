@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -8,6 +7,8 @@ import { selectListToAddData } from '../actions/index'
 
 import CustomTable from '../components/table'
 import Filter from './filter'
+
+import { get } from '../assets/api_calls'
 
 class FormList extends Component {
   constructor (props) {
@@ -35,19 +36,13 @@ class FormList extends Component {
     this.setState({searchData: response.data})
   }
 
-  fetchSearchData = (filterData = this.props.filterData) => {
-    axios.get(this.props.modelUrl, {
-      params: {...filterData}
-    }).then(
-      this.updateSearchData
-    ).catch(function (error) {
-      alert(error)
-    })
+  fetchSearchData = (filterData) => {
+    get(this.props.modelUrl, this.updateSearchData, filterData)
   }
 
   componentWillMount = () => {
     this.props.selectListToAddData([])
-    this.fetchSearchData()
+    this.fetchSearchData(this.props.filterData)
   }
 
   componentWillReceiveProps = (nextProps) => {

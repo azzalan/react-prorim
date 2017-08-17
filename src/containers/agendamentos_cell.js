@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import axios from 'axios'
 import ListIcon from 'react-material-icons/icons/action/assignment'
 import AddIcon from 'react-material-icons/icons/action/assignment-turned-in'
 import DeleteIcon from 'react-material-icons/icons/action/highlight-off'
@@ -15,6 +14,7 @@ import {
 } from '../actions/index'
 
 import { estadiaUrl } from '../assets/urls'
+import { get, del } from '../assets/api_calls'
 
 class AgendamentoCell extends Component {
   handleOpenDialogAgendamentos = () => {
@@ -41,9 +41,7 @@ class AgendamentoCell extends Component {
   }
 
   handleDeleteInstance = (index) => {
-    axios.delete(estadiaUrl + index + '/').then(
-      this.fetchModelData
-    ).catch(function (error) { alert(error) })
+    del(estadiaUrl + index + '/', this.fetchModelData)
   }
 
   updateModelData = (response) => {
@@ -51,13 +49,7 @@ class AgendamentoCell extends Component {
   }
 
   fetchModelData = () => {
-    axios.get(estadiaUrl, {
-      params: {...this.props.filterData}
-    }).then(
-      this.updateModelData
-    ).catch(function (error) {
-      alert(error)
-    })
+    get(estadiaUrl, this.updateModelData, this.props.filterData)
   }
 
   render () {

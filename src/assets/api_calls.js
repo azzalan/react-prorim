@@ -1,18 +1,13 @@
 import axios from 'axios'
 import { store } from '../index'
+import shortid from 'shortid'
 
 import { selectAlertOpen, selectAlertMessages } from '../actions/index'
-import selectSnackbarOpen from '../actions/snackbarOpen'
 import selectSnackbarMessage from '../actions/snackbarMessage'
 
 import { loading, sending, sendingFile, deleting, editing } from './strings'
 
-const closeSnackbar = () => {
-  store.dispatch(selectSnackbarOpen(false))
-  store.dispatch(selectSnackbarMessage(null))
-}
-
-const defaultCatch = (error) => {
+export const defaultCatch = (error) => {
   let alertMessages = store.getState().alertMessages || []
   if (error.response) {
     if (error.response.data) {
@@ -28,21 +23,35 @@ const defaultCatch = (error) => {
   }
 }
 
+export const openSnackbar = (message) => {
+  const id = shortid.generate()
+  const snackbar = {...store.getState().snackbarMessage}
+  const created = new Date()
+  snackbar[id] = { message, created }
+  store.dispatch(selectSnackbarMessage(snackbar))
+  return id
+}
+
+export const closeSnackbar = (id) => {
+  const snackbar = {...store.getState().snackbarMessage}
+  delete snackbar[id]
+  store.dispatch(selectSnackbarMessage(snackbar))
+}
+
 export const del = (
   url,
   thenFunction = () => {},
-  catchFunction = (error) => alert(error)
+  catchFunction = defaultCatch
 ) => {
-  store.dispatch(selectSnackbarMessage(deleting))
-  store.dispatch(selectSnackbarOpen(true))
+  const snackbar = openSnackbar(deleting)
   const token = store.getState().authToken
   const headers = token ? { 'Authorization': 'Token ' + token } : undefined
   const config = { headers }
   axios.delete(url, config).then((response) => {
-    closeSnackbar()
+    closeSnackbar(snackbar)
     thenFunction(response)
   }).catch((error) => {
-    closeSnackbar()
+    closeSnackbar(snackbar)
     catchFunction(error)
   })
 }
@@ -53,21 +62,19 @@ export const putFiles = (
   thenFunction = () => {},
   catchFunction = defaultCatch
 ) => {
-  store.dispatch(selectSnackbarMessage(sendingFile))
-  store.dispatch(selectSnackbarOpen(true))
+  const snackbar = openSnackbar(sendingFile)
   let token = store.getState().authToken
   token = token ? { 'Authorization': 'Token ' + token } : undefined
   const headers = {
     'content-type': 'multipart/form-data',
     'Authorization': token
   }
-  console.log(formData)
   const config = { headers }
   axios.put(url, formData, config).then((response) => {
-    closeSnackbar()
+    closeSnackbar(snackbar)
     thenFunction(response)
   }).catch((error) => {
-    closeSnackbar()
+    closeSnackbar(snackbar)
     catchFunction(error)
   })
 }
@@ -78,16 +85,15 @@ export const post = (
   thenFunction = () => {},
   catchFunction = defaultCatch
 ) => {
-  store.dispatch(selectSnackbarMessage(sending))
-  store.dispatch(selectSnackbarOpen(true))
+  const snackbar = openSnackbar(sending)
   const token = store.getState().authToken
   const headers = token ? { 'Authorization': 'Token ' + token } : undefined
   const config = { headers }
   axios.post(url, data, config).then((response) => {
-    closeSnackbar()
+    closeSnackbar(snackbar)
     thenFunction(response)
   }).catch((error) => {
-    closeSnackbar()
+    closeSnackbar(snackbar)
     catchFunction(error)
   })
 }
@@ -98,37 +104,34 @@ export const patch = (
   thenFunction = () => {},
   catchFunction = defaultCatch
 ) => {
-  store.dispatch(selectSnackbarMessage(editing))
-  store.dispatch(selectSnackbarOpen(true))
-  // store.dispatch(selectAlertOpen(true))
+  const snackbar = openSnackbar(editing)
   const token = store.getState().authToken
   const headers = token ? { 'Authorization': 'Token ' + token } : undefined
   const config = { headers }
   axios.patch(url, data, config).then((response) => {
-    closeSnackbar()
+    closeSnackbar(snackbar)
     thenFunction(response)
   }).catch((error) => {
-    closeSnackbar()
+    closeSnackbar(snackbar)
     catchFunction(error)
   })
 }
 
 export const get = (
   url,
-  thenFunction = (response) => console.log(response),
+  thenFunction = () => {},
   params = undefined,
   catchFunction = defaultCatch
 ) => {
-  store.dispatch(selectSnackbarMessage(loading))
-  store.dispatch(selectSnackbarOpen(true))
+  const snackbar = openSnackbar(loading)
   const token = store.getState().authToken
   const headers = token ? { 'Authorization': 'Token ' + token } : undefined
   const config = { params, headers }
   axios.get(url, config).then((response) => {
-    closeSnackbar()
+    closeSnackbar(snackbar)
     thenFunction(response)
   }).catch((error) => {
-    closeSnackbar()
+    closeSnackbar(snackbar)
     catchFunction(error)
   })
 }

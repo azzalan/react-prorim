@@ -15,19 +15,20 @@ import FormField from '../components/form_field'
 import { setValueDotPath } from '../assets/functions'
 
 class Filter extends Component {
-  updateFormData = (newFormData, value, field) => {
+  updateFilterData = (newFormData, value, field) => {
     if (field.type === 'choice') {
       setValueDotPath(field.accessor, newFormData, value)
     }
     this.props.selectFilterData(newFormData)
   }
+
   buildFields = () => {
     return this.props.filterFields.map((field, index) => (
       <div key={field.accessor + index}>
         <FormField
           field={field}
           formData={this.props.filterData}
-          selectFormData={this.updateFormData}
+          selectFormData={this.updateFilterData}
         />
       </div>
     ))

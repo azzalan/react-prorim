@@ -16,7 +16,7 @@ class Logged extends Component {
 
   render () {
     return (
-      <div>
+      <div className='flex-container'>
         <AppBar title={prorim}
           onLeftIconButtonTouchTap={this.handleToggle}
           iconElementRight={<AppBarRight />}

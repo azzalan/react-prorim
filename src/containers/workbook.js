@@ -12,23 +12,38 @@ class ContainerName extends Component {
     }
   }
 
+  buildCols = (modelCols, cols, prefix = '') => {
+    modelCols.forEach((col, index) => {
+      if (col.columns) {
+        this.buildCols(col.columns, cols, col.header + '|')
+      } else {
+        const addCol = (
+          <Workbook.Column
+            label={prefix + col.header}
+            value={col.accessor}
+            key={index}
+          />
+        )
+        cols.push(addCol)
+      }
+    })
+  }
+
   componentDidMount = () => {
   }
 
   render () {
+    const cols = []
+    this.buildCols(this.props.cols, cols)
+    console.log(cols)
+    console.log(this.props.data)
     return (
       <Workbook
         filename={this.props.filename}
         element={this.props.element}
       >
         <Workbook.Sheet data={this.props.data} name='Sheet A'>
-          {this.props.cols.map((col, index) => (
-            <Workbook.Column
-              label={col.header}
-              value={col.accessor}
-              key={index}
-            />
-          ))}
+          {cols}
         </Workbook.Sheet>
       </Workbook>
     )

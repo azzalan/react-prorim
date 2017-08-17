@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import axios from 'axios'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 
@@ -17,6 +16,7 @@ import CustomTable from '../components/table'
 import { estadiaUrl } from '../assets/urls'
 import { cancel } from '../assets/strings'
 import { listToRemoveCols } from '../assets/pacientes'
+import { get } from '../assets/api_calls'
 
 class DialogAgendamentos extends Component {
   updateModelData = (response) => {
@@ -26,13 +26,7 @@ class DialogAgendamentos extends Component {
   handleCloseDialog = () => this.props.selectDialogAgendamentosIsOpen(false)
 
   fetchModelData = (filterData = this.props.filterData) => {
-    axios.get(estadiaUrl, {
-      params: {...filterData}
-    }).then(
-      this.updateModelData
-    ).catch(function (error) {
-      alert(error)
-    })
+    get(estadiaUrl, this.updateModelData, filterData)
   }
 
   componentWillMount = () => {

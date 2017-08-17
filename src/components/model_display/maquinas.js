@@ -8,7 +8,7 @@ import ModelDisplayCards from '../../containers/model_display_cards'
 
 import { apiUrl } from '../../assets/urls'
 import { getValueDotPath } from '../../assets/functions'
-import { maquinasForm } from '../../assets/maquinas'
+import { maquinasForm, maquinasCols } from '../../assets/maquinas'
 import {
   maquinasTitle,
   consultor
@@ -24,6 +24,7 @@ class Maquinas extends Component {
         modelUrl={modelUrl}
         modelTitle={maquinasTitle}
         formFields={maquinasForm}
+        tableCols={maquinasCols}
         disableEdit={isConsultor}
         disableAddButton={isConsultor}
         hideAddButton={isConsultor}

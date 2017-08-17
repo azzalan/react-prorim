@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -14,40 +13,46 @@ import {
 import { pacienteUrl, estadiaUrl } from '../assets/urls'
 import DialogList from '../components/dialog_list'
 import { adicionarPacientes } from '../assets/strings'
+import { get, post, defaultCatch } from '../assets/api_calls'
 
 class DialogListPacientes extends Component {
-  fetchModelData = (filterData = this.props.filterData) => {
-    axios.get(estadiaUrl, {
-      params: {...filterData}
-    }).then(
-      this.updateTableData
-    ).catch(function (error) {
-      alert(error)
-    })
+  fetchModelData = () => {
+    get(estadiaUrl, this.updateTableData, this.props.filterData)
   }
 
   updateTableData = (response) => {
     this.props.selectTableData(response.data)
   }
 
-  handleSave = () => {
-    const { listToAddData, filterData } = this.props
-    listToAddData.forEach(
-      (paciente, index) => {
-        let data = {
-          data: filterData.data,
-          periodo: filterData.periodo,
-          sala: filterData.sala,
-          paciente: paciente.id
-        }
-        data['csrfmiddlewaretoken'] = '{{ csrf_token }}'
-        axios.post(estadiaUrl, data).then(
-          (response) => {
-            if (index === listToAddData.length - 1) this.fetchModelData()
-          }
-        ).catch(function (error) { alert(error) })
+  catchSave = (error) => {
+    this.fetchModelData()
+    defaultCatch(error)
+  }
+
+  saveList = (list, index) => {
+    const { filterData } = this.props
+    const paciente = list[index]
+    let data = {
+      data: filterData.data,
+      periodo: filterData.periodo,
+      sala: filterData.sala,
+      paciente: paciente.id
+    }
+    if (index === list.length - 1) {
+      post(estadiaUrl, data, this.fetchModelData, this.catchSave)
+    } else {
+      const saveNext = () => this.saveList(list, index + 1)
+      const catchNext = (error) => {
+        defaultCatch(error)
+        saveNext()
       }
-    )
+      post(estadiaUrl, data, saveNext, catchNext)
+    }
+  }
+
+  handleSave = () => {
+    const { listToAddData } = this.props
+    this.saveList(listToAddData, 0)
     this.props.handleCloseDialog()
   }
 

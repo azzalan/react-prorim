@@ -8,33 +8,54 @@ class ContainerName extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      data: []
     }
   }
 
+  buildArray = (object) => {
+    const array = []
+    for (let key in object) {
+      array.push(object[key])
+    }
+    return array
+  }
+
+  buildData = (snackbar) => {
+    const data = this.buildArray(snackbar)
+    data.sort((a, b) => (a.created - b.created))
+    this.setState({data})
+  }
+
+  renderSnackbars = () => (
+    this.state.data.map((instance, index) => (
+      <Snackbar
+        key={index}
+        message={instance.message}
+        open
+      />
+    ))
+  )
+
   componentDidMount = () => {
+    this.buildData(this.props.snackbarMessage)
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    this.buildData(nextProps.snackbarMessage)
   }
 
   render () {
-    const open = this.props.snackbarOpen || false
-    const message = this.props.snackbarMessage || ''
-    return (
-      <Snackbar
-        open={open}
-        message={message}
-      />
-    )
+    return (<div>{this.renderSnackbars()}</div>)
   }
 }
 
 ContainerName.propTypes = {
   // redux state
-  snackbarOpen: PropTypes.bool,
-  snackbarMessage: PropTypes.string
+  snackbarMessage: PropTypes.object
 }
 
 function mapStateToProps (state) {
   return {
-    snackbarOpen: state.snackbarOpen,
     snackbarMessage: state.snackbarMessage
   }
 }

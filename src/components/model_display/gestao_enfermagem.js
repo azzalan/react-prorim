@@ -7,6 +7,7 @@ import { selectDialogAddIsOpen } from '../../actions/index'
 
 import ModelDisplayTable from '../../containers/model_display_table'
 import DialogListPacientes from '../../containers/dialog_list_pacientes'
+import EnfermeiroField from '../../containers/enfermeiro_field'
 
 import { estadiaUrl } from '../../assets/urls'
 import {
@@ -24,6 +25,7 @@ class GestaoEnfermagem extends Component {
         handleCloseDialog={() => this.props.selectDialogAddIsOpen(false)}
       />
     )
+    const enfermeiroField = (<EnfermeiroField />)
     return (
       <ModelDisplayTable
         tableUrl={estadiaUrl}
@@ -31,6 +33,7 @@ class GestaoEnfermagem extends Component {
         tableCols={gestaoEnfermagemCols}
         formFields={gestaoEnfermagemForm}
         filterFields={gestaoEnfermagemFilter}
+        extraFields={enfermeiroField}
         disableAddButton={false}
         dialogAdd={dialogAdd}
       />

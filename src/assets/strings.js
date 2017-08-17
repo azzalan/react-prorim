@@ -6,6 +6,7 @@ export const manutencaoCorretivaTitle = 'Manutenção coretiva'
 export const manutencaoPreventivaTitle = 'Manutenção preventiva'
 export const maquinasTitle = 'Máquinas'
 export const gestaoEnfermagemTitle = 'Gestão de enfermagem'
+export const reportTitle = 'Relatório'
 // Usado para botão e título de dialog.
 export const add = 'Adicionar'
 export const filter = 'Filtro'

@@ -17,3 +17,7 @@ export const loginUrl = authUrl + 'login/'
 export const logoutUrl = authUrl + 'logout/'
 
 export const userUrl = apiUrl + 'user/'
+
+export const reportUrl = apiUrl + 'report/'
+
+export const secaoUrl = apiUrl + 'secao/'

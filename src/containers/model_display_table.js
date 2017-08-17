@@ -30,7 +30,8 @@ class ModelDisplayTable extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      filterOpen: true
+      filterOpen: true,
+      tableData: []
     }
   }
 
@@ -62,18 +63,14 @@ class ModelDisplayTable extends Component {
     selectDialogAddIsOpen(true)
   }
 
-  fetchChoices = (fields, filterData = this.props.filterData) => {
-    fetchChoicesData()
-  }
-
   saveNewChoice = (field, data) => {
     let newChoices = this.props.choices ? {...this.props.choices} : {}
     setValueDotPath(field.accessor, newChoices, data)
     this.props.selectChoices(newChoices)
   }
 
-  fetchChoices = (fields, filterData = this.props.filterData) => {
-    fetchChoicesData(fields, filterData, this.saveNewChoice)
+  fetchChoices = (fields) => {
+    fetchChoicesData(fields, this.props.filterData, this.saveNewChoice)
   }
 
   fetchTableData = (filterData = this.props.filterData) => {
@@ -106,13 +103,15 @@ class ModelDisplayTable extends Component {
     if (this.props.filterData !== nextProps.filterData) {
       this.fetchTableData(nextProps.filterData)
     }
+    if (this.props.activeTableData !== nextProps.activeTableData) {
+      this.setState({tableData: nextProps.activeTableData})
+    }
   }
 
   render () {
     const dialogAdd = (
       <DialogAdd
         fields={this.props.formFields}
-        choices={this.state.choices}
         modelUrl={this.props.tableUrl}
         fetchModelData={this.fetchModelData}
       />
@@ -120,7 +119,6 @@ class ModelDisplayTable extends Component {
     const dialogEdit = (
       <DialogEdit
         fields={this.props.formFields}
-        choices={this.state.choices}
         modelUrl={this.props.tableUrl}
         fetchModelData={this.fetchModelData}
         disabled={this.props.disableEdit}
@@ -134,7 +132,8 @@ class ModelDisplayTable extends Component {
           hideAddButton={this.props.disableAddButton}
           toogleFilter={this.toogleFilter}
           showFilterToogle={this.props.filterFields}
-          tableCols={this.props.tableCols}
+          tableCols={this.props.tableCols || []}
+          data={this.props.activeTableData || []}
         />
         <Filter
           filterOpen={this.state.filterOpen}
@@ -143,8 +142,9 @@ class ModelDisplayTable extends Component {
           disableInvalid={this.props.disableFilterInvalid}
           initialFilter={this.props.initialFilter}
         />
+        {this.props.extraFields || null}
         <Table
-          data={this.props.activeTableData}
+          data={this.state.tableData}
           columns={this.props.tableCols}
           onRowTouchTap={this.handleOpenDialogEdit}
         />
@@ -167,6 +167,7 @@ ModelDisplayTable.propTypes = {
   tableUrl: PropTypes.string.isRequired,
   initialFilter: PropTypes.object,
   disableEdit: PropTypes.bool,
+  extraFields: PropTypes.any,
   // redux state
   activeTableData: PropTypes.array,
   filterData: PropTypes.object,

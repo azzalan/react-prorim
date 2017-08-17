@@ -1,3 +1,26 @@
+export const maquinasCols = [
+  {
+    accessor: 'numero',
+    header: 'Número da máquina',
+    type: 'text'
+  },
+  {
+    accessor: 'fabricante',
+    header: 'Fabricante',
+    type: 'text'
+  },
+  {
+    accessor: 'disponibilidade.nome',
+    header: 'Disponibilidade',
+    type: 'text'
+  },
+  {
+    accessor: 'sala.identificador',
+    header: 'Sala',
+    type: 'text'
+  }
+]
+
 export const maquinasForm = [
   {
     accessor: 'numero',

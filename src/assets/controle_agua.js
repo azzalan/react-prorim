@@ -5,11 +5,6 @@ export const controleAguaCols = [
     type: 'date'
   },
   {
-    accessor: 'teste',
-    header: 'Teste',
-    type: 'text'
-  },
-  {
     accessor: 'resultado',
     header: 'Satisfatório',
     type: 'bool'
@@ -17,6 +12,11 @@ export const controleAguaCols = [
   {
     accessor: 'numeroDoLaudo',
     header: 'Número do laudo',
+    type: 'text'
+  },
+  {
+    accessor: 'teste',
+    header: 'Teste',
     type: 'text'
   },
   {
@@ -33,11 +33,6 @@ export const controleAguaForm = [
     type: 'date'
   },
   {
-    accessor: 'teste',
-    header: 'Teste',
-    type: 'text'
-  },
-  {
     accessor: 'resultado',
     header: 'Satisfatório',
     type: 'bool'
@@ -46,6 +41,11 @@ export const controleAguaForm = [
     accessor: 'numeroDoLaudo',
     header: 'Número do laudo',
     type: 'text'
+  },
+  {
+    accessor: 'teste',
+    header: 'Teste',
+    type: 'textArea'
   },
   {
     accessor: 'arquivoResultado',

@@ -101,14 +101,23 @@ class ModelToolbar extends Component {
     return null
   }
 
-  buildExportTableData = (activeTableData) => {
-    const exportTableData = activeTableData.map((line, index) => {
+  buildExportTableData = (data) => {
+    const exportTableData = data.map((line, index) => {
       const exportLine = {}
       this.props.tableCols.forEach((field) => {
-        exportLine[field.accessor] = this.getFieldStringValue(
-          field,
-          activeTableData[index]
-        )
+        if (field.columns) {
+          field.columns.forEach((fieldField) => {
+            exportLine[fieldField.accessor] = this.getFieldStringValue(
+              fieldField,
+              data[index]
+            )
+          })
+        } else {
+          exportLine[field.accessor] = this.getFieldStringValue(
+            field,
+            data[index]
+          )
+        }
       })
       return exportLine
     })
@@ -116,14 +125,14 @@ class ModelToolbar extends Component {
   }
 
   componentWillMount = () => {
-    if (this.props.activeTableData) {
-      this.buildExportTableData(this.props.activeTableData)
+    if (this.props.data) {
+      this.buildExportTableData(this.props.data)
     }
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if (nextProps.activeTableData) {
-      this.buildExportTableData(nextProps.activeTableData)
+    if (nextProps.data) {
+      this.buildExportTableData(nextProps.data)
     }
   }
 
@@ -146,14 +155,13 @@ ModelToolbar.propTypes = {
   toogleFilter: PropTypes.func,
   modelTitle: PropTypes.string.isRequired,
   tableCols: PropTypes.array.isRequired,
+  data: PropTypes.array.isRequired,
   // redux state
-  disableAddButton: PropTypes.bool,
-  activeTableData: PropTypes.array
+  disableAddButton: PropTypes.bool
 }
 
 function mapStateToProps (state) {
   return {
-    activeTableData: state.activeTableData,
     disableAddButton: state.disableAddButton
   }
 }

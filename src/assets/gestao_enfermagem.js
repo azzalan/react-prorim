@@ -146,3 +146,12 @@ export const gestaoEnfermagemFilter = [
     choicesUrl: 'sala/'
   }
 ]
+
+export const enfermeiroField = {
+  accessor: 'enfermeiro',
+  show: 'firstName',
+  header: 'Enfermeiro',
+  type: 'choice',
+  choicesUrl: 'enfermeiro/',
+  optional: true
+}

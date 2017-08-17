@@ -12,6 +12,7 @@ import ManutencaoPreventiva from '../components/model_display/manutencao_prevent
 import Maquinas from '../components/model_display/maquinas'
 import Pacientes from '../components/model_display/pacientes'
 import Erros from '../components/model_display/erros'
+import Report from './report/_'
 
 class Display extends Component {
   render () {
@@ -36,6 +37,8 @@ class Display extends Component {
       return (<ManutencaoPreventiva />)
     case 'Maquinas':
       return (<Maquinas />)
+    case 'Relatorio':
+      return (<Report />)
     default:
       return null
     }

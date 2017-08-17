@@ -25,7 +25,7 @@ export default class formField extends Component {
     super(props)
     this.state = {
       choices: [],
-      value: ''
+      value: null
     }
   }
 
@@ -34,6 +34,12 @@ export default class formField extends Component {
     let value = getValueDotPath(field.accessor, formData)
     switch (field.type) {
     case 'date':
+      value = value ? new Date(value) : undefined
+      break
+    case 'time':
+      value = value ? new Date(value) : undefined
+      break
+    case 'dateWithClear':
       value = value ? new Date(value) : undefined
       break
     case 'choice':

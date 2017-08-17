@@ -19,6 +19,7 @@ import {
   gestaoEnfermagemTitle,
   errosTitle,
   pacientesTitle,
+  reportTitle,
   master,
   admin,
   consultor,
@@ -108,6 +109,13 @@ class MenuLeft extends Component {
           </MenuItem>
           )
         break
+      case 'Relatorio':
+        menuItems.push(
+          <MenuItem key={index} onTouchTap={() => this.handleOpenModelDisplay('Relatorio')}>
+            {reportTitle}
+          </MenuItem>
+          )
+        break
       default:
         break
       }
@@ -120,9 +128,10 @@ class MenuLeft extends Component {
     case master:
       break
     case admin:
+      this.props.selectModelDisplay('Relatorio')
       break
     case consultor:
-      this.props.selectModelDisplay('ControleFinanceiro')
+      this.props.selectModelDisplay('Relatorio')
       break
     case enfermeiro:
       this.props.selectModelDisplay('GestaoEnfermagem')
@@ -157,7 +166,8 @@ class MenuLeft extends Component {
       'Erros',
       'ManutencaoCorretiva',
       'ManutencaoPreventiva',
-      'Maquinas'
+      'Maquinas',
+      'Relatorio'
     ]
     let items = []
     switch (this.props.userData.type) {
