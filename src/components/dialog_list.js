@@ -8,24 +8,24 @@ import { save, cancel } from '../assets/strings'
 
 export default class DialogList extends Component {
   render () {
-    const saveAction = (
+    const cancelAction = (
       <FlatButton
-        label={this.props.saveText || cancel}
+        label={this.props.cancelText || cancel}
         primary
         onTouchTap={this.props.handleCloseDialog}
       />
     )
-    const cancelAction = (
+    const saveAction = (
       <FlatButton
-        label={this.props.cancelText || save}
+        label={this.props.saveText || save}
         primary
         keyboardFocused
         onTouchTap={this.props.handleSave}
       />
     )
     let actions = []
-    if (!this.props.disableSave) actions.push(saveAction)
     if (!this.props.disableCancel) actions.push(cancelAction)
+    if (!this.props.disableSave) actions.push(saveAction)
     return (
       <Dialog
         title={this.props.title}

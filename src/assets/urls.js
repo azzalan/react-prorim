@@ -21,3 +21,5 @@ export const userUrl = apiUrl + 'user/'
 export const reportUrl = apiUrl + 'report/'
 
 export const secaoUrl = apiUrl + 'secao/'
+
+export const turnoUrl = apiUrl + 'choice-periodo-turno/'

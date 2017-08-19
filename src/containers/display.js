@@ -12,6 +12,7 @@ import ManutencaoPreventiva from '../components/model_display/manutencao_prevent
 import Maquinas from '../components/model_display/maquinas'
 import Pacientes from '../components/model_display/pacientes'
 import Erros from '../components/model_display/erros'
+import Agendamentos from '../components/model_display/agendamentos'
 import Report from './report/_'
 
 class Display extends Component {
@@ -29,6 +30,8 @@ class Display extends Component {
       return (<Pacientes />)
     case 'GestaoEnfermagem':
       return (<GestaoEnfermagem />)
+    case 'Agendamentos':
+      return (<Agendamentos />)
     case 'Erros':
       return (<Erros />)
     case 'ManutencaoCorretiva':

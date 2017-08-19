@@ -11,6 +11,7 @@ import { apiUrl } from '../../assets/urls'
 import { getValueDotPath } from '../../assets/functions'
 import {
   pacientesCols,
+  pacientesConsultorCols,
   pacientesForm,
   pacientesFilter
 } from '../../assets/pacientes'
@@ -27,12 +28,13 @@ class Pacientes extends Component {
     const tableUrl = apiUrl + 'paciente/'
     const userType = getValueDotPath('type', this.props.userData)
     const isConsultor = userType === consultor
+    const tableCols = isConsultor ? pacientesConsultorCols : pacientesCols
     return (
       <div>
         <ModelDisplayTable
           tableUrl={tableUrl}
           tableTitle={pacientesTitle}
-          tableCols={pacientesCols}
+          tableCols={tableCols}
           formFields={pacientesForm}
           filterFields={pacientesFilter}
           disableFilterInvalid

@@ -25,3 +25,10 @@ body {
   padding: 0 0 0 2%;
   background: rgba(0,0,0,0.04);
 }
+.flex-center {
+  display: flex;
+  justify-content: center;
+}
+.toggle {
+  width: 50px;
+}

@@ -181,3 +181,26 @@ export const agendarCols = [
     type: 'text'
   }
 ]
+
+export const pacientesConsultorCols = [
+  {
+    accessor: 'nome',
+    header: 'Nome',
+    type: 'text'
+  },
+  {
+    accessor: 'cpf',
+    header: 'CPF',
+    type: 'text'
+  },
+  {
+    accessor: 'convenio',
+    header: 'Convênio',
+    type: 'text'
+  },
+  {
+    accessor: 'status.nome',
+    header: 'Status',
+    type: 'text'
+  }
+]

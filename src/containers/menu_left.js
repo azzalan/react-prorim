@@ -17,6 +17,7 @@ import {
   manutencaoPreventivaTitle,
   maquinasTitle,
   gestaoEnfermagemTitle,
+  agendamentosTitle,
   errosTitle,
   pacientesTitle,
   reportTitle,
@@ -81,6 +82,13 @@ class MenuLeft extends Component {
           </MenuItem>
           )
         break
+      case 'Agendamentos':
+        menuItems.push(
+          <MenuItem key={index} onTouchTap={() => this.handleOpenModelDisplay('Agendamentos')}>
+            {agendamentosTitle}
+          </MenuItem>
+          )
+        break
       case 'Erros':
         menuItems.push(
           <MenuItem key={index} onTouchTap={() => this.handleOpenModelDisplay('Erros')}>
@@ -128,7 +136,8 @@ class MenuLeft extends Component {
     case master:
       break
     case admin:
-      this.props.selectModelDisplay('Relatorio')
+      this.props.selectModelDisplay('Agendamentos')
+      // this.props.selectModelDisplay('Relatorio')
       break
     case consultor:
       this.props.selectModelDisplay('Relatorio')
@@ -163,6 +172,7 @@ class MenuLeft extends Component {
       'ControleFinanceiro',
       'Pacientes',
       'GestaoEnfermagem',
+      'Agendamentos',
       'Erros',
       'ManutencaoCorretiva',
       'ManutencaoPreventiva',
@@ -184,7 +194,8 @@ class MenuLeft extends Component {
       items = [
         'ControleDesinfeccao',
         'Pacientes',
-        'GestaoEnfermagem'
+        'GestaoEnfermagem',
+        'Agendamentos'
       ]
       break
     case tecnico:

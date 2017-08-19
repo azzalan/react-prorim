@@ -94,7 +94,7 @@ class ContainerName extends Component {
             formData={{enfermeiro: this.state.enfermeiro}}
             filterData={{}}
             selectFormData={this.selectFormData}
-            disabled={this.state.disabled}
+            disabled={this.props.disabled || this.state.disabled}
           />
         </Formsy.Form>
       </div>
@@ -103,15 +103,13 @@ class ContainerName extends Component {
 }
 
 ContainerName.propTypes = {
+  disabled: PropTypes.bool,
   // redux state
-  filterData: PropTypes.object,
-  disableAddButton: PropTypes.bool
+  filterData: PropTypes.object
 }
 
 function mapStateToProps (state) {
   return {
-    activeTableData: state.activeTableData,
-    disableAddButton: state.disableAddButton,
     filterData: state.filterData
   }
 }

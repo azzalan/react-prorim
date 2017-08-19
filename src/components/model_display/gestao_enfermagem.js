@@ -15,17 +15,20 @@ import {
   gestaoEnfermagemForm,
   gestaoEnfermagemFilter
 } from '../../assets/gestao_enfermagem'
-import { gestaoEnfermagemTitle } from '../../assets/strings'
+import { gestaoEnfermagemTitle, consultor } from '../../assets/strings'
+import { getValueDotPath } from '../../assets/functions'
 
 class GestaoEnfermagem extends Component {
   render () {
+    const userType = getValueDotPath('type', this.props.userData)
+    const isConsultor = userType === consultor
     const dialogAdd = (
       <DialogListPacientes
         dialogOpen={this.props.dialogAddIsOpen}
         handleCloseDialog={() => this.props.selectDialogAddIsOpen(false)}
       />
     )
-    const enfermeiroField = (<EnfermeiroField />)
+    const enfermeiroField = (<EnfermeiroField disabled={isConsultor} />)
     return (
       <ModelDisplayTable
         tableUrl={estadiaUrl}
@@ -34,7 +37,8 @@ class GestaoEnfermagem extends Component {
         formFields={gestaoEnfermagemForm}
         filterFields={gestaoEnfermagemFilter}
         extraFields={enfermeiroField}
-        disableAddButton={false}
+        disableEdit={isConsultor}
+        disableAddButton={isConsultor}
         dialogAdd={dialogAdd}
       />
     )
@@ -44,13 +48,15 @@ class GestaoEnfermagem extends Component {
 GestaoEnfermagem.propTypes = {
   // redux state
   dialogAddIsOpen: PropTypes.bool,
+  userData: PropTypes.object,
   // redux actions
   selectDialogAddIsOpen: PropTypes.func.isRequired
 }
 
 function mapStateToProps (state) {
   return {
-    dialogAddIsOpen: state.dialogAddIsOpen
+    dialogAddIsOpen: state.dialogAddIsOpen,
+    userData: state.userData
   }
 }
 

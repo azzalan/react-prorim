@@ -35,8 +35,6 @@ class ContainerName extends Component {
   render () {
     const cols = []
     this.buildCols(this.props.cols, cols)
-    console.log(cols)
-    console.log(this.props.data)
     return (
       <Workbook
         filename={this.props.filename}

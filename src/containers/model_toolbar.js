@@ -29,7 +29,7 @@ class ModelToolbar extends Component {
 
   handleChange = (event, index, value) => this.setState({value});
 
-  renderAddButton = () => {
+  renderOptions = () => {
     const arrow = (
       <IconMenu
         iconButtonElement={
@@ -60,7 +60,7 @@ class ModelToolbar extends Component {
         <FontIcon className='muidocs-icon-custom-sort' />
         <ToolbarSeparator />
         {this.props.hideAddButton ? null : addButton}
-        {arrow}
+        {this.props.hideArrow ? null : arrow}
       </ToolbarGroup>
     )
   }
@@ -142,7 +142,7 @@ class ModelToolbar extends Component {
       <Toolbar>
         <ToolbarTitle text={modelTitle} />
         {this.renderFilter()}
-        {this.renderAddButton()}
+        {this.renderOptions()}
       </Toolbar>
     )
   }
@@ -150,6 +150,7 @@ class ModelToolbar extends Component {
 
 ModelToolbar.propTypes = {
   hideAddButton: PropTypes.bool,
+  hideArrow: PropTypes.bool,
   handleOpenDialogAdd: PropTypes.func.isRequired,
   showFilterToogle: PropTypes.array,
   toogleFilter: PropTypes.func,

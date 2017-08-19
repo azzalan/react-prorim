@@ -64,7 +64,7 @@ export const putFiles = (
 ) => {
   const snackbar = openSnackbar(sendingFile)
   let token = store.getState().authToken
-  token = token ? { 'Authorization': 'Token ' + token } : undefined
+  token = token !== null ? 'Token ' + token : undefined
   const headers = {
     'content-type': 'multipart/form-data',
     'Authorization': token
