@@ -16,6 +16,12 @@ import {
 } from '../assets/strings'
 
 export default class Table extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+    }
+  }
+
   buildCols = (cols) => {
     cols.forEach((col, index) => {
       if (col.columns) {
@@ -55,7 +61,7 @@ export default class Table extends Component {
           pageText={pagina}
           ofText={de}
           rowsText={linhas}
-          pageSize={pageSize || 20}
+          defaultPageSize={pageSize || 20}
           data={data}
           columns={columns}
           getTdProps={(state, rowInfo, column) => {

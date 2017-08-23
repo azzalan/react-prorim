@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import Toggle from 'material-ui/Toggle'
+import Dialog from 'material-ui/Dialog'
+import FlatButton from 'material-ui/FlatButton'
 
 import { post, del } from '../../assets/api_calls'
 import { estadiaUrl } from '../../assets/urls'
@@ -14,7 +16,8 @@ class ContainerName extends Component {
     const hasId = this.props.row.value > 0
     this.state = {
       value: hasId,
-      id: this.props.row.value | null
+      id: this.props.row.value | null,
+      confirmDialogOpen: false
     }
   }
 
@@ -29,8 +32,18 @@ class ContainerName extends Component {
       post(estadiaUrl, estadia, () => fetchEstadias(filterData))
     }
     if (value === false) {
-      del(estadiaUrl + this.state.id + '/', () => fetchEstadias(filterData))
+      this.setState({confirmDialogOpen: true})
     }
+  }
+
+  thenDelete = (r) => {
+    const { filterData, fetchEstadias } = this.props
+    this.handleCloseConfirm()
+    fetchEstadias(filterData)
+  }
+
+  handleDelete = () => {
+    del(estadiaUrl + this.state.id + '/', this.thenDelete)
   }
 
   componentDidMount = () => {
@@ -46,7 +59,22 @@ class ContainerName extends Component {
     }
   }
 
+  handleCloseConfirm = () => this.setState({confirmDialogOpen: false})
+
   render () {
+    const confirmActions = [
+      <FlatButton
+        label='Cancelar'
+        primary
+        onTouchTap={this.handleCloseConfirm}
+      />,
+      <FlatButton
+        label='Confirmar'
+        primary
+        keyboardFocused
+        onTouchTap={this.handleDelete}
+      />
+    ]
     return (
       <div className='flex-center'>
         <div className='toggle'>
@@ -56,6 +84,16 @@ class ContainerName extends Component {
             onToggle={this.onToogle}
           />
         </div>
+        <Dialog
+          title='Confirmar'
+          actions={confirmActions}
+          modal={false}
+          autoScrollBodyContent
+          open={this.state.confirmDialogOpen}
+          onRequestClose={this.handleCloseConfirm}
+        >
+          Tem certeza que deseja excluir esse agendamento com todas as informações registradas nele?
+        </Dialog>
       </div>
     )
   }
