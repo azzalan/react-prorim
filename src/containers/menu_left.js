@@ -136,7 +136,7 @@ class MenuLeft extends Component {
     case master:
       break
     case admin:
-      this.props.selectModelDisplay('Agendamentos')
+      this.props.selectModelDisplay('Relatorio')
       // this.props.selectModelDisplay('Relatorio')
       break
     case consultor:
