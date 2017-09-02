@@ -192,7 +192,6 @@ class MenuLeft extends Component {
       break
     case enfermeiro:
       items = [
-        'ControleDesinfeccao',
         'Pacientes',
         'GestaoEnfermagem',
         'Agendamentos'
@@ -200,6 +199,7 @@ class MenuLeft extends Component {
       break
     case tecnico:
       items = [
+        'ControleDesinfeccao',
         'ControleAgua',
         'ControleColeta',
         'Erros',
