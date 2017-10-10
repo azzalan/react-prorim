@@ -30,7 +30,7 @@ export default class ModelDisplayCards extends Component {
     return (
       <Card
         onTouchTap={this.props.handleOpenDialogEdit}
-        className='col-md-3 col-sm-6 col-xs-6'
+        className='col-lg-3 col-md-4 col-sm-6 col-xs-6'
         style={this.getStyle(instance)}
       >
         <CardTitle

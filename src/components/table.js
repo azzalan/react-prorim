@@ -65,6 +65,13 @@ export default class Table extends Component {
           defaultPageSize={pageSize || 20}
           data={data}
           columns={columns}
+          getTrProps={(state, rowInfo, column) => {
+            return {
+              style: {
+                minHeight: 40
+              }
+            }
+          }}
           getTdProps={(state, rowInfo, column) => {
             // Checar se a coluna está preenchida e há uma função onTouchTap.
             if (rowInfo && this.props.onRowTouchTap) {
