@@ -146,6 +146,7 @@ class ModelDisplayTable extends Component {
         <Table
           data={this.state.tableData}
           columns={this.props.tableCols}
+          showPagination={this.props.showPagination}
           onRowTouchTap={this.handleOpenDialogEdit}
         />
         {this.props.dialogAdd || dialogAdd}
@@ -168,6 +169,7 @@ ModelDisplayTable.propTypes = {
   initialFilter: PropTypes.object,
   disableEdit: PropTypes.bool,
   extraFields: PropTypes.any,
+  showPagination: PropTypes.bool,
   // redux state
   activeTableData: PropTypes.array,
   filterData: PropTypes.object,

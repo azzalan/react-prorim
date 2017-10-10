@@ -11,15 +11,17 @@ import Filtro from './../filter'
 
 import { reportFilter } from '../../assets/report'
 import { get } from '../../assets/api_calls'
-import { reportUrl } from '../../assets/urls'
+import { reportUrl, controleFinanceiroUrl } from '../../assets/urls'
 
 import Text from './Text'
+import ControleFinanceiroReport from './ControleFinanceiro'
 
-class ContainerName extends Component {
+class Report extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      data: null
+      data: null,
+      controleFinanceiro: null
     }
   }
 
@@ -27,8 +29,16 @@ class ContainerName extends Component {
     this.setState({data: response.data})
   }
 
+  updateControleFinanceiro = (response) => {
+    this.setState({controleFinanceiro: response.data})
+  }
+
   fetchData = () => {
+    const anoFilter = {
+      ano: this.props.filterData.inicial.getFullYear()
+    }
     get(reportUrl, this.updateData, this.props.filterData)
+    get(controleFinanceiroUrl, this.updateControleFinanceiro, anoFilter)
   }
 
   componentDidMount = () => {
@@ -56,13 +66,14 @@ class ContainerName extends Component {
         </div>
         <div className='report'>
           <Text data={this.state.data} />
+          <ControleFinanceiroReport data={this.state.controleFinanceiro} />
         </div>
       </div>
     )
   }
 }
 
-ContainerName.propTypes = {
+Report.propTypes = {
   // redux state
   disableAddButton: PropTypes.bool,
   filterData: PropTypes.object
@@ -80,4 +91,4 @@ function mapDispatchToProps (dispatch) {
   }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContainerName)
+export default connect(mapStateToProps, mapDispatchToProps)(Report)

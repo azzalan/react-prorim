@@ -57,11 +57,14 @@ class Filter extends Component {
   componentWillMount = () => {
     if (this.props.initialFilter) {
       this.props.selectFilterData(this.props.initialFilter)
+    } else {
+      this.props.selectFilterData(null)
     }
   }
 
   componentWillUnmount = () => {
     this.props.enableAddButton()
+    this.props.selectFilterData(null)
   }
 
   render () {

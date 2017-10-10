@@ -46,10 +46,15 @@ class ModelDisplayCards extends Component {
     modelData.forEach((instance) => {
       const { erros } = instance
       for (let i in erros) {
-        if (erros[i].manutencaoCorretiva.acao === null) {
-          instance.hasErros = true
-          redModelData.push(instance)
-          return null
+        if (erros[i].manutencaoCorretiva) {
+          if (erros[i].manutencaoCorretiva.acao === null) {
+            instance.hasErros = true
+            redModelData.push(instance)
+            return null
+          }
+        } else {
+          console.log(erros[i])
+          console.log('Essa instância de erro teva sua manutenção corretiva incorretamente deletada.')
         }
       }
       clearModelData.push(instance)

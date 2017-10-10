@@ -54,6 +54,7 @@ export default class Table extends Component {
         <ReactTable
           className='-highlight'
           key={table}
+          showPagination={this.props.showPagination || true}
           previousText={anterior}
           nextText={proximo}
           loadingText={carregando}
@@ -87,5 +88,6 @@ Table.propTypes = {
   data: PropTypes.array,
   columns: PropTypes.array.isRequired,
   onRowTouchTap: PropTypes.func,
-  pageSize: PropTypes.number
+  pageSize: PropTypes.number,
+  showPagination: PropTypes.bool
 }
