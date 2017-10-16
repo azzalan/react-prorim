@@ -12,7 +12,7 @@ import {
 
 import FormField from '../components/form_field'
 
-import { setValueDotPath } from '../assets/functions'
+import { setValueDotPath, cleanDotPath } from '../assets/functions'
 
 class Filter extends Component {
   updateFilterData = (newFormData, value, field) => {
@@ -55,16 +55,29 @@ class Filter extends Component {
   }
 
   componentWillMount = () => {
+    let filterData = this.props.filterData || {}
     if (this.props.initialFilter) {
-      this.props.selectFilterData(this.props.initialFilter)
-    } else {
-      this.props.selectFilterData(null)
+      for (let key in this.props.initialFilter) {
+        filterData[key] = this.props.initialFilter[key]
+      }
     }
+    if (this.props.filterFields) {
+      this.props.filterFields.forEach((field) => {
+        cleanDotPath(field.accessor, filterData)
+      })
+    }
+    this.props.selectFilterData(filterData)
   }
 
   componentWillUnmount = () => {
     this.props.enableAddButton()
-    this.props.selectFilterData(null)
+    let filterData = this.props.filterData || {}
+    if (this.props.filterFields) {
+      this.props.filterFields.forEach((field) => {
+        cleanDotPath(field.accessor, filterData)
+      })
+    }
+    this.props.selectFilterData(filterData)
   }
 
   render () {

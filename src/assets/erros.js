@@ -21,6 +21,11 @@ export const errosCols = [
         accessor: 'fim',
         header: 'Fim',
         type: 'time'
+      },
+      {
+        accessor: 'status.nome',
+        header: 'Status',
+        type: 'text'
       }
     ]
   },
@@ -50,6 +55,11 @@ export const errosCols = [
       {
         accessor: 'erro.maquina.numero',
         header: 'Número da máquina',
+        type: 'text'
+      },
+      {
+        accessor: 'erro.manutencaoCorretiva.status.nome',
+        header: 'Status',
         type: 'text'
       },
       {

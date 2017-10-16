@@ -21,6 +21,11 @@ export const gestaoEnfermagemCols = [
         accessor: 'fim',
         header: 'Fim',
         type: 'time'
+      },
+      {
+        accessor: 'status.nome',
+        header: 'Status',
+        type: 'text'
       }
     ]
   },
@@ -53,6 +58,11 @@ export const gestaoEnfermagemCols = [
         type: 'text'
       },
       {
+        accessor: 'erro.manutencaoCorretiva.status.nome',
+        header: 'Status',
+        type: 'text'
+      },
+      {
         accessor: 'erro.observacao',
         header: 'Observação',
         type: 'text'
@@ -78,6 +88,14 @@ export const gestaoEnfermagemForm = [
     accessor: 'fim',
     header: 'Fim',
     type: 'time',
+    optional: true
+  },
+  {
+    accessor: 'status',
+    header: 'Status',
+    type: 'choice',
+    show: 'nome',
+    choicesUrl: 'choice-status-estadia/',
     optional: true
   },
   {

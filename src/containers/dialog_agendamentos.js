@@ -20,7 +20,20 @@ import { get } from '../assets/api_calls'
 
 class DialogAgendamentos extends Component {
   updateModelData = (response) => {
-    this.props.selectDialogAgendamentosData(response.data)
+    let data = response.data
+    let returnData = []
+    data.forEach((estadia) => {
+      if (estadia.secao) {
+        let date = new Date(estadia.secao.data)
+        date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0)
+        let now = new Date()
+        now = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0)
+        if (date.getTime() >= now.getTime()) returnData.push(estadia)
+      } else {
+        console.log('Estadia não tem seção.')
+      }
+    })
+    this.props.selectDialogAgendamentosData(returnData)
   }
 
   handleCloseDialog = () => this.props.selectDialogAgendamentosIsOpen(false)

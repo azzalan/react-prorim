@@ -29,6 +29,7 @@ class Maquinas extends Component {
         disableAddButton={isConsultor}
         hideAddButton={isConsultor}
         disableFilter
+        disableDelete
       />
     )
   }

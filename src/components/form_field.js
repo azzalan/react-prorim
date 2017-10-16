@@ -194,6 +194,7 @@ export default class formField extends Component {
         <FormsyTime
           name={field.accessor}
           floatingLabelText={field.header}
+          format='24hr'
           value={this.state.value}
           required={!field.optional}
           onChange={(e, value) => this.updateFormData(field, value)}

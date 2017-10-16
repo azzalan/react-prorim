@@ -17,6 +17,7 @@ class ContainerName extends Component {
 
   render () {
     const { data } = this.props
+    console.log(data)
     const t1 = data.total
     const s = (t) => (t === 1 ? null : 's')
     const periodos = (
@@ -25,11 +26,15 @@ class ContainerName extends Component {
     const salas = (
       <li>{printArray(data.salas, data.total, 'na sala')}</li>
     )
+    const status = (
+      <li>{printArray(data.status, data.total, 'com status')}</li>
+    )
     return (
       <div>
         <li>{t1} atendimento{s(t1)}.</li>
         {data.periodos.length > 0 ? periodos : null}
         {data.salas.length > 0 ? salas : null}
+        {data.status.length > 0 ? status : null}
       </div>
     )
   }

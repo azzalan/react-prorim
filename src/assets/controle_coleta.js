@@ -35,6 +35,11 @@ export const controleColetaCols = [
     type: 'text'
   },
   {
+    accessor: 'tecnico.firstName',
+    header: 'Técnico',
+    type: 'text'
+  },
+  {
     accessor: 'observacao',
     header: 'Observação',
     type: 'text'
@@ -83,6 +88,14 @@ export const controleColetaForm = [
     type: 'choice',
     show: 'nome',
     choicesUrl: 'choice-resultado-agua/',
+    optional: true
+  },
+  {
+    accessor: 'tecnico',
+    header: 'Técnico',
+    type: 'choice',
+    show: 'firstName',
+    choicesUrl: 'tecnico/',
     optional: true
   },
   {

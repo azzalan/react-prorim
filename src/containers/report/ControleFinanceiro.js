@@ -5,9 +5,6 @@ import { bindActionCreators } from 'redux'
 
 import Table from '../../components/table'
 
-import { controleFinanceiroCols } from '../../assets/controle_financeiro'
-import { copyObject } from '../../assets/functions'
-
 class ControleFinanceiroReport extends Component {
   constructor (props) {
     super(props)
@@ -16,16 +13,7 @@ class ControleFinanceiroReport extends Component {
     }
   }
 
-  setColsWidth = () => {
-    const cols = copyObject(controleFinanceiroCols)
-    cols.forEach((col) => {
-      col.width = 50
-    })
-    this.setState({cols})
-  }
-
   componentWillMount = () => {
-    this.setColsWidth()
   }
 
   render () {
@@ -36,7 +24,7 @@ class ControleFinanceiroReport extends Component {
           <div className='ControleFinanceiroReport' ref='ControleFinanceiroReport'>
             <Table
               data={this.props.data}
-              columns={this.state.cols}
+              columns={this.props.cols}
               showPagination={false}
               pageSize={this.props.data.length}
             />
@@ -48,7 +36,8 @@ class ControleFinanceiroReport extends Component {
 }
 
 ControleFinanceiroReport.propTypes = {
-  data: PropTypes.array
+  data: PropTypes.array,
+  cols: PropTypes.array
 }
 
 function mapStateToProps (state) {

@@ -12,10 +12,12 @@ export default class CustomCell extends Component {
       case 'date':
         return (<div>{new Intl.DateTimeFormat().format(new Date(value))}</div>)
       case 'time':
-        const options = {hour: 'numeric', minute: 'numeric'}
         let time = new Date(value)
-        time = new Intl.DateTimeFormat(lang, options).format(time)
-        return (<div>{time}</div>)
+        let hour = time.getHours()
+        if (hour < 10) hour = '0' + hour
+        let minutes = time.getMinutes()
+        if (minutes < 10) minutes = '0' + minutes
+        return (<div>{hour + ':' + minutes}</div>)
       case 'money':
         const currency = {style: 'currency', currency: 'BRL'}
         const money = new Intl.NumberFormat(lang, currency).format(value)

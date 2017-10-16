@@ -33,6 +33,11 @@ export const manutencaoCorretivaCols = [
     accessor: 'acao',
     header: 'Ação',
     type: 'text'
+  },
+  {
+    accessor: 'status.nome',
+    header: 'Status',
+    type: 'text'
   }
 ]
 
@@ -53,5 +58,12 @@ export const manutencaoCorretivaForm = [
     accessor: 'acao',
     header: 'Ação',
     type: 'textArea'
+  },
+  {
+    accessor: 'status',
+    header: 'Status',
+    type: 'choice',
+    show: 'nome',
+    choicesUrl: 'choice-status-manutencao-corretiva/'
   }
 ]

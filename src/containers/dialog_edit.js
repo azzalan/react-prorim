@@ -58,6 +58,7 @@ class DialogEdit extends Component {
           dialogOpen={this.props.dialogEditIsOpen}
           handleCloseDialog={() => this.props.selectDialogEditIsOpen(false)}
           enableDelete
+          disableDelete={this.props.disableDelete}
           deleteAction={this.deleteForm}
           submitForm={this.submitForm}
           title={this.props.title || edit}
@@ -74,6 +75,7 @@ DialogEdit.propTypes = {
   fetchModelData: PropTypes.func.isRequired,
   title: PropTypes.string,
   disabled: PropTypes.bool,
+  disableDelete: PropTypes.bool,
   // redux state
   formData: PropTypes.object,
   dialogEditIsOpen: PropTypes.bool,

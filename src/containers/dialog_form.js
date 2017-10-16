@@ -79,7 +79,7 @@ class FormDialog extends Component {
       />
     )
     if (!this.props.disabled) {
-      actions.push(deleteAction)
+      if (!this.props.disableDelete) actions.push(deleteAction)
       actions.push(saveAction)
     }
     return (
@@ -122,6 +122,7 @@ class FormDialog extends Component {
 
 FormDialog.propTypes = {
   deleteAction: PropTypes.func,
+  disableDelete: PropTypes.bool,
   enableDelete: PropTypes.bool,
   disabled: PropTypes.bool,
   submitForm: PropTypes.func.isRequired,

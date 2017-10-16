@@ -34,7 +34,7 @@ class RowFormFields extends Component {
           <div key={field.accessor + index}>
             <RowFormField
               field={field}
-              disabled={this.props.disabled}
+              disabled={this.props.disabled || field.disabled}
             />
           </div>
         )

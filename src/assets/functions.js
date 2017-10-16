@@ -41,6 +41,21 @@ export const deleteDotPath = (dotPath, data) => {
   deleteDotArray(dotArray, 0, data)
 }
 
+const cleanDotArray = (dotArray, position, data) => {
+  if (dotArray.length - 1 === position) {
+    delete data[dotArray[position]]
+  } else {
+    if (!data[dotArray[position]]) return null
+    cleanDotArray(dotArray, position + 1, data[dotArray[position]])
+  }
+}
+
+export const cleanDotPath = (dotPath, data) => {
+  const dotArray = dotPath.split('.')
+  if (!data) return null
+  cleanDotArray(dotArray, 0, data)
+}
+
 export const addFiles = (formData, fields) => {
   let hasFormData = false
   fields.forEach((field) => {

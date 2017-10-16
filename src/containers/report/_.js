@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux'
 import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar'
 import RaisedButton from 'material-ui/RaisedButton'
 import RefreshIcon from 'react-material-icons/icons/navigation/refresh'
+import PrintIcon from 'react-material-icons/icons/action/print'
 
 import Filtro from './../filter'
 
@@ -16,12 +17,18 @@ import { reportUrl, controleFinanceiroUrl } from '../../assets/urls'
 import Text from './Text'
 import ControleFinanceiroReport from './ControleFinanceiro'
 
+import { controleFinanceiroCols } from '../../assets/controle_financeiro'
+import { copyObject } from '../../assets/functions'
+
 class Report extends Component {
   constructor (props) {
     super(props)
     this.state = {
       data: null,
-      controleFinanceiro: null
+      controleFinanceiro: null,
+      cols: copyObject(controleFinanceiroCols),
+      print: false,
+      resetAfterPrint: false
     }
   }
 
@@ -41,7 +48,43 @@ class Report extends Component {
     get(controleFinanceiroUrl, this.updateControleFinanceiro, anoFilter)
   }
 
+  setPrintStyle = () => {
+    const cols = copyObject(controleFinanceiroCols)
+    cols.forEach((col) => {
+      col.minWidth = 50
+      col.maxWidth = 50
+      col.className = 'reportCol'
+    })
+    this.setState({cols})
+  }
+
+  resetPrintStyle = () => {
+    const cols = copyObject(controleFinanceiroCols)
+    cols.forEach((col) => {
+      col.minWidth = 100
+      col.maxWidth = 200
+      col.className = 'reportCol'
+    })
+    this.setState({cols})
+  }
+
+  printReport = () => {
+    this.setPrintStyle()
+    this.setState({print: true})
+  }
+
   componentDidMount = () => {
+  }
+
+  componentDidUpdate = (pp, ps) => {
+    if (this.state.print) {
+      window.print()
+      this.setState({ resetAfterPrint: true, print: false })
+    }
+    if (this.state.resetAfterPrint) {
+      this.resetPrintStyle()
+      this.setState({ resetAfterPrint: false })
+    }
   }
 
   render () {
@@ -57,6 +100,11 @@ class Report extends Component {
                 onTouchTap={this.fetchData}
                 disabled={this.props.disableAddButton}
               />
+              <RaisedButton
+                icon={<PrintIcon />}
+                primary
+                onTouchTap={this.printReport}
+              />
             </ToolbarGroup>
           </Toolbar>
           <Filtro
@@ -66,7 +114,10 @@ class Report extends Component {
         </div>
         <div className='report'>
           <Text data={this.state.data} />
-          <ControleFinanceiroReport data={this.state.controleFinanceiro} />
+          <ControleFinanceiroReport
+            data={this.state.controleFinanceiro}
+            cols={this.state.cols}
+          />
         </div>
       </div>
     )

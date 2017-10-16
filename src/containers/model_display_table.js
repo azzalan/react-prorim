@@ -122,6 +122,7 @@ class ModelDisplayTable extends Component {
         modelUrl={this.props.tableUrl}
         fetchModelData={this.fetchModelData}
         disabled={this.props.disableEdit}
+        disableDelete={this.props.disableDelete}
       />
     )
     return (
@@ -170,6 +171,7 @@ ModelDisplayTable.propTypes = {
   disableEdit: PropTypes.bool,
   extraFields: PropTypes.any,
   showPagination: PropTypes.bool,
+  disableDelete: PropTypes.bool,
   // redux state
   activeTableData: PropTypes.array,
   filterData: PropTypes.object,

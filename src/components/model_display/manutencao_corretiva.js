@@ -27,6 +27,7 @@ class ManutencaoCorretiva extends Component {
         disableAddButton
         disableFilter
         disableEdit={isConsultor}
+        disableDelete
       />
     )
   }

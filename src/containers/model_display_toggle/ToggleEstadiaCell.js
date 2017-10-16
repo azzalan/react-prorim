@@ -17,7 +17,8 @@ class ContainerName extends Component {
     this.state = {
       value: hasId,
       id: this.props.row.value | null,
-      confirmDialogOpen: false
+      confirmDialogOpen: false,
+      disabled: false
     }
   }
 
@@ -46,10 +47,23 @@ class ContainerName extends Component {
     del(estadiaUrl + this.state.id + '/', this.thenDelete)
   }
 
-  componentDidMount = () => {
+  // Checa se a data do agendamento já passou, caso tenha passado, desabilita
+  // a edição.
+  setDisable = () => {
+    let date = this.props.data
+    date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0)
+    let now = new Date()
+    now = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0)
+    if (date.getTime() < now.getTime()) this.setState({ disabled: true })
+    else this.setState({ disabled: false })
+  }
+
+  componentWillMount = () => {
+    this.setDisable()
   }
 
   componentWillReceiveProps = (n) => {
+    this.setDisable()
     if (this.props.row.value !== n.row.value) {
       const hasId = n.row.value > 0
       this.setState({
@@ -80,7 +94,7 @@ class ContainerName extends Component {
         <div className='toggle'>
           <Toggle
             toggled={this.state.value}
-            disabled={this.props.disabled || false}
+            disabled={this.state.disabled}
             onToggle={this.onToogle}
           />
         </div>
@@ -102,7 +116,6 @@ class ContainerName extends Component {
 ContainerName.propTypes = {
   row: PropTypes.object,
   data: PropTypes.any,
-  disabled: PropTypes.bool,
   fetchEstadias: PropTypes.func.isRequired,
   // redux state
   filterData: PropTypes.object

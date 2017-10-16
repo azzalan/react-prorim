@@ -131,9 +131,11 @@ class ContainerName extends Component {
   }
 
   fetchEstadias = (filterData) => {
-    const has = (prop) => (filterData.hasOwnProperty(prop))
-    if (has('inicial') && has('final') && has('sala')) {
-      get(estadiaUrl, (r) => this.setTables(r, filterData), filterData)
+    if (filterData) {
+      const has = (prop) => (filterData.hasOwnProperty(prop))
+      if (has('inicial') && has('final') && has('sala')) {
+        get(estadiaUrl, (r) => this.setTables(r, filterData), filterData)
+      }
     }
   }
 

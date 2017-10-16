@@ -40,6 +40,7 @@ class Pacientes extends Component {
           disableFilterInvalid
           disableEdit={isConsultor}
           disableAddButton={isConsultor}
+          disableDelete
         />
         <DialogAgendamentos
           title={titleDialogAgendamentos}

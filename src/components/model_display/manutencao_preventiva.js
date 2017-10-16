@@ -30,6 +30,7 @@ class ManutencaoPreventiva extends Component {
         disableAddButton
         disableFilter
         disableEdit={isConsultor}
+        disableDelete
       />
     )
   }

@@ -30,6 +30,7 @@ class Erros extends Component {
         filterFields={errosFilter}
         disableAddButton
         disableEdit={isConsultor}
+        disableDelete
       />
     )
   }

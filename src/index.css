@@ -25,10 +25,20 @@ body {
   padding: 0 2% 0 2%;
   background: rgba(0,0,0,0.04);
 }
-.ControleFinanceiroReport {
-  width: 660px;
-  font-size: 7px;
+@media print {
+  .ControleFinanceiroReport {
+    width: 660px;
+    font-size: 7px;
+  }
+  .reportCol {
+    width: 50px;
+  }
 }
+
+.reportCol {
+  width: 50px;
+}
+
 .flex-center {
   display: flex;
   justify-content: center;

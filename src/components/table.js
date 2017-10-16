@@ -47,14 +47,14 @@ export default class Table extends Component {
   }
 
   render () {
-    const { data, pageSize } = this.props
+    const { data, pageSize, showPagination } = this.props
     const columns = this.buildCols(this.props.columns)
     if (data) {
       return (
         <ReactTable
           className='-highlight'
           key={table}
-          showPagination={this.props.showPagination || true}
+          showPagination={showPagination === undefined ? true : showPagination}
           previousText={anterior}
           nextText={proximo}
           loadingText={carregando}
