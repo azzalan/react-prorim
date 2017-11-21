@@ -15,10 +15,16 @@ class DialogAdd extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      sending: false
     }
   }
 
+  isSending = () => this.setState({sending: true})
+
+  finishedSending = () => this.setState({sending: false})
+
   afterSave = () => {
+    this.finishedSending()
     this.props.fetchModelData()
     this.props.selectDialogAddIsOpen(false)
   }
@@ -32,6 +38,7 @@ class DialogAdd extends Component {
   }
 
   submitForm = () => {
+    this.isSending()
     const { modelUrl, filterData, formData } = this.props
     const saveData = {...fixObjectsForSave(formData), filter: {...filterData}}
     post(modelUrl, saveData, this.afterPost)
@@ -46,6 +53,7 @@ class DialogAdd extends Component {
           handleCloseDialog={() => this.props.selectDialogAddIsOpen(false)}
           submitForm={this.submitForm}
           title={this.props.title || add}
+          sending={this.state.sending}
         />
       </div>
     )

@@ -2,7 +2,7 @@ import axios from 'axios'
 import { store } from '../index'
 import shortid from 'shortid'
 
-import { selectAlertOpen, selectAlertMessages } from '../actions/index'
+import { selectAlertOpen, selectAlertMessages, selectLastPost } from '../actions/index'
 import selectSnackbarMessage from '../actions/snackbarMessage'
 
 import { loading, sending, sendingFile, deleting, editing } from './strings'
@@ -85,6 +85,12 @@ export const post = (
   thenFunction = () => {},
   catchFunction = defaultCatch
 ) => {
+  const thisPost = JSON.stringify({url, data})
+  if (thisPost === store.getState().lastPost) {
+    console.log('Entrada duplicada ignorada.')
+    return null
+  }
+  store.dispatch(selectLastPost(thisPost))
   const snackbar = openSnackbar(sending)
   const token = store.getState().authToken
   const headers = token ? { 'Authorization': 'Token ' + token } : undefined

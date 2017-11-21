@@ -5,6 +5,13 @@ export function selectAlertMessages (data) {
   }
 }
 
+export function selectLastPost (data) {
+  return {
+    type: 'LAST_POST',
+    payload: data
+  }
+}
+
 export function selectAlertOpen (data) {
   return {
     type: 'ALERT_OPEN',

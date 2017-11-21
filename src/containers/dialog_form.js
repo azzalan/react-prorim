@@ -74,7 +74,7 @@ class FormDialog extends Component {
         label='Salvar'
         primary
         keyboardFocused
-        disabled={!this.state.canSubmit}
+        disabled={!this.state.canSubmit || this.props.sending}
         onTouchTap={() => { this.refs.form.submit() }}
       />
     )
@@ -130,6 +130,7 @@ FormDialog.propTypes = {
   handleCloseDialog: PropTypes.func.isRequired,
   fields: PropTypes.array,
   title: PropTypes.string.isRequired,
+  sending: PropTypes.bool,
   // redux actions
   selectGroupInputOpen: PropTypes.func.isRequired
 }

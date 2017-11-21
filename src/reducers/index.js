@@ -23,6 +23,7 @@ import AlertOpen from './alert_open'
 import AlertMessages from './alert_messages'
 import SnackbarOpen from './snackbar_open'
 import SnackbarMessage from './snackbar_message'
+import LastPost from './last_post'
 
 const rootReducer = combineReducers({
   activeTableData: ActiveTableData,
@@ -48,7 +49,8 @@ const rootReducer = combineReducers({
   alertOpen: AlertOpen,
   alertMessages: AlertMessages,
   snackbarOpen: SnackbarOpen,
-  snackbarMessage: SnackbarMessage
+  snackbarMessage: SnackbarMessage,
+  lastPost: LastPost
 })
 
 export default rootReducer

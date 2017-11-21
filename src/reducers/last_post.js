@@ -1,0 +1,9 @@
+export default function (state = null, action) {
+  switch (action.type) {
+  case 'LAST_POST':
+    return action.payload
+  default:
+    break
+  }
+  return state
+}
